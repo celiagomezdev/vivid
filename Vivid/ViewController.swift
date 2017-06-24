@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var toolBar: UIToolbar!
     @IBOutlet weak var mapView: GMSMapView!
+    @IBOutlet weak var searchButton: UIBarButtonItem!
     
     var googleMap: GMSMapView?
 
@@ -25,17 +26,25 @@ class ViewController: UIViewController {
         googleMap = GMSMapView.map(withFrame: mapView.frame, camera: camera)
         self.mapView = googleMap
         self.view.addSubview(mapView!)
+        self.view.addSubview(searchBar)
         
         let initialLocation = CLLocationCoordinate2DMake(52.520736, 13.409423)
         let marker = GMSMarker(position: initialLocation)
         marker.title = "Berlin"
         marker.map = mapView
-        
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchBar.isHidden = true
+    }
     
     @IBAction func search(_ sender: Any) {
-
+        if searchBar.isHidden {
+            searchBar.isHidden = false
+        } else {
+            searchBar.isHidden = true
+        }
     }
  }
 
