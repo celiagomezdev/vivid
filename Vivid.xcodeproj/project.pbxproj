@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		188183DBB5A80114C0E08912 /* libPods-Vivid.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A185197ED16FA440F6352C69 /* libPods-Vivid.a */; };
 		7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */; };
-		7EE906321EFD9C1200E6EAD9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE906311EFD9C1200E6EAD9 /* ViewController.swift */; };
+		7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */; };
 		7EE906351EFD9C1200E6EAD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EE906331EFD9C1200E6EAD9 /* Main.storyboard */; settings = {ASSET_TAGS = (1, ); }; };
 		7EE906371EFD9C1200E6EAD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EE906361EFD9C1200E6EAD9 /* Assets.xcassets */; };
 		7EE9063A1EFD9C1200E6EAD9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EE906381EFD9C1200E6EAD9 /* LaunchScreen.storyboard */; };
@@ -19,12 +19,12 @@
 /* Begin PBXFileReference section */
 		7EE9062C1EFD9C1200E6EAD9 /* Vivid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vivid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7EE906311EFD9C1200E6EAD9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		7EE906341EFD9C1200E6EAD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7EE906361EFD9C1200E6EAD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7EE906391EFD9C1200E6EAD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7EE9063B1EFD9C1200E6EAD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7EE906411EFD9CC600E6EAD9 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		7EE906411EFD9CC600E6EAD9 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		8385AD172EA13ED24E344B8A /* Pods-Vivid.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vivid.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vivid/Pods-Vivid.release.xcconfig"; sourceTree = "<group>"; };
 		A185197ED16FA440F6352C69 /* libPods-Vivid.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vivid.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1C052E857E06A5E8449E24B /* Pods-Vivid.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vivid.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vivid/Pods-Vivid.debug.xcconfig"; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */,
-				7EE906311EFD9C1200E6EAD9 /* ViewController.swift */,
+				7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */,
 				7EE906331EFD9C1200E6EAD9 /* Main.storyboard */,
 				7EE906361EFD9C1200E6EAD9 /* Assets.xcassets */,
 				7EE906381EFD9C1200E6EAD9 /* LaunchScreen.storyboard */,
@@ -219,7 +219,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EE906321EFD9C1200E6EAD9 /* ViewController.swift in Sources */,
+				7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */,
 				7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,7 +347,7 @@
 				DEVELOPMENT_TEAM = 6JFW8GEZ3K;
 				INFOPLIST_FILE = Vivid/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = celiagomezdev.com.Vivid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.celiagomezdev.Vivid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -361,7 +361,7 @@
 				DEVELOPMENT_TEAM = 6JFW8GEZ3K;
 				INFOPLIST_FILE = Vivid/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = celiagomezdev.com.Vivid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.celiagomezdev.Vivid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
