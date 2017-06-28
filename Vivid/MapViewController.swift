@@ -28,9 +28,17 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        searchBarView.isHidden = true
+        //MARK: Call initianLocation method when user disable authorized location
         
-        //MARK: Initial position when no user location
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
         
+        searchAutocomplete()
+
+    }
+    
+    func initialLocation() {
         let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 12)
         self.mapView.camera = camera
         
@@ -39,11 +47,9 @@ class MapViewController: UIViewController {
         marker.title = "Berlin"
         marker.map = mapView
         
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        
-        //MARK: Autocomplete search connected with our searchBar
-        
+    }
+    
+    func searchAutocomplete() {
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         
@@ -54,7 +60,7 @@ class MapViewController: UIViewController {
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
         definesPresentationContext = true
-        searchBarView.isHidden = true
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -88,6 +94,8 @@ extension MapViewController: CLLocationManagerDelegate {
             
             mapView.isMyLocationEnabled = true
             mapView.settings.myLocationButton = true
+        } else {
+            initialLocation()
         }
     }
     
