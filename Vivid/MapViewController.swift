@@ -42,35 +42,31 @@ class MapViewController: UIViewController {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
-        //MARK: autocomplete search connected with our searchBar
+        //MARK: Autocomplete search connected with our searchBar
         
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
-        self.view.addSubview((searchController?.searchBar)!)
-        
-        searchBarView.addSubview((searchController?.searchBar)!)
-        view.addSubview(searchBarView)
-        
-        searchController?.searchBar.sizeToFit()
         searchController?.hidesNavigationBarDuringPresentation = false
         
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
         definesPresentationContext = true
+        searchBarView.isHidden = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchBarView.isHidden = true
     }
     
     //MARK: Simple search button
     
     @IBAction func search(_ sender: Any) {
         if searchBarView.isHidden {
+            searchBarView.addSubview((searchController?.searchBar)!)
+            searchController?.searchBar.sizeToFit()
             searchBarView.isHidden = false
         } else {
             searchBarView.isHidden = true
