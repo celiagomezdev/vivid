@@ -19,7 +19,6 @@ class MapViewController: UIViewController {
     @IBOutlet weak var searchButton: UIBarButtonItem!
     @IBOutlet weak var searchBarView: UIView!
     
-    var googleMap: GMSMapView?
     let locationManager = CLLocationManager()
     
     var resultsViewController: GMSAutocompleteResultsViewController?
@@ -33,9 +32,7 @@ class MapViewController: UIViewController {
         //MARK: Initial position when no user location
         
         let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 12)
-        googleMap = GMSMapView.map(withFrame: mapView.frame, camera: camera)
-        self.mapView = googleMap
-        self.view.addSubview(mapView!)
+        self.mapView.camera = camera
         
         let initialLocation = CLLocationCoordinate2DMake(52.520736, 13.409423)
         let marker = GMSMarker(position: initialLocation)
