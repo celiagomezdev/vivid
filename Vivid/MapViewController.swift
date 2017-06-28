@@ -14,13 +14,17 @@ import GooglePlacePicker
 
 class MapViewController: UIViewController {
     
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var toolBar: UIToolbar!
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var searchButton: UIBarButtonItem!
+    @IBOutlet weak var searchBarView: UIView!
     
     var googleMap: GMSMapView?
     let locationManager = CLLocationManager()
+    
+    var resultsViewController: GMSAutocompleteResultsViewController?
+    var searchController: UISearchController?
+    var resultView: UITextView?
 
     override func viewDidLoad() {
         
@@ -32,7 +36,6 @@ class MapViewController: UIViewController {
         googleMap = GMSMapView.map(withFrame: mapView.frame, camera: camera)
         self.mapView = googleMap
         self.view.addSubview(mapView!)
-        self.view.addSubview(searchBar)
         
         let initialLocation = CLLocationCoordinate2DMake(52.520736, 13.409423)
         let marker = GMSMarker(position: initialLocation)
@@ -42,22 +45,41 @@ class MapViewController: UIViewController {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
+        //MARK: autocomplete search connected with our searchBar
+        
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self
+        
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        self.view.addSubview((searchController?.searchBar)!)
+        
+        searchBarView.addSubview((searchController?.searchBar)!)
+        view.addSubview(searchBarView)
+        
+        searchController?.searchBar.sizeToFit()
+        searchController?.hidesNavigationBarDuringPresentation = false
+        
+        // When UISearchController presents the results view, present it in
+        // this view controller, not one further up the chain.
+        definesPresentationContext = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchBar.isHidden = true
+        searchBarView.isHidden = true
     }
     
     //MARK: Simple search button
     
     @IBAction func search(_ sender: Any) {
-        if searchBar.isHidden {
-            searchBar.isHidden = false
+        if searchBarView.isHidden {
+            searchBarView.isHidden = false
         } else {
-            searchBar.isHidden = true
+            searchBarView.isHidden = true
         }
     }
+
 }
 
 //MARK: Get user location
@@ -83,6 +105,34 @@ extension MapViewController: CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
             
         }
+    }
+}
+
+// Handle the user's selection.
+extension MapViewController: GMSAutocompleteResultsViewControllerDelegate {
+    
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didAutocompleteWith place: GMSPlace) {
+        searchController?.isActive = false
+        // Do something with the selected place.
+        print("Place name: \(place.name)")
+        print("Place address: \(String(describing: place.formattedAddress))")
+        print("Place attributions: \(String(describing: place.attributions))")
+    }
+    
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didFailAutocompleteWithError error: Error){
+        // TODO: handle the error.
+        print("Error: ", error.localizedDescription)
+    }
+    
+    // Turn the network activity indicator on and off again.
+    func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 }
 
