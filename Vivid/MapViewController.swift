@@ -57,6 +57,11 @@ class MapViewController: UIViewController {
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.hidesNavigationBarDuringPresentation = false
         
+        let filter = GMSAutocompleteFilter()
+        filter.type = .region
+        filter.country = "de"
+        resultsViewController?.autocompleteFilter = filter
+   
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
         definesPresentationContext = true
