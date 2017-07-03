@@ -11,21 +11,39 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
+import MapKit
+
 
 class MapViewController: UIViewController {
+    
+    // MARK: Outlets
     
     @IBOutlet weak var toolBar: UIToolbar!
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var searchButton: UIBarButtonItem!
     @IBOutlet weak var searchBarView: UIView!
     
+    
+    // MARK: Properties
+    
     let locationManager = CLLocationManager()
     
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
     var resultView: UITextView?
+    var searchSource: [String]?
     
-
+    //create a completer
+    lazy var searchCompleter: MKLocalSearchCompleter = {
+        let sC = MKLocalSearchCompleter()
+        sC.delegate = self
+        return sC
+        
+    }()
+   
+    
+    // MARK: Life Cycle
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -156,4 +174,22 @@ extension MapViewController: GMSAutocompleteResultsViewControllerDelegate {
     }
 }
 
+//Try searchCompleter
+
+extension MapViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        //change searchCompleter depends on searchBar's text
+        if !searchText.isEmpty {
+            searchCompleter.queryFragment = searchText
+        }
+    }
+}
+
+extension MapViewController: MKLocalSearchCompleterDelegate {
+    
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        //handle the error
+        print(error.localizedDescription)
+    }
+}
 
