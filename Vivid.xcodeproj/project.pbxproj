@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		188183DBB5A80114C0E08912 /* libPods-Vivid.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A185197ED16FA440F6352C69 /* libPods-Vivid.a */; };
+		7E4417001F0A875800072545 /* GMSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4416FF1F0A875800072545 /* GMSClient.swift */; };
+		7E4417021F0A878700072545 /* GMSConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417011F0A878700072545 /* GMSConvenience.swift */; };
+		7E4417041F0A87AB00072545 /* GMSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417031F0A87AB00072545 /* GMSConstants.swift */; };
+		7E4417061F0A87CC00072545 /* GMSPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417051F0A87CC00072545 /* GMSPlace.swift */; };
+		7E4417081F0A880100072545 /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417071F0A880100072545 /* GCDBlackBox.swift */; };
+		7E44170A1F0A884F00072545 /* Neighbourhood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417091F0A884F00072545 /* Neighbourhood.swift */; };
 		7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */; };
 		7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */; };
 		7EE906351EFD9C1200E6EAD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EE906331EFD9C1200E6EAD9 /* Main.storyboard */; settings = {ASSET_TAGS = (1, ); }; };
@@ -17,6 +23,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7E4416FF1F0A875800072545 /* GMSClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSClient.swift; sourceTree = "<group>"; };
+		7E4417011F0A878700072545 /* GMSConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSConvenience.swift; sourceTree = "<group>"; };
+		7E4417031F0A87AB00072545 /* GMSConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSConstants.swift; sourceTree = "<group>"; };
+		7E4417051F0A87CC00072545 /* GMSPlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSPlace.swift; sourceTree = "<group>"; };
+		7E4417071F0A880100072545 /* GCDBlackBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
+		7E4417091F0A884F00072545 /* Neighbourhood.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Neighbourhood.swift; sourceTree = "<group>"; };
 		7EE9062C1EFD9C1200E6EAD9 /* Vivid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vivid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +71,67 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		7E4416F81F0A85A600072545 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7E4416FD1F0A863800072545 /* Clients */,
+				7E4417091F0A884F00072545 /* Neighbourhood.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		7E4416F91F0A85C600072545 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7EE906331EFD9C1200E6EAD9 /* Main.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		7E4416FA1F0A85D300072545 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		7E4416FB1F0A85F400072545 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7EE9063B1EFD9C1200E6EAD9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7E4416FC1F0A85F700072545 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				7EE906361EFD9C1200E6EAD9 /* Assets.xcassets */,
+				7EE906381EFD9C1200E6EAD9 /* LaunchScreen.storyboard */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		7E4416FD1F0A863800072545 /* Clients */ = {
+			isa = PBXGroup;
+			children = (
+				7E4416FE1F0A863E00072545 /* GMS */,
+			);
+			name = Clients;
+			sourceTree = "<group>";
+		};
+		7E4416FE1F0A863E00072545 /* GMS */ = {
+			isa = PBXGroup;
+			children = (
+				7E4416FF1F0A875800072545 /* GMSClient.swift */,
+				7E4417011F0A878700072545 /* GMSConvenience.swift */,
+				7E4417031F0A87AB00072545 /* GMSConstants.swift */,
+				7E4417051F0A87CC00072545 /* GMSPlace.swift */,
+			);
+			name = GMS;
+			sourceTree = "<group>";
+		};
 		7EE906231EFD9C1200E6EAD9 = {
 			isa = PBXGroup;
 			children = (
@@ -82,11 +155,12 @@
 			isa = PBXGroup;
 			children = (
 				7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */,
-				7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */,
-				7EE906331EFD9C1200E6EAD9 /* Main.storyboard */,
-				7EE906361EFD9C1200E6EAD9 /* Assets.xcassets */,
-				7EE906381EFD9C1200E6EAD9 /* LaunchScreen.storyboard */,
-				7EE9063B1EFD9C1200E6EAD9 /* Info.plist */,
+				7E4417071F0A880100072545 /* GCDBlackBox.swift */,
+				7E4416F81F0A85A600072545 /* Model */,
+				7E4416F91F0A85C600072545 /* View */,
+				7E4416FA1F0A85D300072545 /* Controller */,
+				7E4416FC1F0A85F700072545 /* Assets */,
+				7E4416FB1F0A85F400072545 /* Supporting Files */,
 			);
 			path = Vivid;
 			sourceTree = "<group>";
@@ -220,7 +294,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */,
+				7E4417061F0A87CC00072545 /* GMSPlace.swift in Sources */,
+				7E4417041F0A87AB00072545 /* GMSConstants.swift in Sources */,
+				7E44170A1F0A884F00072545 /* Neighbourhood.swift in Sources */,
 				7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */,
+				7E4417001F0A875800072545 /* GMSClient.swift in Sources */,
+				7E4417021F0A878700072545 /* GMSConvenience.swift in Sources */,
+				7E4417081F0A880100072545 /* GCDBlackBox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

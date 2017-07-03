@@ -24,6 +24,7 @@ class MapViewController: UIViewController {
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
     var resultView: UITextView?
+    
 
     override func viewDidLoad() {
         
@@ -33,13 +34,18 @@ class MapViewController: UIViewController {
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        
-        searchAutocomplete()
 
     }
     
+   
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchAutocomplete()
+    }
+    
+    
     func initialLocation() {
-        let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 12)
+        let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 8)
         self.mapView.camera = camera
         
         let initialLocation = CLLocationCoordinate2DMake(52.520736, 13.409423)
@@ -53,25 +59,32 @@ class MapViewController: UIViewController {
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
         
+        let northEastBoundsCorner = CLLocationCoordinate2D(latitude: 52.650385,
+                                                           longitude: 13.730843)
+        let southWestBoundsCorner = CLLocationCoordinate2D(latitude: 52.390954,
+                                                           longitude: 13.111097)
+        let bounds = GMSCoordinateBounds(coordinate: northEastBoundsCorner,
+                                         coordinate: southWestBoundsCorner)
+
+        resultsViewController?.autocompleteBounds = bounds
+        
+        let filter = GMSAutocompleteFilter()
+        filter.type = .region
+       
+        filter.country = "de"
+        resultsViewController?.autocompleteFilter = filter
+        
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.hidesNavigationBarDuringPresentation = false
         
-        let filter = GMSAutocompleteFilter()
-        filter.type = .region
-        filter.country = "de"
-        resultsViewController?.autocompleteFilter = filter
-   
+  
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
         definesPresentationContext = true
 
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     //MARK: Simple search button
     
     @IBAction func search(_ sender: Any) {
@@ -124,6 +137,7 @@ extension MapViewController: GMSAutocompleteResultsViewControllerDelegate {
         print("Place name: \(place.name)")
         print("Place address: \(String(describing: place.formattedAddress))")
         print("Place attributions: \(String(describing: place.attributions))")
+        print("Place coordinates: \(String(describing: place.coordinate))")
     }
     
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
