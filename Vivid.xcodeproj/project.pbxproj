@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		188183DBB5A80114C0E08912 /* libPods-Vivid.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A185197ED16FA440F6352C69 /* libPods-Vivid.a */; };
+		1C30B642D69229631FAF234D /* Pods_Vivid.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A5DE85217929321C694C98 /* Pods_Vivid.framework */; };
 		7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */; };
 		7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */; };
 		7EE906351EFD9C1200E6EAD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EE906331EFD9C1200E6EAD9 /* Main.storyboard */; settings = {ASSET_TAGS = (1, ); }; };
@@ -17,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		63A5DE85217929321C694C98 /* Pods_Vivid.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vivid.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE9062C1EFD9C1200E6EAD9 /* Vivid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vivid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -26,7 +27,6 @@
 		7EE9063B1EFD9C1200E6EAD9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EE906411EFD9CC600E6EAD9 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		8385AD172EA13ED24E344B8A /* Pods-Vivid.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vivid.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vivid/Pods-Vivid.release.xcconfig"; sourceTree = "<group>"; };
-		A185197ED16FA440F6352C69 /* libPods-Vivid.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vivid.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1C052E857E06A5E8449E24B /* Pods-Vivid.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vivid.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vivid/Pods-Vivid.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,7 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				188183DBB5A80114C0E08912 /* libPods-Vivid.a in Frameworks */,
+				1C30B642D69229631FAF234D /* Pods_Vivid.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +45,7 @@
 		49BC49D5A6BCF115D89A871B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A185197ED16FA440F6352C69 /* libPods-Vivid.a */,
+				63A5DE85217929321C694C98 /* Pods_Vivid.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
