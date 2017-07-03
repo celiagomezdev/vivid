@@ -12,6 +12,7 @@ import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
 import MapKit
+import SearchTextField
 
 
 class MapViewController: UIViewController {
@@ -22,7 +23,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var searchButton: UIBarButtonItem!
     @IBOutlet weak var searchBarView: UIView!
-    
+    @IBOutlet weak var mySearchTextField: SearchTextField!
     
     // MARK: Properties
     
@@ -31,23 +32,14 @@ class MapViewController: UIViewController {
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
     var resultView: UITextView?
-    var searchSource: [String]?
     
-    //create a completer
-    lazy var searchCompleter: MKLocalSearchCompleter = {
-        let sC = MKLocalSearchCompleter()
-        sC.delegate = self
-        return sC
-        
-    }()
    
-    
     // MARK: Life Cycle
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        searchBarView.isHidden = true
+        mySearchTextField.isHidden = true
         //MARK: Call initianLocation method when user disable authorized location
         
         locationManager.delegate = self
@@ -58,7 +50,6 @@ class MapViewController: UIViewController {
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchAutocomplete()
     }
     
     
@@ -106,15 +97,15 @@ class MapViewController: UIViewController {
     //MARK: Simple search button
     
     @IBAction func search(_ sender: Any) {
-        if searchBarView.isHidden {
-            searchBarView.addSubview((searchController?.searchBar)!)
-            searchController?.searchBar.sizeToFit()
-            searchBarView.isHidden = false
+        mySearchTextField.filterStrings(["Neukölln", "Kreuzberg", "Mitte"])
+        mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
+        mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
+        if mySearchTextField.isHidden {
+           mySearchTextField.isHidden = false
         } else {
-            searchBarView.isHidden = true
+            mySearchTextField.isHidden = true
         }
     }
-
 }
 
 //MARK: Get user location
@@ -174,22 +165,5 @@ extension MapViewController: GMSAutocompleteResultsViewControllerDelegate {
     }
 }
 
-//Try searchCompleter
 
-extension MapViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        //change searchCompleter depends on searchBar's text
-        if !searchText.isEmpty {
-            searchCompleter.queryFragment = searchText
-        }
-    }
-}
-
-extension MapViewController: MKLocalSearchCompleterDelegate {
-    
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        //handle the error
-        print(error.localizedDescription)
-    }
-}
 
