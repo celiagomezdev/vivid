@@ -64,35 +64,6 @@ class MapViewController: UIViewController {
         
     }
     
-    func searchAutocomplete() {
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-        
-        let northEastBoundsCorner = CLLocationCoordinate2D(latitude: 52.650385,
-                                                           longitude: 13.730843)
-        let southWestBoundsCorner = CLLocationCoordinate2D(latitude: 52.390954,
-                                                           longitude: 13.111097)
-        let bounds = GMSCoordinateBounds(coordinate: northEastBoundsCorner,
-                                         coordinate: southWestBoundsCorner)
-
-        resultsViewController?.autocompleteBounds = bounds
-        
-        let filter = GMSAutocompleteFilter()
-        filter.type = .region
-       
-        filter.country = "de"
-        resultsViewController?.autocompleteFilter = filter
-        
-        searchController = UISearchController(searchResultsController: resultsViewController)
-        searchController?.searchResultsUpdater = resultsViewController
-        searchController?.hidesNavigationBarDuringPresentation = false
-        
-  
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
-
-    }
 
     //MARK: Simple search button
     
@@ -101,13 +72,12 @@ class MapViewController: UIViewController {
         mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
         mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
         if mySearchTextField.isHidden {
-           mySearchTextField.isHidden = false
+            mySearchTextField.isHidden = false
         } else {
             mySearchTextField.isHidden = true
         }
     }
 }
-
 //MARK: Get user location
 
 extension MapViewController: CLLocationManagerDelegate {

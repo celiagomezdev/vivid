@@ -13,7 +13,7 @@ import MapKit
 //MARK: Neighbourhood enumeration
 
 enum Neighbourhood: String {
-    case neukölln = "Neukölln", kreuzberg = "Kreuzberg", mitte = "Mitte"
+    case currentLocation = "Current location", neukölln = "Neukölln", kreuzberg = "Kreuzberg", mitte = "Mitte"
 }
 
 //MARK: NeighbourhoodPickerViewControllerDelegate

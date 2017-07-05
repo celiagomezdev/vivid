@@ -14,6 +14,7 @@
 		7E4417061F0A87CC00072545 /* GMSPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417051F0A87CC00072545 /* GMSPlace.swift */; };
 		7E4417081F0A880100072545 /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417071F0A880100072545 /* GCDBlackBox.swift */; };
 		7E44170C1F0A8DD100072545 /* NeighbourhoodPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E44170B1F0A8DD100072545 /* NeighbourhoodPickerViewController.swift */; };
+		7E498C721F0BE0CC00DC443B /* PlacesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E498C711F0BE0CC00DC443B /* PlacesTableViewController.swift */; };
 		7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */; };
 		7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */; };
 		7EE906351EFD9C1200E6EAD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EE906331EFD9C1200E6EAD9 /* Main.storyboard */; settings = {ASSET_TAGS = (1, ); }; };
@@ -30,6 +31,7 @@
 		7E4417051F0A87CC00072545 /* GMSPlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSPlace.swift; sourceTree = "<group>"; };
 		7E4417071F0A880100072545 /* GCDBlackBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
 		7E44170B1F0A8DD100072545 /* NeighbourhoodPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NeighbourhoodPickerViewController.swift; path = ../NeighbourhoodPickerViewController.swift; sourceTree = "<group>"; };
+		7E498C711F0BE0CC00DC443B /* PlacesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesTableViewController.swift; sourceTree = "<group>"; };
 		7EE9062C1EFD9C1200E6EAD9 /* Vivid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vivid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -82,7 +84,6 @@
 		7E4416F91F0A85C600072545 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7EE906331EFD9C1200E6EAD9 /* Main.storyboard */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -107,6 +108,7 @@
 		7E4416FC1F0A85F700072545 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				7EE906331EFD9C1200E6EAD9 /* Main.storyboard */,
 				7EE906361EFD9C1200E6EAD9 /* Assets.xcassets */,
 				7EE906381EFD9C1200E6EAD9 /* LaunchScreen.storyboard */,
 			);
@@ -135,6 +137,7 @@
 		7EE906231EFD9C1200E6EAD9 = {
 			isa = PBXGroup;
 			children = (
+				7E498C711F0BE0CC00DC443B /* PlacesTableViewController.swift */,
 				7EE906411EFD9CC600E6EAD9 /* Podfile */,
 				7EE9062E1EFD9C1200E6EAD9 /* Vivid */,
 				7EE9062D1EFD9C1200E6EAD9 /* Products */,
@@ -301,6 +304,7 @@
 				7E4417001F0A875800072545 /* GMSClient.swift in Sources */,
 				7E4417021F0A878700072545 /* GMSConvenience.swift in Sources */,
 				7E4417081F0A880100072545 /* GCDBlackBox.swift in Sources */,
+				7E498C721F0BE0CC00DC443B /* PlacesTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
