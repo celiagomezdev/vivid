@@ -41,12 +41,6 @@ class NeighbourhoodPickerViewController: UIViewController {
             mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
             mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
             
-//            if mySearchTextField.isHidden {
-//                mySearchTextField.isHidden = false
-//            } else {
-//                mySearchTextField.isHidden = true
-//            }
-            
         } else {
             print("No search text field")
         }

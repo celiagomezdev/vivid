@@ -72,6 +72,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="searchButton" destination="DEg-J5-Ltd" id="QQw-Yb-d3B"/>
+                        <outlet property="searchView" destination="T7e-uv-WyC" id="w0f-XR-oIP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dJ8-Gl-SrS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -150,7 +151,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rtb-4y-6sn" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2ns-6N-eet">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="2ns-6N-eet">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
