@@ -12,34 +12,24 @@ import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
 import MapKit
-import SearchTextField
 
 
 class MapViewController: UIViewController {
     
     // MARK: Outlets
     
-    @IBOutlet weak var toolBar: UIToolbar!
     @IBOutlet weak var mapView: GMSMapView!
-    @IBOutlet weak var searchButton: UIBarButtonItem!
-    @IBOutlet weak var searchBarView: UIView!
-    @IBOutlet weak var mySearchTextField: SearchTextField!
+
     
     // MARK: Properties
     
     let locationManager = CLLocationManager()
-    
-    var resultsViewController: GMSAutocompleteResultsViewController?
-    var searchController: UISearchController?
-    var resultView: UITextView?
-    
-   
+
     // MARK: Life Cycle
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        mySearchTextField.isHidden = true
         //MARK: Call initianLocation method when user disable authorized location
         
         locationManager.delegate = self
@@ -64,19 +54,6 @@ class MapViewController: UIViewController {
         
     }
     
-
-    //MARK: Simple search button
-    
-    @IBAction func search(_ sender: Any) {
-        mySearchTextField.filterStrings(["Neukölln", "Kreuzberg", "Mitte"])
-        mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
-        mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
-        if mySearchTextField.isHidden {
-            mySearchTextField.isHidden = false
-        } else {
-            mySearchTextField.isHidden = true
-        }
-    }
 }
 //MARK: Get user location
 
@@ -103,35 +80,6 @@ extension MapViewController: CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
             
         }
-    }
-}
-
-// Handle the user's selection.
-extension MapViewController: GMSAutocompleteResultsViewControllerDelegate {
-    
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didAutocompleteWith place: GMSPlace) {
-        searchController?.isActive = false
-        // Do something with the selected place.
-        print("Place name: \(place.name)")
-        print("Place address: \(String(describing: place.formattedAddress))")
-        print("Place attributions: \(String(describing: place.attributions))")
-        print("Place coordinates: \(String(describing: place.coordinate))")
-    }
-    
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didFailAutocompleteWithError error: Error){
-        // TODO: handle the error.
-        print("Error: ", error.localizedDescription)
-    }
-    
-    // Turn the network activity indicator on and off again.
-    func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-    }
-    
-    func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 }
 
