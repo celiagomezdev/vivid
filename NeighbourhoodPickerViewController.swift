@@ -21,6 +21,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     
     var queryText: String?
     var neighbourhoods: [String]!
+    var userLocation: String?
     
     //MARK: Neighbourhood enumeration
     
@@ -62,6 +63,8 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text != nil {
             queryText = textField.text
+            print("queryText")
+            print((userLocation ?? "No user location"))
         } else {
             print("Error: textFieldDidEndEditing")
         }

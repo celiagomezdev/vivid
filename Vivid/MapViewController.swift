@@ -42,7 +42,7 @@ class MapViewController: UIViewController {
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        storeUserLocation()
+
  
     }
     
@@ -61,6 +61,7 @@ class MapViewController: UIViewController {
         
     }
 }
+
 //MARK: Get user location
 
 extension MapViewController: CLLocationManagerDelegate {
@@ -80,30 +81,28 @@ extension MapViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
         if let location = locations.first {
             
             mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
             
-            //Save current lat long
-            UserDefaults.standard.set(location.coordinate.latitude, forKey: "LAT")
-            UserDefaults.standard.set(location.coordinate.longitude, forKey: "LON")
-            UserDefaults().synchronize()
-            
             locationManager.stopUpdatingLocation()
+            
+            //Store User Location
+            userLocation = "\(location.coordinate.latitude), \(location.coordinate.longitude)"
+            print("userLocation is: \((userLocation) ?? "No user Location")")
+            
+            if let userLocation = userLocation {
+                
+                let neighbourhoodVC = storyboard?.instantiateViewController(withIdentifier: "NeighbourhoodPickerViewController") as! NeighbourhoodPickerViewController
+                neighbourhoodVC.userLocation = userLocation
+                
+            } else {
+                print("There was an issue storing the user location")
+            }
         }
+        
     }
-    
-//    func storeUserLocation() {
-//        
-//        //Access user Location LAT & LON from User Defaults
-// 
-//        let coordinate =  CLLocationCoordinate2D(latitude: UserDefaults.standard.value(forKey: "LAT") as! CLLocationDegrees, longitude: UserDefaults.standard.value(forKey: "LON") as! CLLocationDegrees)
-//        
-//        userLocation = "\(coordinate.latitude), \(coordinate.longitude)"
-//        print("userLocation is: \((userLocation) ?? "No user Location")")
-//
-//    }
 }
-
 
 

@@ -14,17 +14,18 @@ var urlRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?l
 
 extension GMSClient {
     
+
+    
     // MARK: Constants
     struct Constants {
         
         // MARK: API Key
-        static let ApiKey = "5bc85671b2e9b28cb69bf0ea4cbad9ba"
+        static let ApiKey = ""
         
         // MARK: URLs
         static let ApiScheme = "https"
         static let ApiHost = "maps.googleapis.com"
         static let ApiPath = "/maps/api/"
-
     }
     
     // MARK: Methods

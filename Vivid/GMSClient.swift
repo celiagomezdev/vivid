@@ -11,6 +11,14 @@ import UIKit
 class GMSClient: NSObject {
     
 
+    // MARK: Shared Instance
     
-
+    class func sharedInstance() -> GMSClient {
+        struct Singleton {
+            static var sharedInstance = GMSClient()
+        }
+        return Singleton.sharedInstance
+    }
 }
+
+

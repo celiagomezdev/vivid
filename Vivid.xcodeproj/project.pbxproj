@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2F084D4209028884D2E84E16 /* Pods_Vivid.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0308D493D0A18B5855B49F51 /* Pods_Vivid.framework */; };
 		7E206B2B1F0F891A00E5E052 /* GMSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E206B2A1F0F891A00E5E052 /* GMSConstants.swift */; };
+		7E206B2D1F0FD8B600E5E052 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E206B2C1F0FD8B600E5E052 /* Keys.plist */; };
 		7E4417001F0A875800072545 /* GMSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4416FF1F0A875800072545 /* GMSClient.swift */; };
 		7E4417021F0A878700072545 /* GMSConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417011F0A878700072545 /* GMSConvenience.swift */; };
 		7E4417061F0A87CC00072545 /* GMSPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417051F0A87CC00072545 /* GMSPlace.swift */; };
@@ -28,6 +29,7 @@
 /* Begin PBXFileReference section */
 		0308D493D0A18B5855B49F51 /* Pods_Vivid.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vivid.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E206B2A1F0F891A00E5E052 /* GMSConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSConstants.swift; sourceTree = "<group>"; };
+		7E206B2C1F0FD8B600E5E052 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Keys.plist; path = ../Keys.plist; sourceTree = "<group>"; };
 		7E4416FF1F0A875800072545 /* GMSClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSClient.swift; sourceTree = "<group>"; };
 		7E4417011F0A878700072545 /* GMSConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSConvenience.swift; sourceTree = "<group>"; };
 		7E4417051F0A87CC00072545 /* GMSPlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GMSPlace.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 		7E4416FB1F0A85F400072545 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7E206B2C1F0FD8B600E5E052 /* Keys.plist */,
 				7EE9063B1EFD9C1200E6EAD9 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -244,6 +247,7 @@
 				7EE906371EFD9C1200E6EAD9 /* Assets.xcassets in Resources */,
 				7EE906421EFD9CC600E6EAD9 /* Podfile in Resources */,
 				7EE906351EFD9C1200E6EAD9 /* Main.storyboard in Resources */,
+				7E206B2D1F0FD8B600E5E052 /* Keys.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
