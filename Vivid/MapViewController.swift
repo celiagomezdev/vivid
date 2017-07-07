@@ -16,32 +16,42 @@ import SearchTextField
 
 class MapViewController: UIViewController {
     
-    @IBOutlet weak var toolBar: UIToolbar!
+    // MARK: Outlets
+    
     @IBOutlet weak var mapView: GMSMapView!
-    @IBOutlet weak var searchButton: UIBarButtonItem!
-    @IBOutlet weak var searchBarView: UIView!
+
+    
+    // MARK: Properties
     
     let locationManager = CLLocationManager()
+    var userLocation: String?
     
-    var resultsViewController: GMSAutocompleteResultsViewController?
-    var searchController: UISearchController?
-    var resultView: UITextView?
 
+    // MARK: Life Cycle
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        searchBarView.isHidden = true
         //MARK: Call initianLocation method when user disable authorized location
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        
-        searchAutocomplete()
 
     }
     
+   
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+ 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     func initialLocation() {
-        let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 12)
+        let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 8)
         self.mapView.camera = camera
         
         let initialLocation = CLLocationCoordinate2DMake(52.520736, 13.409423)
@@ -50,42 +60,6 @@ class MapViewController: UIViewController {
         marker.map = mapView
         
     }
-    
-    func searchAutocomplete() {
-        resultsViewController = GMSAutocompleteResultsViewController()
-        resultsViewController?.delegate = self
-        
-        searchController = UISearchController(searchResultsController: resultsViewController)
-        searchController?.searchResultsUpdater = resultsViewController
-        searchController?.hidesNavigationBarDuringPresentation = false
-        
-        let filter = GMSAutocompleteFilter()
-        filter.type = .region
-        filter.country = "de"
-        resultsViewController?.autocompleteFilter = filter
-   
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
-
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    //MARK: Simple search button
-    
-    @IBAction func search(_ sender: Any) {
-        if searchBarView.isHidden {
-            searchBarView.addSubview((searchController?.searchBar)!)
-            searchController?.searchBar.sizeToFit()
-            searchBarView.isHidden = false
-        } else {
-            searchBarView.isHidden = true
-        }
-    }
-
 }
 
 //MARK: Get user location
@@ -109,38 +83,25 @@ extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         if let location = locations.first {
-            mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
-        locationManager.stopUpdatingLocation()
             
+            mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
+            
+            locationManager.stopUpdatingLocation()
+            
+            //Store User Location
+            userLocation = "\(location.coordinate.latitude), \(location.coordinate.longitude)"
+            print("userLocation is: \((userLocation) ?? "No user Location")")
+            
+            if let userLocation = userLocation {
+                
+                let neighbourhoodVC = storyboard?.instantiateViewController(withIdentifier: "NeighbourhoodPickerViewController") as! NeighbourhoodPickerViewController
+                neighbourhoodVC.userLocation = userLocation
+                
+            } else {
+                print("There was an issue storing the user location")
+            }
         }
-    }
-}
-
-// Handle the user's selection.
-extension MapViewController: GMSAutocompleteResultsViewControllerDelegate {
-    
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didAutocompleteWith place: GMSPlace) {
-        searchController?.isActive = false
-        // Do something with the selected place.
-        print("Place name: \(place.name)")
-        print("Place address: \(String(describing: place.formattedAddress))")
-        print("Place attributions: \(String(describing: place.attributions))")
-    }
-    
-    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
-                           didFailAutocompleteWithError error: Error){
-        // TODO: handle the error.
-        print("Error: ", error.localizedDescription)
-    }
-    
-    // Turn the network activity indicator on and off again.
-    func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-    }
-    
-    func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        
     }
 }
 

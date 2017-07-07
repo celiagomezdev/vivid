@@ -14,15 +14,24 @@ import GooglePlaces
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        GMSPlacesClient.provideAPIKey("AIzaSyA_lLC17QV-E9720fMzRMZF04QtdIy4JEo")
+        var keys: NSDictionary?
         
-        GMSServices.provideAPIKey("AIzaSyA_lLC17QV-E9720fMzRMZF04QtdIy4JEo")
+        if let path = Bundle.main.path(forResource: "Keys", ofType: "plist") {
+            keys = NSDictionary(contentsOfFile: path)
+        }
         
+        if let dict = keys {
+            let iosApiKey = dict["GMSiOSApiKey"] as? String
+            let webSearchApiKey = dict["GMSWebApiKey"] as? String
+            
+            GMSPlacesClient.provideAPIKey(iosApiKey!)
+            GMSServices.provideAPIKey(webSearchApiKey!)
+        }
+
         return true
     }
 
