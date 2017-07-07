@@ -15,7 +15,6 @@ var urlRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?l
 extension GMSClient {
     
 
-    
     // MARK: Constants
     struct Constants {
         
