@@ -63,8 +63,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text != nil {
             queryText = textField.text
-            print("queryText")
-            print((userLocation ?? "No user location"))
+            print("\(String(describing: queryText!))")
         } else {
             print("Error: textFieldDidEndEditing")
         }
