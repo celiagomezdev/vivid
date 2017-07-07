@@ -1,0 +1,6 @@
+framework module Pods_Vivid {
+  umbrella header "Pods-Vivid-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -14,12 +14,20 @@ var urlRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?l
 
 extension GMSClient {
     
-
+    class func valueForAPIKey(named keyname:String) -> String {
+        let filePath = Bundle.main.path(forResource: "ApiKeys", ofType: "plist")
+        let plist = NSDictionary(contentsOfFile:filePath!)
+        let value = plist?.object(forKey: keyname) as! String
+        return value
+    }
+    
+    
     // MARK: Constants
     struct Constants {
-        
+    
         // MARK: API Key
-        static let ApiKey = ""
+
+        static let ApiKey = GMSClient.valueForAPIKey(named:"GMSWebApiKey") //TYPE YOUR API KEY HERE INSTEAD
         
         // MARK: URLs
         static let ApiScheme = "https"
