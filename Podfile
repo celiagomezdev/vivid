@@ -5,5 +5,5 @@ pod 'GoogleMaps'
 pod 'GooglePlacePicker'
 pod 'GooglePlaces'
 use_frameworks!
-pod "SearchTextField"
+pod 'SearchTextField'
 end

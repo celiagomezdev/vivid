@@ -11,7 +11,7 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
-import SearchTextField
+import MapKit
 
 
 class MapViewController: UIViewController {
