@@ -9,11 +9,9 @@
 import Foundation
 
 
-var urlRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=52.479209, 13.437409&radius=2500&type=bar&key=AIzaSyDa9Fh9sFFxVaeawHxr-nvRgZUeX1SWB74"
-
-
 extension GMSClient {
     
+    //Method to extract API Key from private file
     class func valueForAPIKey(named keyname:String) -> String {
         let filePath = Bundle.main.path(forResource: "ApiKeys", ofType: "plist")
         let plist = NSDictionary(contentsOfFile:filePath!)
@@ -27,7 +25,7 @@ extension GMSClient {
     
         // MARK: API Key
 
-        static let ApiKey = GMSClient.valueForAPIKey(named:"GMSWebApiKey") //TYPE YOUR API KEY HERE INSTEAD
+        static let ApiKey = GMSClient.valueForAPIKey(named:"GMSWebApiKey") //YOUR API KEY HERE INSTEAD
         
         // MARK: URLs
         static let ApiScheme = "https"
