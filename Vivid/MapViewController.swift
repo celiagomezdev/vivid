@@ -24,6 +24,8 @@ class MapViewController: UIViewController {
     // MARK: Properties
     
     let locationManager = CLLocationManager()
+    var userLocation: String?
+    
 
     // MARK: Life Cycle
     
@@ -40,8 +42,13 @@ class MapViewController: UIViewController {
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        storeUserLocation()
+ 
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
     
     func initialLocation() {
         let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 8)
@@ -53,7 +60,6 @@ class MapViewController: UIViewController {
         marker.map = mapView
         
     }
-    
 }
 //MARK: Get user location
 
@@ -74,13 +80,29 @@ extension MapViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
         if let location = locations.first {
-            mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
-        locationManager.stopUpdatingLocation()
             
+            mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
+            
+            //Save current lat long
+            UserDefaults.standard.set(location.coordinate.latitude, forKey: "LAT")
+            UserDefaults.standard.set(location.coordinate.longitude, forKey: "LON")
+            UserDefaults().synchronize()
+            
+            locationManager.stopUpdatingLocation()
         }
     }
+    
+//    func storeUserLocation() {
+//        
+//        //Access user Location LAT & LON from User Defaults
+// 
+//        let coordinate =  CLLocationCoordinate2D(latitude: UserDefaults.standard.value(forKey: "LAT") as! CLLocationDegrees, longitude: UserDefaults.standard.value(forKey: "LON") as! CLLocationDegrees)
+//        
+//        userLocation = "\(coordinate.latitude), \(coordinate.longitude)"
+//        print("userLocation is: \((userLocation) ?? "No user Location")")
+//
+//    }
 }
 
 

@@ -14,12 +14,13 @@ import SearchTextField
 
 //MARK: NeighbourhoodPickerViewController: UIViewController
 
-class NeighbourhoodPickerViewController: UIViewController {
+class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
 
     //MARK: Outlets
     @IBOutlet weak var mySearchTextField: SearchTextField!
     
     var queryText: String?
+    var neighbourhoods: [String]!
     
     //MARK: Neighbourhood enumeration
     
@@ -29,24 +30,41 @@ class NeighbourhoodPickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        neighbourhoodPicker()
+        self.mySearchTextField.delegate = self
         
+        neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
+        
+        neighbourhoodPicker(neighbourhoods: neighbourhoods)
+
         // Do any additional setup after loading the view.
     }
     
-    func neighbourhoodPicker() {
+    //MARK: neigbourhoodPicker
+    
+    func neighbourhoodPicker(neighbourhoods: [String]) {
+        
+        //TODO implement completionHandler
         
         if (mySearchTextField) != nil {
-            mySearchTextField.filterStrings(["Neukölln", "Kreuzberg", "Mitte"])
+            mySearchTextField.filterStrings(neighbourhoods)
             mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
             mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
-            
         } else {
             print("No search text field")
         }
-        
     }
-
     
-
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.text != nil {
+            queryText = textField.text
+        } else {
+            print("Error: textFieldDidEndEditing")
+        }
+    }
+    
 }
