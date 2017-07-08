@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SearchTextField
+import MapKit
 
 
 
@@ -22,6 +23,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     var queryText: String?
     var neighbourhoods: [String]!
     var userLocation: String?
+    var currentLocation: CLLocation!
     
     //MARK: Neighbourhood enumeration
     
@@ -33,11 +35,19 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         self.mySearchTextField.delegate = self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(locationUpdateNotification), name: Notification.Name("UserLocationNotification"), object: nil)
+        
         neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
         
         neighbourhoodPicker(neighbourhoods: neighbourhoods)
 
-        // Do any additional setup after loading the view.
+    }
+    
+    func locationUpdateNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo?["location"] as? CLLocation {
+            self.currentLocation = userInfo
+            self.userLocation = "\(userInfo.coordinate.latitude), \(userInfo.coordinate.longitude)"
+        }
     }
     
     //MARK: neigbourhoodPicker
@@ -64,9 +74,27 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         if textField.text != nil {
             queryText = textField.text
             print("\(String(describing: queryText!))")
+            userSelection()
         } else {
             print("Error: textFieldDidEndEditing")
         }
+    }
+    
+    func userSelection() {
+        if queryText == "Current location" {
+            print(userLocation ?? "No location")
+        }
+    }
+}
+
+extension NeighbourhoodPickerViewController {
+    
+    struct Neighbourhoods {
+        
+        static let Neukölln = "52.479209, 13.437409"
+        static let Kreuzberg = "52.499248, 13.403765"
+        static let Mitte = "52.521785, 13.401039"
+    
     }
     
 }

@@ -26,6 +26,10 @@ class MapViewController: UIViewController {
     let locationManager = CLLocationManager()
     var userLocation: String?
     
+    
+    /// Notification on update of location. UserInfo contains CLLocation for key "location"
+    let kUserLocationNotification = "UserLocationNotification"
+    
 
     // MARK: Life Cycle
     
@@ -36,19 +40,15 @@ class MapViewController: UIViewController {
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
+     
 
     }
     
-   
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
 
- 
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
+    
     
     func initialLocation() {
         let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 8)
@@ -63,6 +63,7 @@ class MapViewController: UIViewController {
 }
 
 //MARK: Get user location
+
 
 extension MapViewController: CLLocationManagerDelegate {
     
@@ -81,27 +82,18 @@ extension MapViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
+ 
         if let location = locations.first {
             
             mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
             
             locationManager.stopUpdatingLocation()
             
-            //Store User Location
-            userLocation = "\(location.coordinate.latitude), \(location.coordinate.longitude)"
-            print("userLocation is: \((userLocation) ?? "No user Location")")
+            let userInfo : NSDictionary = ["location" : location]
             
-            if let userLocation = userLocation {
-                
-                let neighbourhoodVC = storyboard?.instantiateViewController(withIdentifier: "NeighbourhoodPickerViewController") as! NeighbourhoodPickerViewController
-                neighbourhoodVC.userLocation = userLocation
-                
-            } else {
-                print("There was an issue storing the user location")
-            }
+            NotificationCenter.default.post(name: NSNotification.Name("UserLocationNotification"), object: self, userInfo: userInfo as [NSObject : AnyObject])
+
         }
-        
     }
 }
 

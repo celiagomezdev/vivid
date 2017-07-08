@@ -10,7 +10,7 @@ import Foundation
 
 
 extension GMSClient {
-    
+
     //Method to extract API Key from private file
     class func valueForAPIKey(named keyname:String) -> String {
         let filePath = Bundle.main.path(forResource: "ApiKeys", ofType: "plist")
@@ -18,14 +18,13 @@ extension GMSClient {
         let value = plist?.object(forKey: keyname) as! String
         return value
     }
-    
-    
+
     // MARK: Constants
     struct Constants {
     
         // MARK: API Key
 
-        static let ApiKey = GMSClient.valueForAPIKey(named:"GMSWebApiKey") //YOUR API KEY HERE INSTEAD
+        static let ApiKey = GMSClient.valueForAPIKey(named:"GMSWebApiKey") //YOUR API KEY HERE
         
         // MARK: URLs
         static let ApiScheme = "https"
@@ -48,14 +47,5 @@ extension GMSClient {
         static let Location = "location"
         static let Radius = "radius"
     }
-    
-    struct ParameterValues {
-        static let Bar = "bar"
-        static let Radius = "2500"
-        static let Neukölln = "52.479209, 13.437409"
-        static let Kreuzberg = "52.499248, 13.403765"
-        static let Mitte = "52.521785, 13.401039"
-        static let currentLocation = ""
-     
-    }
+
 }
