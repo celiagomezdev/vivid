@@ -20,7 +20,6 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     //MARK: Outlets
     @IBOutlet weak var mySearchTextField: SearchTextField!
     
-    var queryText: String?
     var neighbourhoods: [String]!
     var userLocation: String?
     var currentLocation: CLLocation!
@@ -70,31 +69,22 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    //MARK: getPlaces methods depending what user chose
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.text != nil {
-            queryText = textField.text
-            print("\(String(describing: queryText!))")
-            userSelection()
+        if let searchText = textField.text {
+            if searchText == "Current location" {
+                if let userLocation = userLocation {
+                    GMSClient.sharedInstance().getPlacesForUserLocation(userLocation)
+                } else {
+                    print("We couldn't set the user location")
+                }
+            } else {
+                GMSClient.sharedInstance().getPlacesForSelectedNeighbourhood(searchText)
+            }
         } else {
             print("Error: textFieldDidEndEditing")
         }
     }
-    
-    func userSelection() {
-        if queryText == "Current location" {
-            print(userLocation ?? "No location")
-        }
-    }
 }
 
-extension NeighbourhoodPickerViewController {
-    
-    struct Neighbourhoods {
-        
-        static let Neukölln = "52.479209, 13.437409"
-        static let Kreuzberg = "52.499248, 13.403765"
-        static let Mitte = "52.521785, 13.401039"
-    
-    }
-    
-}
