@@ -18,19 +18,9 @@ class GMSClient: NSObject {
     //GET Search Request when user select Neighbourhood
     func getPlacesForSelectedNeighbourhood(_ searchText: String) {
         
-        if searchText == "Neukölln" {
-            let parameters = [GMSClient.ParameterKeys.Location: Neighbourhoods.Neukölln]
-            print("Search text for Selected Neighbourhood: \(searchText)")
-            print("Parameters for Selected Neighbourhood: \(parameters)")
-            return
-        }
+        let parameters = getParametersForNeighbourhood(searchText)
+        print("Parameters for Selected Neighbourhood: \(parameters)")
         
-        if searchText == "Kreuzberg" {
-            let parameters = [GMSClient.ParameterKeys.Location: Neighbourhoods.Kreuzberg]
-            print("Search text for Selected Neighbourhood: \(searchText)")
-            print("Parameters for Selected Neighbourhood: \(parameters)")
-            return
-        }
     }
     
     //GET Search Request when user select Current Location
@@ -38,7 +28,33 @@ class GMSClient: NSObject {
         let parameters = [GMSClient.ParameterKeys.Location: userLocation]
         print("User location: \(userLocation)")
         print("Parameters for User location: \(parameters)")
+        
+        
  
+    }
+    
+    //Helper methods
+    
+    func getParametersForNeighbourhood(_ searchText: String) -> [String:Any] {
+        
+        var parameters = [String:Any]()
+        
+        if searchText == "Neukölln" {
+            parameters = [GMSClient.ParameterKeys.Location: Neighbourhoods.Neukölln]
+            print("Selected Neighbourhood: \(searchText)")
+        }
+        
+        if searchText == "Kreuzberg" {
+            parameters = [GMSClient.ParameterKeys.Location: Neighbourhoods.Kreuzberg]
+            print("Selected Neighbourhood: \(searchText)")
+        }
+        
+        if searchText == "Mitte" {
+            parameters = [GMSClient.ParameterKeys.Location: Neighbourhoods.Mitte]
+            print("Selected Neighbourhood: \(searchText)")
+        }
+        
+        return parameters
     }
     
 

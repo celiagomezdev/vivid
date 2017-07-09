@@ -38,7 +38,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
         
-        neighbourhoodPicker(neighbourhoods: neighbourhoods)
+        neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
 
     }
     
@@ -51,17 +51,12 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: neigbourhoodPicker
     
-    func neighbourhoodPicker(neighbourhoods: [String]) {
+    func neighbourhoodPickerConfig(neighbourhoods: [String]) {
         
-        //TODO implement completionHandler
-        
-        if (mySearchTextField) != nil {
-            mySearchTextField.filterStrings(neighbourhoods)
+        mySearchTextField.filterStrings(neighbourhoods)
             mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
             mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
-        } else {
-            print("No search text field")
-        }
+            mySearchTextField.autocorrectionType = .no
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -69,22 +64,34 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    //MARK: getPlaces methods depending what user chose
+    //MARK: getPlaces methods depending what user chooses
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        
         if let searchText = textField.text {
-            if searchText == "Current location" {
-                if let userLocation = userLocation {
-                    GMSClient.sharedInstance().getPlacesForUserLocation(userLocation)
+            
+            if neighbourhoods.contains(searchText) {
+                
+                if searchText == "Current location" {
+                    if let userLocation = userLocation {
+                        GMSClient.sharedInstance().getPlacesForUserLocation(userLocation)
+                    } else {
+                        print("We couldn't set the user location")
+                    }
                 } else {
-                    print("We couldn't set the user location")
+                    GMSClient.sharedInstance().getPlacesForSelectedNeighbourhood(searchText)
                 }
             } else {
-                GMSClient.sharedInstance().getPlacesForSelectedNeighbourhood(searchText)
+                
+                //Display an alert when text is not recognized
+                let alertController = UIAlertController(title: "Oops!", message:
+                    "Unrecognized location. Please try again", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default,handler: nil))
+                
+                self.present(alertController, animated: true, completion: nil)
+                
+                print("The user typed the location incorrectly")
             }
-        } else {
-            print("Error: textFieldDidEndEditing")
         }
     }
 }
-
