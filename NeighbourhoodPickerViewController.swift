@@ -24,6 +24,8 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     var userLocation: String?
     var currentLocation: CLLocation!
     
+    var searchTask: URLSessionDataTask?
+    
     //MARK: Neighbourhood enumeration
     
     enum Neighbourhood: String {
@@ -45,7 +47,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     func locationUpdateNotification(notification: NSNotification) {
         if let userInfo = notification.userInfo?["location"] as? CLLocation {
             self.currentLocation = userInfo
-            self.userLocation = "\(userInfo.coordinate.latitude), \(userInfo.coordinate.longitude)"
+            self.userLocation = "\(userInfo.coordinate.latitude),\(userInfo.coordinate.longitude)"
         }
     }
     
@@ -79,7 +81,13 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
                         print("We couldn't set the user location")
                     }
                 } else {
-                    GMSClient.sharedInstance().getPlacesForSelectedNeighbourhood(searchText)
+                    GMSClient.sharedInstance().getPlacesForSelectedNeighbourhood(searchText) { (places, error) in
+                        if let places = places {
+                            print("func textFieldDidEndEditing: We received some places. Create class [GMSPlaces] to store")
+                        } else {
+                            print("We don't have yet any places for the selected neighbourhood")
+                        }
+                    }
                 }
             } else {
                 

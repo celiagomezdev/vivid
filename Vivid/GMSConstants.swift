@@ -13,7 +13,7 @@ extension GMSClient {
 
     //Method to extract API Key from private file
     class func valueForAPIKey(named keyname:String) -> String {
-        let filePath = Bundle.main.path(forResource: "ApiKeys", ofType: "plist")
+        let filePath = Bundle.main.path(forResource: "Keys", ofType: "plist")
         let plist = NSDictionary(contentsOfFile:filePath!)
         let value = plist?.object(forKey: keyname) as! String
         return value
