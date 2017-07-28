@@ -22,7 +22,6 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     
     var neighbourhoods: [String]!
     var userLocation: String?
-    var currentLocation: CLLocation!
     
     var searchTask: URLSessionDataTask?
     
@@ -36,6 +35,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         self.mySearchTextField.delegate = self
         
+        //Receive Notification from MapViewController - User Location
         NotificationCenter.default.addObserver(self, selector: #selector(locationUpdateNotification), name: Notification.Name("UserLocationNotification"), object: nil)
         
         neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
@@ -45,8 +45,8 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     }
     
     func locationUpdateNotification(notification: NSNotification) {
+
         if let userInfo = notification.userInfo?["location"] as? CLLocation {
-            self.currentLocation = userInfo
             self.userLocation = "\(userInfo.coordinate.latitude),\(userInfo.coordinate.longitude)"
         }
     }

@@ -24,11 +24,6 @@ class MapViewController: UIViewController {
     // MARK: Properties
     
     let locationManager = CLLocationManager()
-    var userLocation: String?
-    
-    
-    /// Notification on update of location. UserInfo contains CLLocation for key "location"
-    let kUserLocationNotification = "UserLocationNotification"
     
 
     // MARK: Life Cycle
@@ -40,8 +35,6 @@ class MapViewController: UIViewController {
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-     
-
     }
     
 
@@ -88,10 +81,11 @@ extension MapViewController: CLLocationManagerDelegate {
             mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 15, bearing: 0, viewingAngle: 0)
             
             locationManager.stopUpdatingLocation()
+
+            let userInfo: NSDictionary = ["location": location]
             
-            let userInfo : NSDictionary = ["location" : location]
-            
-            NotificationCenter.default.post(name: NSNotification.Name("UserLocationNotification"), object: self, userInfo: userInfo as [NSObject : AnyObject])
+            //Post Notification - User Location
+            NotificationCenter.default.post(name: NSNotification.Name("UserLocationNotification"), object: self, userInfo: userInfo as? [String: Any])
 
         }
     }
