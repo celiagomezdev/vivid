@@ -102,6 +102,7 @@ class GMSClient: NSObject {
     //GET Search Request when user select Current Location
     func getPlacesForUserLocation(_ userLocation: String) {
         
+        //TODO: Call TaskforGetMethod
         let parameters = [ParameterKeys.Radius: "2500", ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: userLocation]
         print("User location: \(userLocation)")
         print("Parameters for User location: \(parameters)")
