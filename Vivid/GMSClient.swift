@@ -78,6 +78,7 @@ class GMSClient: NSObject {
             
     }
 
+
     //GET Search Request when user select Neighbourhood
     //TODO: Change _ results: AnyObject? for [GMSPlace]?
     func getPlacesForSelectedNeighbourhood(_ searchText: String, completionHandlerForPlaces: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask? {
@@ -89,13 +90,13 @@ class GMSClient: NSObject {
 
             //Send the desired values to completion handler
             if let error = error {
+                print(error)
                 completionHandlerForPlaces(nil, error)
             } else {
                 completionHandlerForPlaces(results, nil)
                 print("Sent results to completion handler for places")
             }
         }
-        
       return task
      }
     
