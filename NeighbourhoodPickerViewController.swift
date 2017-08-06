@@ -188,6 +188,11 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
             }
             }.resume()
     }
+    
+    func getDataForBars() {
+        //Make individual requests and get data for our 46 bars
+    }
+    
 }
 
 
