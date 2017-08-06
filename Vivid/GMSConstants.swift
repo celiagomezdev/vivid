@@ -26,6 +26,8 @@ extension GMSClient {
 
         static let ApiKey = GMSClient.valueForAPIKey(named:"GMSWebApiKey") //YOUR API KEY HERE
         
+        static let myListURL = GMSClient.valueForAPIKey(named: "NonSmoSheetJSON")
+        
         // MARK: URLs
         static let ApiScheme = "https"
         static let ApiHost = "maps.googleapis.com"

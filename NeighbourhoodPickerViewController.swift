@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SearchTextField
 import MapKit
-
+import Sync
 
 
 //MARK: NeighbourhoodPickerViewController: UIViewController
@@ -41,6 +41,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
         
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
+        importListData()
 
     }
     
@@ -83,7 +84,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
                 } else {
                     GMSClient.sharedInstance().getPlacesForSelectedNeighbourhood(searchText) { (places, error) in
                         if let places = places {
-                            print("func textFieldDidEndEditing: We received some places. Create class [GMSPlaces] to store")
+                            print("Total places: (\(places.count)")
                         } else {
                             print("We don't have yet any places for the selected neighbourhood")
                         }
@@ -102,4 +103,56 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    
+    //MARK: Import method for my NonSmokingBars Pre-List
+    
+    func importListData() {
+        
+        let dataStack = DataStack(modelName: "NonSmokingBarModel")
+        
+        self.getDataWith { (json, error) in
+            
+            guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+            
+            if let json = json as? [[String:Any]]{
+                
+                dataStack.sync(json, inEntityNamed: "NonSmokingBar") { error in
+                    guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+                    print("SAVED")
+                }
+                print("We have JSON data: \(json)")
+            }
+            
+        }
+        print("importListData called")
+    }
+    
+    func getDataWith(completion: @escaping (_ result: [[String: Any]]?,_ error: NSError?) -> Void) {
+        
+        guard let url = URL(string: GMSClient.Constants.myListURL) else { return }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            
+            guard error == nil else {
+                completion(nil, error! as NSError)
+                print("Could not receive the data from NonSmokingBars Sheet: \(String(describing: error))")
+                return
+            }
+            
+            guard let data = data else { print("No data"); return }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: [.mutableContainers]) as? [[String: Any]] {
+                    DispatchQueue.main.async {
+                        print("JSON data sent to completion handler)")
+                        completion(json, nil)
+                    }
+                }
+            } catch let error {
+                completion(nil, error as NSError)
+                print("Could not parse the data from NonSmokingBars Sheet: \(String(describing: error))")
+            }
+            }.resume()
+    }
 }
+
+

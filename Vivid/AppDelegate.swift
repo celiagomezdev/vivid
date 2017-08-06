@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import CoreData
+import Sync
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -87,6 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return container
     }()
     
+
     // MARK: - Core Data Saving support
     
     func saveContext () {
@@ -102,9 +104,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
 }
 
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
 let context = appDelegate.persistentContainer.viewContext
+
 

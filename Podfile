@@ -6,4 +6,5 @@ pod 'GooglePlacePicker'
 pod 'GooglePlaces'
 use_frameworks!
 pod 'SearchTextField'
+pod 'Sync', '~> 3'
 end

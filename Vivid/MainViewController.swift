@@ -9,8 +9,7 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    
-    
+
     var data = [NonSmokingBar]()
     
     //MARK: Outlets
@@ -23,7 +22,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         searchView.isHidden = true
 //        insertData()
-        fetchData()
+//        fetchData()
         
         
         // Do any additional setup after loading the view.
