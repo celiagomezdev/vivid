@@ -41,7 +41,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
         
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
-        importListData()
+//        importListData()
 
     }
     
@@ -114,22 +114,25 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
             
             guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
             
-            if let json = json as? [[String:Any]]{
+            if let jsonResult = json?["results"] as? [[String:Any]] {
                 
-                dataStack.sync(json, inEntityNamed: "NonSmokingBar") { error in
+                dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
                     guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-                    print("SAVED")
+                    print("SAVED \(jsonResult.count) in data base")
                 }
-                print("We have JSON data: \(json)")
+                
+            } else {
+                print("Could not get data as [[String:Any]]")
             }
-            
         }
         print("importListData called")
     }
     
-    func getDataWith(completion: @escaping (_ result: [[String: Any]]?,_ error: NSError?) -> Void) {
+    func getDataWith(completion: @escaping (_ result: AnyObject?,_ error: NSError?) -> Void) {
         
         guard let url = URL(string: GMSClient.Constants.myListURL) else { return }
+        print(url)
+        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             guard error == nil else {
@@ -138,18 +141,22 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
                 return
             }
             
-            guard let data = data else { print("No data"); return }
-            
+            guard let data = data else {
+                print("No data")
+                return
+            }
+            var parsedResult: AnyObject! = nil
             do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: [.mutableContainers]) as? [[String: Any]] {
-                    DispatchQueue.main.async {
+                parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
+                
+                DispatchQueue.main.async {
                         print("JSON data sent to completion handler)")
-                        completion(json, nil)
-                    }
+                        completion(parsedResult, nil)
                 }
-            } catch let error {
-                completion(nil, error as NSError)
-                print("Could not parse the data from NonSmokingBars Sheet: \(String(describing: error))")
+            } catch {
+                let userInfo = [NSLocalizedDescriptionKey : "Could not parse the data as JSON: '\(data)'"]
+                completion(nil, NSError(domain: "convertDataWithCompletionHandler", code: 1, userInfo: userInfo))
+                
             }
             }.resume()
     }
