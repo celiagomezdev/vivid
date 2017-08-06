@@ -9,7 +9,6 @@
             </userInfo>
         </attribute>
         <attribute name="neighbourhood" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="openingHours" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="photos" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="placeId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postalCode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -17,6 +16,6 @@
         <attribute name="smokingType" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="NonSmokingBar" positionX="-63" positionY="-18" width="128" height="195"/>
+        <element name="NonSmokingBar" positionX="-63" positionY="-18" width="128" height="180"/>
     </elements>
 </model>

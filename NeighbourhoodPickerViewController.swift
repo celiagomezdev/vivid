@@ -24,6 +24,9 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     var userLocation: String?
     
     var searchTask: URLSessionDataTask?
+    let dataStack = DataStack(modelName: "NonSmokingBarModel")
+    var nonSmokingBars = [NonSmokingBar]()
+    var managedObjectContext: NSManagedObjectContext!
     
     //MARK: Neighbourhood enumeration
     
@@ -42,8 +45,32 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
 //        importListData()
+        
+        //Accesing
+        managedObjectContext = dataStack.viewContext
+        
+        loadData()
 
     }
+    
+    func loadData() {
+        
+        let nonSmokingBarsRequest: NSFetchRequest<NonSmokingBar> = NonSmokingBar.fetchRequest()
+        
+        do {
+            
+            nonSmokingBars = try managedObjectContext.fetch(nonSmokingBarsRequest)
+            print("Number of bars in nonSmokingBars: \(nonSmokingBars.count)")
+            for each in nonSmokingBars {
+                if let barName = each.name {
+                    print("Name: \(barName)")
+                }
+            }
+        } catch {
+            print("Could not load data from database: \(error.localizedDescription)")
+        }
+    }
+    
     
     func locationUpdateNotification(notification: NSNotification) {
 
@@ -108,15 +135,13 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     
     func importListData() {
         
-        let dataStack = DataStack(modelName: "NonSmokingBarModel")
-        
         self.getDataWith { (json, error) in
             
             guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
             
             if let jsonResult = json?["results"] as? [[String:Any]] {
                 
-                dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
+                self.dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
                     guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
                     print("SAVED \(jsonResult.count) in data base")
                 }
@@ -125,8 +150,11 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
                 print("Could not get data as [[String:Any]]")
             }
         }
+        
         print("importListData called")
+      
     }
+    
     
     func getDataWith(completion: @escaping (_ result: AnyObject?,_ error: NSError?) -> Void) {
         
