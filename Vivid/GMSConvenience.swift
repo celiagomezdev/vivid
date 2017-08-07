@@ -17,7 +17,7 @@ extension GMSClient {
     
     //GET Search Request when user select Neighbourhood
     //TODO: Change _ results: AnyObject? for [GMSPlace]?
-    func getPlacesForSelectedNeighbourhood(_ searchText: String, completionHandlerForPlaces: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask? {
+    func getPlacesForSelectedNeighbourhood(_ searchText: String, completionHandlerForPlaces: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
         let parameters = [ParameterKeys.Radius: "2500", ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: getLocationForNeighbourhood(searchText)]
         print(parameters)
@@ -33,7 +33,6 @@ extension GMSClient {
                 print("Sent results to completion handler for places")
             }
         }
-        return task
     }
     
     //GET Search Request when user select Current Location
@@ -76,4 +75,31 @@ extension GMSClient {
         static let Mitte = "52.521785,13.401039"
         
     }
+    
+    
+//    func updateNonSmokingBarsModelFromGMSApi() {
+//        
+//        let parameters = [ParameterKeys.Radius: "10000", ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: "52.479209,13.437409", "name": Model.sharedInstance().dataStack.fetch(]
+//        
+//         Model.sharedInstance().getDataWith { (json, error) in
+//            
+//            guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+//            
+//            if let jsonResult = json?["results"] as? [[String:Any]] {
+//                
+//                Model.sharedInstance().dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
+//                    guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+//                    print("SAVED \(jsonResult.count) in data base")
+//                }
+//                
+//            } else {
+//                print("Could not get data as [[String:Any]]")
+//            }
+//        }
+//    }
+//    
+//    func importPhotoURLArrayFrom(_ placeId: String) {
+//    print("photos")
+//    }
+//    
 }

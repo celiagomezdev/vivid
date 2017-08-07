@@ -115,6 +115,7 @@ class GMSClient: NSObject {
         return components.url!
     }
     
+
     // MARK: Shared Instance
     
     class func sharedInstance() -> GMSClient {
