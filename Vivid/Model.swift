@@ -23,28 +23,28 @@ class Model: NSObject {
     }
     
     //MARK: Import data into database
-    func importListData() {
-        
-        self.getDataWith { (json, error) in
-            
-            guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-            
-            if let jsonResult = json?["results"] as? [[String:Any]] {
-                
-                self.dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
-                    guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-                    print("SAVED \(jsonResult.count) in data base")
-                }
-                
-            } else {
-                print("Could not get data as [[String:Any]]")
-            }
-        }
-        
-        print("importListData called")
-        
-    }
-    
+//    func importListData() {
+//        
+//        self.getDataWith { (json, error) in
+//            
+//            guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+//            
+//            if let jsonResult = json?["results"] as? [[String:Any]] {
+//                
+//                self.dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
+//                    guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+//                    print("SAVED \(jsonResult.count) in data base")
+//                }
+//                
+//            } else {
+//                print("Could not get data as [[String:Any]]")
+//            }
+//        }
+//        
+//        print("importListData called")
+//        
+//    }
+//    
     //Parse data from JSON file
     func getDataWith(completion: @escaping (_ result: AnyObject?,_ error: NSError?) -> Void) {
         
@@ -99,16 +99,39 @@ class Model: NSObject {
         
         //Accesing Model
         managedObjectContext = dataStack.viewContext
-
+        
         request.returnsObjectsAsFaults = false
         
         do {
             
             let results = try managedObjectContext.fetch(request)
+            print("nº: \(results.count)")
+            
             if results.count > 0 {
                 for result in results as! [NSManagedObject] {
                     if let barName = result.value(forKey: "name") as? String {
-                        print("Name: \(barName)")
+                        
+                        let parameters = [GMSClient.ParameterKeys.Radius: "10000", GMSClient.ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: GMSClient.Neighbourhoods.Neukölln, "name": "\(barName)"]
+                        
+                        let _ = GMSClient.sharedInstance().taskForGetMethod(GMSClient.Methods.SearchPlace, parameters: parameters as [String:Any]) { (results, error) in
+                            
+                            if let error = error {
+                                print("ERROR: \(error.localizedDescription)")
+                            } else {
+                                
+                                if let results = results?["results"] as? [[String:Any]] {
+                                    
+                                    if let firstResultName = results.first?["name"] as? String {
+                                        
+                                        if let firstResultPlaceId = results.first?["place_id"] as? String {
+                                            
+                                            print("name: \(firstResultName), place_id: \(firstResultPlaceId)")
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -118,8 +141,7 @@ class Model: NSObject {
         }
     }
     
-    
-    
+
     // MARK: Shared Instance
     
     class func sharedInstance() -> Model {

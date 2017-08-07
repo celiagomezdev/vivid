@@ -36,10 +36,6 @@ class GMSClient: NSObject {
         //Build the URL and configure the request
         let request = NSMutableURLRequest(url: gmsURLFromParameters(parametersWithApiKey, withPathExtension: method))
         
-        if let requestURL = request.url {
-            print("The request url is: \(requestURL)")
-        }
-        
         //Make the request
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             
