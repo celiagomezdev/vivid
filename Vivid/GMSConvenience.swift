@@ -12,6 +12,7 @@ import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
 import MapKit
+import Sync
 
 extension GMSClient {
     
@@ -77,29 +78,30 @@ extension GMSClient {
     }
     
     
-//    func updateNonSmokingBarsModelFromGMSApi() {
-//        
-//        let parameters = [ParameterKeys.Radius: "10000", ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: "52.479209,13.437409", "name": Model.sharedInstance().dataStack.fetch(]
-//        
-//         Model.sharedInstance().getDataWith { (json, error) in
+    
+//            let parameters = [ParameterKeys.Radius: "10000", ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: "52.479209,13.437409", "name": ""]
 //            
-//            guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+//            print(parameters)
 //            
-//            if let jsonResult = json?["results"] as? [[String:Any]] {
+//            Model.sharedInstance().getDataWith { (json, error) in
 //                
-//                Model.sharedInstance().dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
-//                    guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-//                    print("SAVED \(jsonResult.count) in data base")
+//                guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+//                
+//                if let jsonResult = json?["results"] as? [[String:Any]] {
+//                    
+//                    Model.sharedInstance().dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
+//                        guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+//                        print("SAVED \(jsonResult.count) in data base")
+//                    }
+//                    
+//                } else {
+//                    print("Could not get data as [[String:Any]]")
 //                }
-//                
-//            } else {
-//                print("Could not get data as [[String:Any]]")
 //            }
-//        }
-//    }
-//    
-//    func importPhotoURLArrayFrom(_ placeId: String) {
-//    print("photos")
-//    }
-//    
+//
+
+    func importPhotoURLArrayFrom(_ placeId: String) {
+    print("photos")
+    }
+    
 }

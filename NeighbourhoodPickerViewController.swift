@@ -44,9 +44,11 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
 
         
         //Accesing Model
-        Model.sharedInstance().managedObjectContext = Model.sharedInstance().dataStack.viewContext
+//        Model.sharedInstance().managedObjectContext = Model.sharedInstance().dataStack.viewContext
         
-        Model.sharedInstance().loadData()
+//        Model.sharedInstance().loadData()
+        
+        Model.sharedInstance().updateNonSmokingBarsModelFromGMSApi()
 
     }
     

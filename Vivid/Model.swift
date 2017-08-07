@@ -16,6 +16,7 @@ class Model: NSObject {
     let dataStack = DataStack(modelName: "NonSmokingBarModel")
     var nonSmokingBars = [NonSmokingBar]()
     var managedObjectContext: NSManagedObjectContext!
+    let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
     
     override init() {
         super.init()
@@ -83,21 +84,41 @@ class Model: NSObject {
     
     func loadData() {
         
-        let nonSmokingBarsRequest: NSFetchRequest<NonSmokingBar> = NonSmokingBar.fetchRequest()
         
         do {
-            
-            nonSmokingBars = try managedObjectContext.fetch(nonSmokingBarsRequest)
-            print("Number of bars in nonSmokingBars: \(nonSmokingBars.count)")
-            for each in nonSmokingBars {
-                if let barName = each.name {
-                    print("Name: \(barName)")
-                }
-            }
+            nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
+            print("Number of bars stored in nonSmokingBars: \(nonSmokingBars.count)")
+
         } catch {
             print("Could not load data from database: \(error.localizedDescription)")
         }
     }
+    
+    //Update data
+    func updateNonSmokingBarsModelFromGMSApi() {
+        
+        //Accesing Model
+        managedObjectContext = dataStack.viewContext
+
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            if results.count > 0 {
+                for result in results as! [NSManagedObject] {
+                    if let barName = result.value(forKey: "name") as? String {
+                        print("Name: \(barName)")
+                    }
+                }
+            }
+            
+        } catch {
+            print("Could not update the data base: \(error.localizedDescription)")
+        }
+    }
+    
+    
     
     // MARK: Shared Instance
     
@@ -107,5 +128,4 @@ class Model: NSObject {
         }
         return Singleton.sharedInstance
     }
-
 }
