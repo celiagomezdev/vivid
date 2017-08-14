@@ -96,10 +96,10 @@ class Model: NSObject {
             
             for result in nonSmokingBars {
                 if let databaseName = result.name {
-                    if let databaseId = result.placeId {
-                        print("name2: \(databaseName), place_id2: \(databaseId)")
+                    if let databasePlaceId = result.placeId {
+                        print("name: \(databaseName), place id: \(databasePlaceId)")
                     } else {
-                        print("No placeId in our Array from database: \(String(describing: result.placeId))")
+                        print("No place ID for name: \(databaseName)")
                     }
                 } else {
                     print("No name in our Array from database")
@@ -145,12 +145,16 @@ class Model: NSObject {
                                     if let firstResultName = results.first?["name"] as? String {
                                         
                                         if let firstResultPlaceId = results.first?["place_id"] as? String {
-                                            
-                                            print("name1: \(firstResultName), place_id1: \(firstResultPlaceId)")
-                                            
+                                    
                                             if barName == firstResultName {
                                                 result.setValue(firstResultPlaceId, forKey: "placeId")
-                                                print("PLACE ID SAVED")
+                                                print("Place ID Saved: \(firstResultPlaceId) for barName: \(barName)")
+                                                
+                                                do {
+                                                    try self.managedObjectContext.save()
+                                                } catch {
+                                                    print("We couldn't save correctly the data into context")
+                                                }
                                             }
                                         }
                                     }
