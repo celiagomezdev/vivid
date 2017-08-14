@@ -85,11 +85,23 @@ class Model: NSObject {
     //Load database entries in an array
     
     func loadData() {
-     
+        
         do {
             nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
             print("Number of bars stored in nonSmokingBars: \(nonSmokingBars.count)")
-
+            
+            for result in nonSmokingBars {
+                if let databaseName = result.name {
+                    if let databaseId = result.placeId {
+                        print("name2: \(databaseName), place_id2: \(databaseId)")
+                    } else {
+                        print("No placeId in our Array from database")
+                    }
+                } else {
+                    print("No name in our Array from database")
+                }
+            }
+            
         } catch {
             print("Could not load data from database: \(error.localizedDescription)")
         }
@@ -120,7 +132,9 @@ class Model: NSObject {
                         let _ = GMSClient.sharedInstance().taskForGetMethod(GMSClient.Methods.SearchPlace, parameters: parameters as [String:Any]) { (results, error) in
                             
                             if let error = error {
+                                
                                 print("ERROR: \(error.localizedDescription)")
+                                
                             } else {
                                 
                                 if let results = results?["results"] as? [[String:Any]] {
@@ -129,7 +143,12 @@ class Model: NSObject {
                                         
                                         if let firstResultPlaceId = results.first?["place_id"] as? String {
                                             
-                                            print("name: \(firstResultName), place_id: \(firstResultPlaceId)")
+                                            print("name1: \(firstResultName), place_id1: \(firstResultPlaceId)")
+                                            
+                                            if barName == firstResultName {
+                                                
+                                                result.setValue(firstResultPlaceId, forKey: "placeId")
+                                            }
                                         }
                                     }
                                 }
