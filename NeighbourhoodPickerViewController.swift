@@ -42,12 +42,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
 
-        
-        //Accesing Model
-//        Model.sharedInstance().managedObjectContext = Model.sharedInstance().dataStack.viewContext
-        
-//        Model.sharedInstance().loadData()
-        
+        //MARK: Call method to update data in our data base:
         Model.sharedInstance().updateNonSmokingBarsModelFromGMSApi()
 
     }
@@ -60,7 +55,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    //MARK: neigbourhoodPicker
+    //MARK: neigbourhoodPicker helper method
     
     func neighbourhoodPickerConfig(neighbourhoods: [String]) {
         

@@ -23,15 +23,14 @@ extension GMSClient {
         let parameters = [ParameterKeys.Radius: "2500", ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: getLocationForNeighbourhood(searchText)]
         print(parameters)
         
-        let task = taskForGetMethod(Methods.SearchPlace, parameters: parameters as [String: Any]) { (results, error) in
+        let _ = taskForGetMethod(Methods.SearchPlace, parameters: parameters as [String: Any]) { (results, error) in
             
             //Send the desired values to completion handler
             if let error = error {
-                print(error)
+                print(error.localizedDescription)
                 completionHandlerForPlaces(nil, error)
             } else {
                 completionHandlerForPlaces(results, nil)
-                print("Sent results to completion handler for places")
             }
         }
     }
@@ -77,28 +76,6 @@ extension GMSClient {
         
     }
     
-    
-    
-//            let parameters = [ParameterKeys.Radius: "10000", ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: "52.479209,13.437409", "name": ""]
-//            
-//            print(parameters)
-//            
-//            Model.sharedInstance().getDataWith { (json, error) in
-//                
-//                guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-//                
-//                if let jsonResult = json?["results"] as? [[String:Any]] {
-//                    
-//                    Model.sharedInstance().dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
-//                        guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-//                        print("SAVED \(jsonResult.count) in data base")
-//                    }
-//                    
-//                } else {
-//                    print("Could not get data as [[String:Any]]")
-//                }
-//            }
-//
 
     func importPhotoURLArrayFrom(_ placeId: String) {
     print("photos")

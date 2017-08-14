@@ -68,7 +68,6 @@ class GMSClient: NSObject {
             
         }
         
-        print("func taskForGetMethod. We could parse the data.")
         task.resume()
         return task
         

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 import Sync
 
 
@@ -23,28 +24,29 @@ class Model: NSObject {
     }
     
     //MARK: Import data into database
-//    func importListData() {
-//        
-//        self.getDataWith { (json, error) in
-//            
-//            guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-//            
-//            if let jsonResult = json?["results"] as? [[String:Any]] {
-//                
-//                self.dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
-//                    guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-//                    print("SAVED \(jsonResult.count) in data base")
-//                }
-//                
-//            } else {
-//                print("Could not get data as [[String:Any]]")
-//            }
-//        }
-//        
-//        print("importListData called")
-//        
-//    }
-//    
+    func importListData() {
+        
+        self.getDataWith { (json, error) in
+            
+            guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+            
+            if let jsonResult = json?["results"] as? [[String:Any]] {
+                
+                self.dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
+                    guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
+                    print("SAVED \(jsonResult.count) in data base")
+                }
+                
+            } else {
+                print("Could not get data as [[String:Any]]")
+            }
+        }
+        
+        print("importListData called")
+        
+    }
+    
+    
     //Parse data from JSON file
     func getDataWith(completion: @escaping (_ result: AnyObject?,_ error: NSError?) -> Void) {
         
@@ -83,8 +85,7 @@ class Model: NSObject {
     //Load database entries in an array
     
     func loadData() {
-        
-        
+     
         do {
             nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
             print("Number of bars stored in nonSmokingBars: \(nonSmokingBars.count)")
@@ -94,10 +95,11 @@ class Model: NSObject {
         }
     }
     
-    //Update data
+    //MARK: Update data in our data base
     func updateNonSmokingBarsModelFromGMSApi() {
         
         //Accesing Model
+
         managedObjectContext = dataStack.viewContext
         
         request.returnsObjectsAsFaults = false
@@ -108,7 +110,9 @@ class Model: NSObject {
             print("nº: \(results.count)")
             
             if results.count > 0 {
+                
                 for result in results as! [NSManagedObject] {
+                    
                     if let barName = result.value(forKey: "name") as? String {
                         
                         let parameters = [GMSClient.ParameterKeys.Radius: "10000", GMSClient.ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: GMSClient.Neighbourhoods.Neukölln, "name": "\(barName)"]
@@ -128,19 +132,42 @@ class Model: NSObject {
                                             print("name: \(firstResultName), place_id: \(firstResultPlaceId)")
                                         }
                                     }
-                                    
                                 }
                             }
                         }
                     }
                 }
             }
-            
         } catch {
             print("Could not update the data base: \(error.localizedDescription)")
         }
     }
     
+    func insertDataManually(context: NSManagedObjectContext) {
+        
+        let entry1 = NonSmokingBar(context: context)
+        
+        entry1.name = "SchwuZ"
+        entry1.address = "Rollbergstr. 26"
+        entry1.neighbourhood = "Neukölln"
+        entry1.smokingType = "SepNonSmo"
+        
+        let entry2 = NonSmokingBar(context: context)
+        
+        entry2.name = "Südblock"
+        entry2.address = "Admiralstraße 1-2"
+        entry2.neighbourhood = "Kreuzberg"
+        entry2.smokingType = "NonSmo"
+        
+        let entry3 = NonSmokingBar(context: context)
+        
+        entry3.name = "Tristeza"
+        entry3.address = "Pannierstr.5"
+        entry3.neighbourhood = "Neukölln"
+        entry3.smokingType = "SepNonSmo"
+        entry3.location = "656735762,-287367826"
+   
+    }
 
     // MARK: Shared Instance
     
