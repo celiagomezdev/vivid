@@ -86,6 +86,10 @@ class Model: NSObject {
     
     func loadData() {
         
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
         do {
             nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
             print("Nº in Array: \(nonSmokingBars.count)")
@@ -95,13 +99,12 @@ class Model: NSObject {
                     if let databaseId = result.placeId {
                         print("name2: \(databaseName), place_id2: \(databaseId)")
                     } else {
-                        print("No placeId in our Array from database")
+                        print("No placeId in our Array from database: \(String(describing: result.placeId))")
                     }
                 } else {
                     print("No name in our Array from database")
                 }
             }
-            
         } catch {
             print("Could not load data from database: \(error.localizedDescription)")
         }
