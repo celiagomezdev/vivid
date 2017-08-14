@@ -88,7 +88,7 @@ class Model: NSObject {
         
         do {
             nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
-            print("Number of bars stored in nonSmokingBars: \(nonSmokingBars.count)")
+            print("Nº in Array: \(nonSmokingBars.count)")
             
             for result in nonSmokingBars {
                 if let databaseName = result.name {
@@ -119,7 +119,7 @@ class Model: NSObject {
         do {
             
             let results = try managedObjectContext.fetch(request)
-            print("nº: \(results.count)")
+            print("nº in Database: \(results.count)")
             
             if results.count > 0 {
                 
@@ -146,8 +146,8 @@ class Model: NSObject {
                                             print("name1: \(firstResultName), place_id1: \(firstResultPlaceId)")
                                             
                                             if barName == firstResultName {
-                                                
                                                 result.setValue(firstResultPlaceId, forKey: "placeId")
+                                                print("PLACE ID SAVED")
                                             }
                                         }
                                     }
