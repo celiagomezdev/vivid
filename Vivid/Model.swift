@@ -128,7 +128,7 @@ class Model: NSObject {
                 
                 for result in results as! [NSManagedObject] {
                     
-                    if let barName = result.value(forKey: "name") as? String {
+                    if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
                         
                         let parameters = [GMSClient.ParameterKeys.Radius: "10000", GMSClient.ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: GMSClient.Neighbourhoods.Neukölln, "name": "\(barName)"]
                         
@@ -140,21 +140,28 @@ class Model: NSObject {
                                 
                             } else {
                                 
-                                if let results = results?["results"] as? [[String:Any]] {
+                                if let parsedResults = results?["results"] as? [[String:Any]] {
                                     
-                                    if let firstResultName = results.first?["name"] as? String {
+                                    for item in parsedResults {
                                         
-                                        if let firstResultPlaceId = results.first?["place_id"] as? String {
-                                    
-                                            if barName == firstResultName {
-                                                result.setValue(firstResultPlaceId, forKey: "placeId")
-                                                print("Place ID Saved: \(firstResultPlaceId) for barName: \(barName)")
+                                        if let itemName = item["name"] as? String, let itemAddress = item["vicinity"] as? String {
+                                            
+                                            if itemName == barName || itemAddress == barAddress {
                                                 
-                                                do {
-                                                    try self.managedObjectContext.save()
-                                                } catch {
-                                                    print("We couldn't save correctly the data into context")
+                                                if let itemPlaceId = item["place_id"] as? String {
+                                                    
+                                                    result.setValue(itemPlaceId, forKey: "placeId")
+                                                    print("Place ID Saved: \(itemPlaceId) for barName: \(barName)")
+                                                    
+                                                    do {
+                                                        try self.managedObjectContext.save()
+                                                    } catch {
+                                                        print("We couldn't save correctly the data into context")
+                                                    }
                                                 }
+                                            } else {
+                                                print("Could not match names: Database name: \(barName) vs GMS name: \(itemName) or addresses: \(barAddress) vs GMS name: \(itemAddress)")
+                                                
                                             }
                                         }
                                     }
@@ -169,34 +176,84 @@ class Model: NSObject {
         }
     }
     
-    func insertDataManually(context: NSManagedObjectContext) {
+    func getPlaceID (_ barName: String?, barAddress: String?, _ completionHanlderForPlaceID: @escaping (_ success: Bool, _ placeID: String?, _ errorString: String?) -> Void) {
         
-        let entry1 = NonSmokingBar(context: context)
+        let parameters = [GMSClient.ParameterKeys.Radius: "10000", GMSClient.ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: GMSClient.Neighbourhoods.Neukölln, "name": "\(barName!)"]
         
-        entry1.name = "SchwuZ"
-        entry1.address = "Rollbergstr. 26"
-        entry1.neighbourhood = "Neukölln"
-        entry1.smokingType = "SepNonSmo"
-        
-        let entry2 = NonSmokingBar(context: context)
-        
-        entry2.name = "Südblock"
-        entry2.address = "Admiralstraße 1-2"
-        entry2.neighbourhood = "Kreuzberg"
-        entry2.smokingType = "NonSmo"
-        
-        let entry3 = NonSmokingBar(context: context)
-        
-        entry3.name = "Tristeza"
-        entry3.address = "Pannierstr.5"
-        entry3.neighbourhood = "Neukölln"
-        entry3.smokingType = "SepNonSmo"
-        entry3.location = "656735762,-287367826"
-   
+        let _ = GMSClient.sharedInstance().taskForGetMethod(GMSClient.Methods.SearchPlace, parameters: parameters as [String:Any]) { (results, error) in
+            
+            if let error = error {
+                
+                print("ERROR: \(error.localizedDescription)")
+                completionHanlderForPlaceID(false, nil, error.localizedDescription)
+                
+            } else {
+                
+                if let parsedResults = results?["results"] as? [[String:Any]] {
+                    
+                    var itemCount = 0
+                    
+                    for item in parsedResults {
+                        
+                        if let itemName = item["name"] as? String, let itemAddress = item["vicinity"] as? String {
+                            
+                            if itemName.contains(barName!) && itemAddress == barAddress {
+                                
+                                if let placeID = item["place_id"] as? String {
+                                    itemCount += 1
+                                    print("Stored Place ID in CompletionHandler: \(placeID) for barName: \(barName!)")
+                                    completionHanlderForPlaceID(true, placeID, nil)
+                                    
+                                } else {
+                                    completionHanlderForPlaceID(false, nil, "Could not store Place ID in CompletionHandler for barName: \(barName!) \(String(describing: error?.localizedDescription))")
+                                }
+                            } else {
+                                completionHanlderForPlaceID(false, nil, "Could not match barName and barAddress. Database name: \(barName!) vs GMS name:\(itemName), Database address: \(barAddress!) vs GMS address:\(itemAddress): \(String(describing: error?.localizedDescription))")
+                            }
+                        } else {
+                            completionHanlderForPlaceID(false, nil, "Could not find itemName or itemAddress in parsed results : \(String(describing: error?.localizedDescription))")
+                        }
+                    }
+                    print("Items saved: \(itemCount)")
+                }
+            }
+        }
     }
-
-    // MARK: Shared Instance
     
+    func adaptAddress() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            print("nº in Database: \(results.count)")
+            
+            if results.count > 0 {
+                
+                for result in results as! [NSManagedObject] {
+                    
+                    if let barAddress = result.value(forKey: "address") as? String {
+                        
+                        result.setValue(barAddress + ", Berlin", forKey: "address")
+                        
+                        do {
+                            try self.managedObjectContext.save()
+                        } catch {
+                            print("We couldn't save correctly the data into context")
+                        }
+                    }
+                }
+            }
+        }  catch {
+            print("We couldn't save correctly the data into context")
+        }
+    }
+    
+    // MARK: Shared Instance
+
     class func sharedInstance() -> Model {
         struct Singleton {
             static var sharedInstance = Model()
