@@ -130,42 +130,14 @@ class Model: NSObject {
                     
                     if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
                         
-                        let parameters = [GMSClient.ParameterKeys.Radius: "10000", GMSClient.ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: GMSClient.Neighbourhoods.Neukölln, "name": "\(barName)"]
+                        self.getPlaceID(barName, barAddress) { (success, placeID, errorString) in
                         
-                        let _ = GMSClient.sharedInstance().taskForGetMethod(GMSClient.Methods.SearchPlace, parameters: parameters as [String:Any]) { (results, error) in
+                            if success {
                             
-                            if let error = error {
-                                
-                                print("ERROR: \(error.localizedDescription)")
-                                
+                            print("Bar name: \(barName), Bar Address: \(barAddress), Bar Place ID: \(placeID!)")
+                            
                             } else {
-                                
-                                if let parsedResults = results?["results"] as? [[String:Any]] {
-                                    
-                                    for item in parsedResults {
-                                        
-                                        if let itemName = item["name"] as? String, let itemAddress = item["vicinity"] as? String {
-                                            
-                                            if itemName == barName || itemAddress == barAddress {
-                                                
-                                                if let itemPlaceId = item["place_id"] as? String {
-                                                    
-                                                    result.setValue(itemPlaceId, forKey: "placeId")
-                                                    print("Place ID Saved: \(itemPlaceId) for barName: \(barName)")
-                                                    
-                                                    do {
-                                                        try self.managedObjectContext.save()
-                                                    } catch {
-                                                        print("We couldn't save correctly the data into context")
-                                                    }
-                                                }
-                                            } else {
-                                                print("Could not match names: Database name: \(barName) vs GMS name: \(itemName) or addresses: \(barAddress) vs GMS name: \(itemAddress)")
-                                                
-                                            }
-                                        }
-                                    }
-                                }
+                                print(errorString!)
                             }
                         }
                     }
@@ -176,7 +148,7 @@ class Model: NSObject {
         }
     }
     
-    func getPlaceID (_ barName: String?, barAddress: String?, _ completionHanlderForPlaceID: @escaping (_ success: Bool, _ placeID: String?, _ errorString: String?) -> Void) {
+    func getPlaceID (_ barName: String?,_ barAddress: String?, _ completionHanlderForPlaceID: @escaping (_ success: Bool, _ placeID: String?, _ errorString: String?) -> Void) {
         
         let parameters = [GMSClient.ParameterKeys.Radius: "10000", GMSClient.ParameterKeys.Types: "bar", GMSClient.ParameterKeys.Location: GMSClient.Neighbourhoods.Neukölln, "name": "\(barName!)"]
         
@@ -220,6 +192,7 @@ class Model: NSObject {
         }
     }
     
+    //Edit values of an attribute in core data
     func adaptAddress() {
         
         managedObjectContext = dataStack.viewContext
@@ -240,7 +213,8 @@ class Model: NSObject {
                         result.setValue(barAddress + ", Berlin", forKey: "address")
                         
                         do {
-                            try self.managedObjectContext.save()
+                            try managedObjectContext.save()
+                            print("ADDRESS UPDATED")
                         } catch {
                             print("We couldn't save correctly the data into context")
                         }
