@@ -39,6 +39,10 @@ extension GMSClient {
         
         // MARK: Search
         static let SearchPlace = "place/nearbysearch/json"
+        
+        // MARK: Place Details
+        
+        static let PlaceDetails = "place/details/json"
        
     }
     
@@ -49,5 +53,12 @@ extension GMSClient {
         static let Location = "location"
         static let Radius = "radius"
     }
+    
+    struct JSONResponseKeys {
+        
+        // MARK: General
+        static let StatusMessage = "error_message"
+        static let StatusCode = "status"
 
+    }
 }

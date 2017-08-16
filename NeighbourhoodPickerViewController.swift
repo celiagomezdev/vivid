@@ -44,13 +44,13 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
 
         //MARK: Call method to update data in our data base:
-//        Model.sharedInstance().updateNonSmokingBarsModelFromGMSApi()
-        Model.sharedInstance().loadData()
-//        Model.sharedInstance().addManually()
-
-    }
-    
+        Model.sharedInstance().updateNonSmokingBarsModelFromGMSApi()
+//        Model.sharedInstance().loadData()
         
+    }
+
+
+
     func locationUpdateNotification(notification: NSNotification) {
 
         if let userInfo = notification.userInfo?["location"] as? CLLocation {

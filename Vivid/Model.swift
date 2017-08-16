@@ -91,7 +91,7 @@ class Model: NSObject {
         managedObjectContext = dataStack.viewContext
         
         request.returnsObjectsAsFaults = false
-
+        
         do {
             
             let results = try managedObjectContext.fetch(request)
@@ -99,29 +99,33 @@ class Model: NSObject {
             if results.count > 0 {
                 
                 print("nº in Database: \(results.count)")
-                var savedItemsCount = 0
-                var notSavedItemsCount = 0
- 
+                var matchedItemsCount = 0
+                
                 for result in results as! [NSManagedObject] {
                     
-                    if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
+                    if let barName = result.value(forKey: "name") as? String, let placeID = result.value(forKey: "placeId") as? String {
                         
-                        self.getPlaceID(barName, barAddress) { (success, placeID, errorString) in
+                        self.getPlaceDetails(placeID) { (results, error) in
                             
-                            if success {
+                            if let error = error {
                                 
-                                savedItemsCount += 1
-                                result.setValue(placeID, forKey: "placeId")
+                                print("We could not get place details. \(error.localizedDescription)")
                                 
-                                do {
-                                    try self.managedObjectContext.save()
-                                    
-                                } catch {
-                                    print("We couldn't save correctly the data into context")
-                                }
                             } else {
-                                notSavedItemsCount += 1
-                                print(errorString!)
+                                
+                                if let result = results?["result"] as? [String:Any] {
+                                    
+                                    if let GMSPlaceName = result["name"] as? String {
+                                        matchedItemsCount += 1
+                                        print("DETAILS MATCHED. DatabaseName: \(barName) vs GMSName: \(GMSPlaceName)")
+                                    } else {
+                                        print("Could not find 'name' in result")
+                                    }
+                                } else {
+                                    if let status = results?["status"] as? String {
+                                        print("Had error for place \(barName), with \(placeID): \(status)")
+                                    }
+                                }
                             }
                         }
                     }
@@ -129,14 +133,23 @@ class Model: NSObject {
                 
                 let when = DispatchTime.now() + 2
                 DispatchQueue.main.asyncAfter(deadline: when) {
-                    print("Saved items: \(savedItemsCount)")
-                    print("Not saved items: \(notSavedItemsCount)")
+                    print("Nº total matches: \(matchedItemsCount)")
                 }
             }
         } catch {
-            print("Could not update the data base: \(error.localizedDescription)")
-        }
-    }
+                    print("We couldn't save correctly the data into context")
+                }
+            }
+
+//                        do {
+//                            try self.managedObjectContext.save()
+//                            
+//                        } catch {
+//                            print("We couldn't save correctly the data into context")
+//                        }
+
+    
+ 
     
     func getPlaceID (_ barName: String?,_ barAddress: String?, _ completionHanlderForPlaceID: @escaping (_ success: Bool, _ placeID: String?, _ errorString: String?) -> Void) {
         
@@ -179,7 +192,7 @@ class Model: NSObject {
     }
     
     
-    //MARK: Editable methods for Data Base
+    //MARK: Helper Editable methods for Data Base
     
     //Edit values of an attribute in core data
     func addManually() {
@@ -201,27 +214,27 @@ class Model: NSObject {
                         
                         switch barName {
                             
-//                        case "Altes Europa":
-//                            print("SAVED place id for bar: \(barName)")
-//                            result.setValue("fc28d9479fcf525a0ce246f72b078097616aa6f4", forKey: "placeId")
-//                        case "K-Fetisch":
-//                            print("SAVED place id for bar: \(barName)")
-//                            result.setValue("10d4ebad03c995f33bb89c2bff7415759e463fde", forKey: "placeId")
-//                        case "Café Pförtner":
-//                            print("SAVED place id for bar: \(barName)")
-//                            result.setValue("fb8f5b2ce90bfdd428df952571628d3bfadc2da1", forKey: "placeId")
-//                        case "Mano":
-//                            print("SAVED place id for bar: \(barName)")
-//                            result.setValue("1c9b7fe4265f78c24e2515fecffe30d8937c8161", forKey: "placeId")
-//                        case "Ungeheuer":
-//                            print("SAVED place id for bar: \(barName)")
-//                            result.setValue("0ed35d2d128b2677f788b6e28e4499a77f05ff2c", forKey: "placeId")
-//                        case "Wolf Kino":
-//                            print("SAVED place id for bar: \(barName)")
-//                            result.setValue("d2d0547e5716dac8209c38d59a5ece582afb2c99", forKey: "placeId")
-//                        case "Hops & Barley":
-//                            print("SAVED place id for bar: \(barName)")
-//                            result.setValue("281111bbe675bdc6745cb3912f6a4e53aa2a4e3a", forKey: "placeId")
+                        case "Altes Europa":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("fc28d9479fcf525a0ce246f72b078097616aa6f4", forKey: "placeId")
+                        case "K-Fetisch":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("10d4ebad03c995f33bb89c2bff7415759e463fde", forKey: "placeId")
+                        case "Café Pförtner":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("fb8f5b2ce90bfdd428df952571628d3bfadc2da1", forKey: "placeId")
+                        case "Mano":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("1c9b7fe4265f78c24e2515fecffe30d8937c8161", forKey: "placeId")
+                        case "Ungeheuer":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("0ed35d2d128b2677f788b6e28e4499a77f05ff2c", forKey: "placeId")
+                        case "Wolf Kino":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("d2d0547e5716dac8209c38d59a5ece582afb2c99", forKey: "placeId")
+                        case "Hops & Barley":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("281111bbe675bdc6745cb3912f6a4e53aa2a4e3a", forKey: "placeId")
                         case "Laika":
                             print("SAVED place id for bar: \(barName)")
                             result.setValue("5fac58dd8d8f1c4aeae3930c23dab97935d270da", forKey: "placeId")
@@ -281,7 +294,7 @@ class Model: NSObject {
         }
     }
     
-    
+
     func changeManually() {
         
         managedObjectContext = dataStack.viewContext
@@ -301,18 +314,18 @@ class Model: NSObject {
                         if barName == "Laika " {
                             
                             result.setValue("Laika", forKey: "name")
-                        }
-                        
-                        do {
-                            try managedObjectContext.save()
-                            print("UPDATED")
-                        } catch {
-                            print("We could not save correctly the PLACE ID into context")
+                            
+                            do {
+                                try managedObjectContext.save()
+                                print("UPDATED")
+                            } catch {
+                                print("We could not save correctly the PLACE ID into context")
+                            }
                         }
                     }
                 }
             }
-        }  catch {
+        } catch {
             print("We couldn't save correctly the data into context")
         }
     }
@@ -352,8 +365,25 @@ class Model: NSObject {
         }
     }
 
-
     
+    func getPlaceDetails(_ placeID: String?, _ completionHanlderForPlaceDetails: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+        
+        let parameters = ["placeid": "\(placeID!)"]
+        
+        let _ = GMSClient.sharedInstance().taskForGetMethod(GMSClient.Methods.PlaceDetails, parameters: parameters as [String:Any]) { (results, error) in
+            
+            if let error = error {
+                completionHanlderForPlaceDetails(nil, error)
+            } else {
+                completionHanlderForPlaceDetails(results, nil)
+            }
+        }
+    }
+    
+    
+    
+
+
     // MARK: Shared Instance
 
     class func sharedInstance() -> Model {
