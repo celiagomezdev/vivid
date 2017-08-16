@@ -198,22 +198,42 @@ class Model: NSObject {
                 for result in results as! [NSManagedObject] {
                     
                     if let barName = result.value(forKey: "name") as? String {
-                    
-                    switch barName {
                         
-                    }
-                        if barName == "Wolf Kino" {
+                        switch barName {
                             
-                        
-                        result.setValue(barName + ", Berlin", forKey: "address")
-                            
+                        case "Altes Europa":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("fc28d9479fcf525a0ce246f72b078097616aa6f4", forKey: "placeId")
+                        case "K-Fetisch":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("10d4ebad03c995f33bb89c2bff7415759e463fde", forKey: "placeId")
+                        case "Café Pförtner":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("fb8f5b2ce90bfdd428df952571628d3bfadc2da1", forKey: "placeId")
+                        case "Mano":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("1c9b7fe4265f78c24e2515fecffe30d8937c8161", forKey: "placeId")
+                        case "Ungeheuer":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("0ed35d2d128b2677f788b6e28e4499a77f05ff2c", forKey: "placeId")
+                        case "Wolf Kino":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("d2d0547e5716dac8209c38d59a5ece582afb2c99", forKey: "placeId")
+                        case "Hops & Barley":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("281111bbe675bdc6745cb3912f6a4e53aa2a4e3a", forKey: "placeId")
+                        case "Laika":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("5fac58dd8d8f1c4aeae3930c23dab97935d270da", forKey: "placeId")
+                        default:
+                            print("We couldn't set the place id for bar: \(barName)")
                         }
                         
                         do {
                             try managedObjectContext.save()
-                            print("ADDRESS UPDATED")
+                            print("PLACE ID UPDATED")
                         } catch {
-                            print("We couldn't save correctly the data into context")
+                            print("We could not save correctly the PLACE ID into context")
                         }
                     }
                 }
@@ -235,15 +255,27 @@ class Model: NSObject {
             nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
             print("Nº in Array: \(nonSmokingBars.count)")
             
+            var barsWithPlaceID = 0
+            
             for result in nonSmokingBars {
                 if let databaseName = result.name {
                     if result.placeId == nil {
                         print("Name: \(databaseName), no place_id")
+                    } else {
+                        barsWithPlaceID += 1
+                        print("Name: \(databaseName), place_id: \(result.placeId!)")
                     }
                 } else {
                     print("No name in our Array from database")
                 }
             }
+            
+            let when = DispatchTime.now() + 2
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                print("Nº total bars: \(self.nonSmokingBars.count)")
+                print("Nº bars with place id: \(barsWithPlaceID)")
+            }
+            
         } catch {
             print("Could not load data from database: \(error.localizedDescription)")
         }
