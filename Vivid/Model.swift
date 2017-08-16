@@ -280,6 +280,78 @@ class Model: NSObject {
             print("Could not load data from database: \(error.localizedDescription)")
         }
     }
+    
+    
+    func changeManually() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for result in results as! [NSManagedObject] {
+                    
+                    if let barName = result.value(forKey: "name") as? String {
+                        
+                        if barName == "Laika " {
+                            
+                            result.setValue("Laika", forKey: "name")
+                        }
+                        
+                        do {
+                            try managedObjectContext.save()
+                            print("UPDATED")
+                        } catch {
+                            print("We could not save correctly the PLACE ID into context")
+                        }
+                    }
+                }
+            }
+        }  catch {
+            print("We couldn't save correctly the data into context")
+        }
+    }
+
+    // Delete entry
+    func deleteManually() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for result in results as! [NSManagedObject] {
+                    
+                    if let barName = result.value(forKey: "name") as? String {
+                        
+                        if barName == "Kptn A. Müller" {
+                            print("Object deleted: \(result)")
+                            managedObjectContext.delete(result)
+                        }
+                        
+                        do {
+                            try managedObjectContext.save()
+                        } catch {
+                            print("We could not save correctly the PLACE ID into context")
+                        }
+                    }
+                }
+            }
+        }  catch {
+            print("We couldn't save correctly the data into context")
+        }
+    }
+
 
     
     // MARK: Shared Instance
