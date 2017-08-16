@@ -82,65 +82,55 @@ class Model: NSObject {
     }
     
     
-    //Load database entries in an array
-    
-    func loadData() {
-        
-        managedObjectContext = dataStack.viewContext
-        
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
-            print("Nº in Array: \(nonSmokingBars.count)")
-            
-            for result in nonSmokingBars {
-                if let databaseName = result.name {
-                    if let databasePlaceId = result.placeId {
-                        print("name: \(databaseName), place id: \(databasePlaceId)")
-                    } else {
-                        print("No place ID for name: \(databaseName)")
-                    }
-                } else {
-                    print("No name in our Array from database")
-                }
-            }
-        } catch {
-            print("Could not load data from database: \(error.localizedDescription)")
-        }
-    }
     
     //MARK: Update data in our data base
     func updateNonSmokingBarsModelFromGMSApi() {
         
         //Accesing Model
-
+        
         managedObjectContext = dataStack.viewContext
         
         request.returnsObjectsAsFaults = false
-        
+
         do {
             
             let results = try managedObjectContext.fetch(request)
-            print("nº in Database: \(results.count)")
             
             if results.count > 0 {
                 
+                print("nº in Database: \(results.count)")
+                var savedItemsCount = 0
+                var notSavedItemsCount = 0
+ 
                 for result in results as! [NSManagedObject] {
                     
                     if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
                         
                         self.getPlaceID(barName, barAddress) { (success, placeID, errorString) in
-                        
+                            
                             if success {
-                            
-                            print("Bar name: \(barName), Bar Address: \(barAddress), Bar Place ID: \(placeID!)")
-                            
+                                
+                                savedItemsCount += 1
+                                result.setValue(placeID, forKey: "placeId")
+                                
+                                do {
+                                    try self.managedObjectContext.save()
+                                    
+                                } catch {
+                                    print("We couldn't save correctly the data into context")
+                                }
                             } else {
+                                notSavedItemsCount += 1
                                 print(errorString!)
                             }
                         }
                     }
+                }
+                
+                let when = DispatchTime.now() + 2
+                DispatchQueue.main.asyncAfter(deadline: when) {
+                    print("Saved items: \(savedItemsCount)")
+                    print("Not saved items: \(notSavedItemsCount)")
                 }
             }
         } catch {
@@ -163,37 +153,36 @@ class Model: NSObject {
                 
                 if let parsedResults = results?["results"] as? [[String:Any]] {
                     
-                    var itemCount = 0
-                    
                     for item in parsedResults {
                         
                         if let itemName = item["name"] as? String, let itemAddress = item["vicinity"] as? String {
                             
-                            if itemName.contains(barName!) && itemAddress == barAddress {
+                            if (itemName == barName) || (itemAddress == barAddress) {
                                 
                                 if let placeID = item["place_id"] as? String {
-                                    itemCount += 1
-                                    print("Stored Place ID in CompletionHandler: \(placeID) for barName: \(barName!)")
+                                    
                                     completionHanlderForPlaceID(true, placeID, nil)
                                     
                                 } else {
                                     completionHanlderForPlaceID(false, nil, "Could not store Place ID in CompletionHandler for barName: \(barName!) \(String(describing: error?.localizedDescription))")
                                 }
                             } else {
-                                completionHanlderForPlaceID(false, nil, "Could not match barName and barAddress. Database name: \(barName!) vs GMS name:\(itemName), Database address: \(barAddress!) vs GMS address:\(itemAddress): \(String(describing: error?.localizedDescription))")
+                                completionHanlderForPlaceID(false, nil, "NOT SAVED. GMSName: \(itemName), GMSAddress: \(itemAddress) // databaseName: \(barName!), databaseAddress: \(barAddress!) ")
                             }
                         } else {
                             completionHanlderForPlaceID(false, nil, "Could not find itemName or itemAddress in parsed results : \(String(describing: error?.localizedDescription))")
                         }
                     }
-                    print("Items saved: \(itemCount)")
                 }
             }
         }
     }
     
+    
+    //MARK: Editable methods for Data Base
+    
     //Edit values of an attribute in core data
-    func adaptAddress() {
+    func addManually() {
         
         managedObjectContext = dataStack.viewContext
         
@@ -208,9 +197,17 @@ class Model: NSObject {
                 
                 for result in results as! [NSManagedObject] {
                     
-                    if let barAddress = result.value(forKey: "address") as? String {
+                    if let barName = result.value(forKey: "name") as? String {
+                    
+                    switch barName {
                         
-                        result.setValue(barAddress + ", Berlin", forKey: "address")
+                    }
+                        if barName == "Wolf Kino" {
+                            
+                        
+                        result.setValue(barName + ", Berlin", forKey: "address")
+                            
+                        }
                         
                         do {
                             try managedObjectContext.save()
@@ -225,6 +222,33 @@ class Model: NSObject {
             print("We couldn't save correctly the data into context")
         }
     }
+    
+    //Load database entries in an array
+    
+    func loadData() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
+            print("Nº in Array: \(nonSmokingBars.count)")
+            
+            for result in nonSmokingBars {
+                if let databaseName = result.name {
+                    if result.placeId == nil {
+                        print("Name: \(databaseName), no place_id")
+                    }
+                } else {
+                    print("No name in our Array from database")
+                }
+            }
+        } catch {
+            print("Could not load data from database: \(error.localizedDescription)")
+        }
+    }
+
     
     // MARK: Shared Instance
 
