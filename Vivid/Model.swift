@@ -98,9 +98,9 @@ class Model: NSObject {
             
             if results.count > 0 {
 
-                for result in results as! [NSManagedObject] {
+                for modelResult in results as! [NSManagedObject] {
                     
-                    if let name = result.value(forKey: "name") as? String, let placeID = result.value(forKey: "placeId") as? String, let address = result.value(forKey: "address") as? String {
+                    if let name = modelResult.value(forKey: "name") as? String, let placeID = modelResult.value(forKey: "placeId") as? String {
                         
                         self.getPlaceDetails(placeID) { (results, error) in
                             
@@ -119,7 +119,7 @@ class Model: NSObject {
                                             
                                             if let latitude = location["lat"] as? Double, let longitude = location["lng"] as? Double {
                                                 let location = "\(latitude), \(longitude)"
-                                                print("Bar: \(name), Address: \(address), Location: \(location)")
+                                                modelResult.setValue(location, forKey: "location")
                                               
                                             } else {
                                                 print("Could not find latitude, or longitud in results")
@@ -133,7 +133,9 @@ class Model: NSObject {
                                     
                                     //Get rating as String
                                     if let rating = result["rating"] as? Int {
-                                        print("Bar: \(name), rating: \(rating)")
+                
+                                        modelResult.setValue(rating, forKey: "rating")
+
                                     } else {
                                         print("Could not find rating in results")
                                     }
@@ -141,6 +143,7 @@ class Model: NSObject {
                                     //Get photos as [String]
                                     if let photos = result["photos"] as? [[String:Any]] {
                                         let photoURLArray = self.getPhotoURLArray(photos)
+                                        modelResult.setValue(photoURLArray, forKey: "photos")
                                     }
                                     
                                 } else {
@@ -150,6 +153,15 @@ class Model: NSObject {
                                 }
                             }
                         }
+                    }
+                    
+                    do {
+                        print("SAVED IN CONTEXT")
+                        try self.managedObjectContext.save()
+                        
+                    } catch {
+                        
+                        print("We couldn't save correctly the data into context")
                     }
                 }
             }
@@ -167,7 +179,6 @@ class Model: NSObject {
 //                        }
     
     
-//    , _ rating: String?, _ photos: [String], _ errorString: String?
 
     func getPhotoURLArray(_ photos: [[String:Any]]) -> [String] {
         
