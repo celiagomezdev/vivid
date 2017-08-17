@@ -97,13 +97,10 @@ class Model: NSObject {
             let results = try managedObjectContext.fetch(request)
             
             if results.count > 0 {
-                
-                print("nº in Database: \(results.count)")
-                var matchedItemsCount = 0
-                
+
                 for result in results as! [NSManagedObject] {
                     
-                    if let barName = result.value(forKey: "name") as? String, let placeID = result.value(forKey: "placeId") as? String {
+                    if let name = result.value(forKey: "name") as? String, let placeID = result.value(forKey: "placeId") as? String, let address = result.value(forKey: "address") as? String {
                         
                         self.getPlaceDetails(placeID) { (results, error) in
                             
@@ -115,31 +112,52 @@ class Model: NSObject {
                                 
                                 if let result = results?["result"] as? [String:Any] {
                                     
-                                    if let GMSPlaceName = result["name"] as? String {
-                                        matchedItemsCount += 1
-                                        print("DETAILS MATCHED. DatabaseName: \(barName) vs GMSName: \(GMSPlaceName)")
+                                    //Get location as String
+                                    if let geometry = result["geometry"] as? [String:Any] {
+                                        
+                                        if let location = geometry["location"] as? [String:Any] {
+                                            
+                                            if let latitude = location["lat"] as? Double, let longitude = location["lng"] as? Double {
+                                                let location = "\(latitude), \(longitude)"
+                                                print("Bar: \(name), Address: \(address), Location: \(location)")
+                                              
+                                            } else {
+                                                print("Could not find latitude, or longitud in results")
+                                            }
+                                        } else {
+                                            print("Could not find location in results")
+                                        }
                                     } else {
-                                        print("Could not find 'name' in result")
+                                        print("Could not find geometry in results")
                                     }
+                                    
+                                    //Get rating as String
+                                    if let rating = result["rating"] as? Int {
+                                        print("Bar: \(name), rating: \(rating)")
+                                    } else {
+                                        print("Could not find rating in results")
+                                    }
+                                    
+                                    //Get photos as [String]
+                                    if let photos = result["photos"] as? [[String:Any]] {
+                                        let photoURLArray = self.getPhotoURLArray(photos)
+                                    }
+                                    
                                 } else {
                                     if let status = results?["status"] as? String {
-                                        print("Had error for place \(barName), with \(placeID): \(status)")
+                                        print("Had error for place: \(name), with place id: \(placeID). \(status)")
                                     }
                                 }
                             }
                         }
                     }
                 }
-                
-                let when = DispatchTime.now() + 2
-                DispatchQueue.main.asyncAfter(deadline: when) {
-                    print("Nº total matches: \(matchedItemsCount)")
-                }
             }
         } catch {
-                    print("We couldn't save correctly the data into context")
-                }
-            }
+            print("We couldn't save correctly the data into context")
+        }
+    }
+    
 
 //                        do {
 //                            try self.managedObjectContext.save()
@@ -147,8 +165,25 @@ class Model: NSObject {
 //                        } catch {
 //                            print("We couldn't save correctly the data into context")
 //                        }
-
     
+    
+//    , _ rating: String?, _ photos: [String], _ errorString: String?
+
+    func getPhotoURLArray(_ photos: [[String:Any]]) -> [String] {
+        
+        var photoURLArray = [String]()
+        
+        for photo in photos {
+            
+            if let photoReference = photo["photo_reference"] as? String {
+                
+                let photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=2048&photoreference=\(photoReference)&key=\(GMSClient.Constants.ApiKey)"
+                
+                photoURLArray.append(photoURL)
+            }
+        }
+        return photoURLArray
+    }
  
     
     func getPlaceID (_ barName: String?,_ barAddress: String?, _ completionHanlderForPlaceID: @escaping (_ success: Bool, _ placeID: String?, _ errorString: String?) -> Void) {
@@ -191,6 +226,20 @@ class Model: NSObject {
         }
     }
     
+    func getPlaceDetails(_ placeID: String?, _ completionHanlderForPlaceDetails: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
+        
+        let parameters = ["placeid": "\(placeID!)"]
+        
+        let _ = GMSClient.sharedInstance().taskForGetMethod(GMSClient.Methods.PlaceDetails, parameters: parameters as [String:Any]) { (results, error) in
+            
+            if let error = error {
+                completionHanlderForPlaceDetails(nil, error)
+            } else {
+                completionHanlderForPlaceDetails(results, nil)
+            }
+        }
+    }
+    
     
     //MARK: Helper Editable methods for Data Base
     
@@ -216,28 +265,28 @@ class Model: NSObject {
                             
                         case "Altes Europa":
                             print("SAVED place id for bar: \(barName)")
-                            result.setValue("fc28d9479fcf525a0ce246f72b078097616aa6f4", forKey: "placeId")
+                            result.setValue("ChIJ64A6sOZRqEcRJQ0_wJJhegM", forKey: "placeId")
                         case "K-Fetisch":
                             print("SAVED place id for bar: \(barName)")
-                            result.setValue("10d4ebad03c995f33bb89c2bff7415759e463fde", forKey: "placeId")
+                            result.setValue("ChIJwbcY56VPqEcRWeH0D3fTHf0", forKey: "placeId")
                         case "Café Pförtner":
                             print("SAVED place id for bar: \(barName)")
-                            result.setValue("fb8f5b2ce90bfdd428df952571628d3bfadc2da1", forKey: "placeId")
+                            result.setValue("ChIJI-j0Uy9SqEcRPfHhhUyfajo", forKey: "placeId")
                         case "Mano":
                             print("SAVED place id for bar: \(barName)")
-                            result.setValue("1c9b7fe4265f78c24e2515fecffe30d8937c8161", forKey: "placeId")
+                            result.setValue("ChIJQwk7-kpOqEcRZwckKwSnWq0", forKey: "placeId")
                         case "Ungeheuer":
                             print("SAVED place id for bar: \(barName)")
-                            result.setValue("0ed35d2d128b2677f788b6e28e4499a77f05ff2c", forKey: "placeId")
+                            result.setValue("ChIJfT45VplPqEcRjouZhssZ7M8", forKey: "placeId")
                         case "Wolf Kino":
                             print("SAVED place id for bar: \(barName)")
-                            result.setValue("d2d0547e5716dac8209c38d59a5ece582afb2c99", forKey: "placeId")
+                            result.setValue("ChIJFyPA2KVPqEcRTNkgWcCNCHg", forKey: "placeId")
                         case "Hops & Barley":
                             print("SAVED place id for bar: \(barName)")
-                            result.setValue("281111bbe675bdc6745cb3912f6a4e53aa2a4e3a", forKey: "placeId")
+                            result.setValue("ChIJbQ8FyVhOqEcRWwWTSlK_3W4", forKey: "placeId")
                         case "Laika":
                             print("SAVED place id for bar: \(barName)")
-                            result.setValue("5fac58dd8d8f1c4aeae3930c23dab97935d270da", forKey: "placeId")
+                            result.setValue("ChIJl86BkJ5PqEcRwLxtNiNWZMo", forKey: "placeId")
                         default:
                             print("We couldn't set the place id for bar: \(barName)")
                         }
@@ -366,19 +415,6 @@ class Model: NSObject {
     }
 
     
-    func getPlaceDetails(_ placeID: String?, _ completionHanlderForPlaceDetails: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
-        
-        let parameters = ["placeid": "\(placeID!)"]
-        
-        let _ = GMSClient.sharedInstance().taskForGetMethod(GMSClient.Methods.PlaceDetails, parameters: parameters as [String:Any]) { (results, error) in
-            
-            if let error = error {
-                completionHanlderForPlaceDetails(nil, error)
-            } else {
-                completionHanlderForPlaceDetails(results, nil)
-            }
-        }
-    }
     
     
     
