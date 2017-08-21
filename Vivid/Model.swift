@@ -112,6 +112,11 @@ class Model: NSObject {
     //MARK: Update Core Dato Model from GMS
     func updateNonSmokingBarsModelFromGMSApi() {
         
+        var itemsPlaceIDSaved = 0
+        var itemsRatingSaved = 0
+        var itemsLocationSaved = 0
+        var itemsPhotosSaved = 0
+        
         //Accesing Model
         
         managedObjectContext = dataStack.viewContext
@@ -125,7 +130,6 @@ class Model: NSObject {
             if results.count > 0 {
 
                 for modelResult in results as! [NSManagedObject] {
-                    
                     if let name = modelResult.value(forKey: "name") as? String, let placeID = modelResult.value(forKey: "placeId") as? String {
                         
                         self.getPlaceDetails(placeID) { (results, error) in
@@ -136,7 +140,10 @@ class Model: NSObject {
                                 
                             } else {
                                 
+                                
                                 if let result = results?["result"] as? [String:Any] {
+                                    
+                                    itemsPlaceIDSaved += 1
                                     
                                     //Get location as String
                                     if let geometry = result["geometry"] as? [String:Any] {
@@ -144,7 +151,10 @@ class Model: NSObject {
                                         if let location = geometry["location"] as? [String:Any] {
                                             
                                             if let latitude = location["lat"] as? Double, let longitude = location["lng"] as? Double {
+                                                
                                                 let location = "\(latitude), \(longitude)"
+                                                
+                                                itemsLocationSaved += 1
                                                 modelResult.setValue(location, forKey: "location")
                                               
                                             } else {
@@ -160,6 +170,9 @@ class Model: NSObject {
                                     //Get rating as String
                                     if let rating = result["rating"] as? Int {
                                         print("Rating Saved")
+                                        
+                                        itemsRatingSaved += 1
+                                        
                                         modelResult.setValue(rating, forKey: "rating")
 
                                     } else {
@@ -168,8 +181,9 @@ class Model: NSObject {
                                     
                                     //Get photos as [String]
                                     if let photos = result["photos"] as? [[String:Any]] {
-                                        print("photoURL Array saved")
+                                        
                                         let photoURLArray = self.getPhotoURLArray(photos)
+                                        itemsPhotosSaved += 1
                                         modelResult.setValue(photoURLArray, forKey: "photos")
                                     }
                                     
@@ -181,9 +195,8 @@ class Model: NSObject {
                             }
                         }
                     }
-                    
+ 
                     do {
-                        print("SAVED IN CONTEXT")
                         try self.managedObjectContext.save()
                         
                     } catch {
@@ -196,6 +209,15 @@ class Model: NSObject {
             }
         } catch {
             print("We couldn't save correctly the data into context")
+        }
+        
+        let when = DispatchTime.now() + 2
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            print("Nº Items TOTAL: \(self.nonSmokingBars.count)")
+            print("Nº Items Place_ID: \(itemsPlaceIDSaved)")
+            print("Nº Items Location: \(itemsLocationSaved)")
+            print("Nº Items Rating: \(itemsRatingSaved)")
+            print("Nº Items Photos: \(itemsPhotosSaved)")
         }
     }
     
@@ -239,7 +261,6 @@ class Model: NSObject {
                             if (itemName == barName) || (itemAddress == barAddress) {
                                 
                                 if let placeID = item["place_id"] as? String {
-                                    
                                     completionHanlderForPlaceID(true, placeID, nil)
                                     
                                 } else {
@@ -395,7 +416,7 @@ class Model: NSObject {
     
     //Load database entries in an array
     
-    func loadData() {
+    func loadPlaceIDResults() {
         
         managedObjectContext = dataStack.viewContext
         
@@ -405,15 +426,13 @@ class Model: NSObject {
             nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
             print("Nº in Array: \(nonSmokingBars.count)")
             
-            var barsWithPlaceID = 0
+            var barsWithoutPlaceID = 0
             
             for result in nonSmokingBars {
                 if let databaseName = result.name {
                     if result.placeId == nil {
+                        barsWithoutPlaceID += 1
                         print("Name: \(databaseName), no place_id")
-                    } else {
-                        barsWithPlaceID += 1
-                        print("Name: \(databaseName), place_id: \(result.placeId!)")
                     }
                 } else {
                     print("No name in our Array from database")
@@ -423,7 +442,7 @@ class Model: NSObject {
             let when = DispatchTime.now() + 2
             DispatchQueue.main.asyncAfter(deadline: when) {
                 print("Nº total bars: \(self.nonSmokingBars.count)")
-                print("Nº bars with place id: \(barsWithPlaceID)")
+                print("Nº bars with place id: \(barsWithoutPlaceID)")
             }
             
         } catch {
@@ -502,32 +521,44 @@ class Model: NSObject {
         }
     }
     
-    func saveDatainNewObject() {
+    func savePlaceIDs() {
         
-        newManagedObjectContext = dataStack.viewContext
+        managedObjectContext = dataStack.viewContext
         
         request.returnsObjectsAsFaults = false
         
+        var placeIDSaved = 0
+        
         do {
             
-            let results = try newManagedObjectContext.fetch(request)
+            let results = try managedObjectContext.fetch(request)
             
             if results.count > 0 {
                 
                 for result in results as! [NSManagedObject] {
                     
-                    if let barName = result.value(forKey: "name") as? String {
+                    if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
                         
-                        print(barName)
-                        
-                    } else {
-                        print("No bar name")
-                    }
-                    if let barAddress = result.value(forKey: "address") as? String {
-                        
-                        print(barAddress)
-                    } else {
-                        print("No address name")
+                        self.getPlaceID(barName, barAddress) { (success, placeID, error) in
+                            
+                            if success {
+                                
+                                if let placeID = placeID {
+ 
+                                print("Place ID: \(placeID) for bar: \(barName)")
+                                result.setValue(placeID, forKey: "placeId")
+                                    
+                                }
+                                
+                                do {
+                                    placeIDSaved += 1
+                                    try self.managedObjectContext.save()
+                                } catch {
+                                    print("We could not save correctly the PLACE ID into context")
+                                }
+                                
+                            }
+                        }
                     }
                 }
             } else {
@@ -535,6 +566,13 @@ class Model: NSObject {
             }
         } catch {
             print("We couldn't save correctly the data into context")
+        }
+        
+        let when = DispatchTime.now() + 2
+        DispatchQueue.main.asyncAfter(deadline: when) {
+           
+            print("Nº Items Place_ID Saved: \(placeIDSaved)")
+
         }
 
     }

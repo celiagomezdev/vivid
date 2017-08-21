@@ -44,8 +44,10 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
 
         //MARK: Call method to update data in our data base:
-//        Model.sharedInstance().addEntryManually()
-        Model.sharedInstance().importFromJSON()
+//         Model.sharedInstance().updateNonSmokingBarsModelFromGMSApi()
+          Model.sharedInstance().loadPlaceIDResults()
+//        Model.sharedInstance().addManually()
+//        Model.sharedInstance().changeManually()
 //        Model.sharedInstance().saveDatainNewObject()
         
     }
