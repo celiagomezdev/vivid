@@ -183,11 +183,16 @@ class Model: NSObject {
                                     if let photos = result["photos"] as? [[String:Any]] {
                                         
                                         let photoURLArray = self.getPhotoURLArray(photos)
+                                        
+                                        let data = NSKeyedArchiver.archivedData(withRootObject: photoURLArray)
+                                        
                                         itemsPhotosSaved += 1
-                                        modelResult.setValue(photoURLArray, forKey: "photos")
+   
+                                        modelResult.setValue(data, forKey: "photos")
                                     }
                                     
                                 } else {
+                                    
                                     if let status = results?["status"] as? String {
                                         print("Had error for place: \(name), with place id: \(placeID). \(status)")
                                     }
