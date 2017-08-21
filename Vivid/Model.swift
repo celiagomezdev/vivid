@@ -53,6 +53,8 @@ class Model: NSObject {
         
         request.returnsObjectsAsFaults = false
         
+        var entriesJSONValues = [[String:Any]]()
+        
         do {
             
             let results = try managedObjectContext.fetch(request)
@@ -60,16 +62,16 @@ class Model: NSObject {
             if results.count > 0 {
                 
                 for entry in results as! [NSManagedObject] {
-        
+
                     let entryValues = entry.export()
-                    //Figure out how to sync this JSON file with Google Sheets
-                    print(entryValues)
-        
+                    entriesJSONValues.append(entryValues)
                 }
             }
         } catch {
             print("We could not fetch the data")
         }
+        
+        print(entriesJSONValues)
     }
     
     
@@ -225,6 +227,110 @@ class Model: NSObject {
             print("Nº Items Photos: \(itemsPhotosSaved)")
         }
     }
+    
+    
+    func updateNonSmokingBarsModelFromGMSApiSecond() {
+        
+        var itemsRatingSaved = 0
+        var itemsLocationSaved = 0
+        
+        //Accesing Model
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for modelResult in results as! [NSManagedObject] {
+                    if let barName = modelResult.value(forKey: "name") as? String, let placeID = modelResult.value(forKey: "placeId") as? String {
+                        
+                        self.getPlaceDetails(placeID) { (results, error) in
+                            
+                            if let error = error {
+                                
+                                print("We could not get place details. \(error.localizedDescription)")
+                                
+                            } else {
+                                
+                                
+                                if let result = results?["result"] as? [String:Any] {
+                                    
+                                    //Get location as String
+                                    if let geometry = result["geometry"] as? [String:Any] {
+                                        
+                                        if let location = geometry["location"] as? [String:Any] {
+                                            
+                                            if let latitude = location["lat"] as? Double, let longitude = location["lng"] as? Double {
+                                                
+                                                let location = "\(latitude), \(longitude)"
+                                                
+                                                itemsLocationSaved += 1
+                                                print("bar: \(barName). Location: \(location)")
+                                                modelResult.setValue(location, forKey: "location")
+                                                
+                                                do {
+                                                    try self.managedObjectContext.save()
+                                                    
+                                                } catch {
+                                                    
+                                                    print("We couldn't save correctly the data into context")
+                                                }
+                                                
+                                            } else {
+                                                print("Could not find latitude, or longitud in results")
+                                            }
+                                        } else {
+                                            print("Could not find location in results")
+                                        }
+                                    } else {
+                                        print("Could not find geometry in results")
+                                    }
+                                    
+                                    //Get rating as String
+                                    if let rating = result["rating"] as? Int {
+                                        print("bar: \(barName). Rating: \(rating)")
+                                        
+                                        itemsRatingSaved += 1
+                                        
+                                        modelResult.setValue(rating, forKey: "rating")
+                                        
+                                        do {
+                                            try self.managedObjectContext.save()
+                                            
+                                        } catch {
+                                            
+                                            print("We couldn't save correctly the data into context")
+                                        }
+                                    
+                                        
+                                    } else {
+                                        print("Could not find rating in results")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("No results in dataStack")
+            }
+        } catch {
+            print("We couldn't save correctly the data into context")
+        }
+        
+        let when = DispatchTime.now() + 2
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            print("Nº Items TOTAL: \(self.nonSmokingBars.count)")
+            print("Nº Items Location: \(itemsLocationSaved)")
+            print("Nº Items Rating: \(itemsRatingSaved)")
+        }
+    }
+
     
 
     func getPhotoURLArray(_ photos: [[String:Any]]) -> [String] {
@@ -455,6 +561,57 @@ class Model: NSObject {
         }
     }
     
+    
+    func loadResults() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
+            print("Nº in Array: \(nonSmokingBars.count)")
+            
+            for result in nonSmokingBars {
+                if let databaseName = result.name {
+                    print("Name: \(databaseName)")
+                }
+                if let databaseAddress = result.address {
+                    print("Address: \(databaseAddress)")
+                }
+                if let databaseLocation = result.location {
+                    print("Location: \(databaseLocation)")
+                }
+                if let databaseNeighbourhood = result.neighbourhood {
+                    print("Neighbourhood: \(databaseNeighbourhood)")
+                }
+                
+                print("Postal Code: \(result.postalCode)")
+                
+        
+                print("Rating: \(result.rating)")
+                
+                if let databasePlaceID = result.placeId {
+                    print("Place ID: \(databasePlaceID)")
+                }
+    
+                if let databaseChecked = result.checked {
+                    print("Checked: \(databaseChecked)")
+                }
+                
+                if let databaseSmokingType = result.smokingType {
+                    print("Checked: \(databaseSmokingType)")
+                }
+                
+                if let databasePhotos = result.photos {
+                    
+                    print("Photos: \(databasePhotos)")
+                }
+            }
+        } catch {
+            print("Could not load data from database: \(error.localizedDescription)")
+        }
+    }
 
     func changeManually() {
         
