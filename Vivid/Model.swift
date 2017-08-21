@@ -18,13 +18,14 @@ class Model: NSObject {
     var nonSmokingBars = [NonSmokingBar]()
     var managedObjectContext: NSManagedObjectContext!
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
+    var newManagedObjectContext: NSManagedObjectContext!
     
     override init() {
         super.init()
     }
     
-    //MARK: Import data into database
-    func importListData() {
+    //MARK: Sync data into Model from a JSON file (Google Sheets Database )
+    func importFromJSON() {
         
         self.getDataWith { (json, error) in
             
@@ -34,7 +35,7 @@ class Model: NSObject {
                 
                 self.dataStack.sync(jsonResult, inEntityNamed: "NonSmokingBar") { error in
                     guard error == nil else { print("Could not import the JSON to NonSmoking barModel"); return }
-                    print("SAVED \(jsonResult.count) in data base")
+                    print("SAVED \(jsonResult.count) in core data")
                 }
                 
             } else {
@@ -44,6 +45,31 @@ class Model: NSObject {
         
         print("importListData called")
         
+    }
+    
+    func exportToJSON () {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for entry in results as! [NSManagedObject] {
+        
+                    let entryValues = entry.export()
+                    //Figure out how to sync this JSON file with Google Sheets
+                    print(entryValues)
+        
+                }
+            }
+        } catch {
+            print("We could not fetch the data")
+        }
     }
     
     
@@ -83,7 +109,7 @@ class Model: NSObject {
     
     
     
-    //MARK: Update data in our data base
+    //MARK: Update Core Dato Model from GMS
     func updateNonSmokingBarsModelFromGMSApi() {
         
         //Accesing Model
@@ -133,7 +159,7 @@ class Model: NSObject {
                                     
                                     //Get rating as String
                                     if let rating = result["rating"] as? Int {
-                
+                                        print("Rating Saved")
                                         modelResult.setValue(rating, forKey: "rating")
 
                                     } else {
@@ -142,6 +168,7 @@ class Model: NSObject {
                                     
                                     //Get photos as [String]
                                     if let photos = result["photos"] as? [[String:Any]] {
+                                        print("photoURL Array saved")
                                         let photoURLArray = self.getPhotoURLArray(photos)
                                         modelResult.setValue(photoURLArray, forKey: "photos")
                                     }
@@ -164,20 +191,13 @@ class Model: NSObject {
                         print("We couldn't save correctly the data into context")
                     }
                 }
+            } else {
+                print("No results in dataStack")
             }
         } catch {
             print("We couldn't save correctly the data into context")
         }
     }
-    
-
-//                        do {
-//                            try self.managedObjectContext.save()
-//                            
-//                        } catch {
-//                            print("We couldn't save correctly the data into context")
-//                        }
-    
     
 
     func getPhotoURLArray(_ photos: [[String:Any]]) -> [String] {
@@ -252,6 +272,66 @@ class Model: NSObject {
     }
     
     
+    
+    //MARK: Add manually
+    
+    func addEntryManually() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        let newEntry = NSEntityDescription.insertNewObject(forEntityName: "NonSmokingBar", into: managedObjectContext)
+        
+        let photos = ["a", "b", "c"]
+        
+        let data = NSKeyedArchiver.archivedData(withRootObject: photos)
+        
+      
+        newEntry.setValue("Laika", forKey: "name")
+        newEntry.setValue(data, forKey: "photos")
+        
+        do {
+            try managedObjectContext.save()
+            print("SAVED")
+        } catch {
+            print("We could not save into context")
+        }
+
+    }
+    
+    func loadDataNew() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for result in results as! [NSManagedObject] {
+        
+                    if let name = result.value(forKey: "name") as? String {
+                        print(name)
+                    }
+                    if let photos = result.value(forKey: "photos") as? Data {
+                        
+                        let unarchiveObject = NSKeyedUnarchiver.unarchiveObject(with: photos)
+                        let arrayPhotos = unarchiveObject as AnyObject! as! [String]
+                        
+                        print(arrayPhotos)
+                    }
+                    
+                }
+            }
+        } catch {
+            print("Error")
+        }
+    }
+    
+    
+    
     //MARK: Helper Editable methods for Data Base
     
     //Edit values of an attribute in core data
@@ -274,9 +354,6 @@ class Model: NSObject {
                         
                         switch barName {
                             
-                        case "Altes Europa":
-                            print("SAVED place id for bar: \(barName)")
-                            result.setValue("ChIJ64A6sOZRqEcRJQ0_wJJhegM", forKey: "placeId")
                         case "K-Fetisch":
                             print("SAVED place id for bar: \(barName)")
                             result.setValue("ChIJwbcY56VPqEcRWeH0D3fTHf0", forKey: "placeId")
@@ -420,16 +497,48 @@ class Model: NSObject {
                     }
                 }
             }
-        }  catch {
+        } catch {
             print("We couldn't save correctly the data into context")
         }
     }
+    
+    func saveDatainNewObject() {
+        
+        newManagedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try newManagedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for result in results as! [NSManagedObject] {
+                    
+                    if let barName = result.value(forKey: "name") as? String {
+                        
+                        print(barName)
+                        
+                    } else {
+                        print("No bar name")
+                    }
+                    if let barAddress = result.value(forKey: "address") as? String {
+                        
+                        print(barAddress)
+                    } else {
+                        print("No address name")
+                    }
+                }
+            } else {
+                print("No results")
+            }
+        } catch {
+            print("We couldn't save correctly the data into context")
+        }
 
+    }
     
-    
-    
-    
-
 
     // MARK: Shared Instance
 
