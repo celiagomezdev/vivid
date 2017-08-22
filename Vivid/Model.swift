@@ -53,8 +53,6 @@ class Model: NSObject {
         
         request.returnsObjectsAsFaults = false
         
-        var entriesJSONValues = [[String:Any]]()
-        
         do {
             
             let results = try managedObjectContext.fetch(request)
@@ -62,18 +60,17 @@ class Model: NSObject {
             if results.count > 0 {
                 
                 for entry in results as! [NSManagedObject] {
-
-                    let entryValues = entry.export()
-                    entriesJSONValues.append(entryValues)
-                }
+                    
+                    let entriesValues = entry.export()
+                    print(entriesValues)
+                        
+                    }
             }
         } catch {
             print("We could not fetch the data")
         }
-        
-        print(entriesJSONValues)
+
     }
-    
     
     //Parse data from JSON file
     func getDataWith(completion: @escaping (_ result: AnyObject?,_ error: NSError?) -> Void) {
@@ -109,9 +106,8 @@ class Model: NSObject {
             }.resume()
     }
     
-    
-    
-    //MARK: Update Core Dato Model from GMS
+
+    //MARK: Update Core Dato Model from GMS Api
     func updateNonSmokingBarsModelFromGMSApi() {
         
         var itemsPlaceIDSaved = 0
@@ -147,7 +143,7 @@ class Model: NSObject {
                                     
                                     itemsPlaceIDSaved += 1
                                     
-                                    //Get location as String
+                                    //Get location as String and store
                                     if let geometry = result["geometry"] as? [String:Any] {
                                         
                                         if let location = geometry["location"] as? [String:Any] {
@@ -169,7 +165,7 @@ class Model: NSObject {
                                         print("Could not find geometry in results")
                                     }
                                     
-                                    //Get rating as String
+                                    //Get rating as String and store
                                     if let rating = result["rating"] as? Int {
                                         print("Rating Saved")
                                         
@@ -181,7 +177,7 @@ class Model: NSObject {
                                         print("Could not find rating in results")
                                     }
                                     
-                                    //Get photos as [String]
+                                    //Get photos as [String] and store
                                     if let photos = result["photos"] as? [[String:Any]] {
                                         
                                         let photoURLArray = self.getPhotoURLArray(photos)
@@ -332,7 +328,7 @@ class Model: NSObject {
     }
 
     
-
+    // Get Array of URL photos
     func getPhotoURLArray(_ photos: [[String:Any]]) -> [String] {
         
         var photoURLArray = [String]()
@@ -389,6 +385,63 @@ class Model: NSObject {
         }
     }
     
+    func savePlaceIDs() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        var placeIDSaved = 0
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for result in results as! [NSManagedObject] {
+                    
+                    if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
+                        
+                        self.getPlaceID(barName, barAddress) { (success, placeID, error) in
+                            
+                            if success {
+                                
+                                if let placeID = placeID {
+                                    
+                                    print("Place ID: \(placeID) for bar: \(barName)")
+                                    result.setValue(placeID, forKey: "placeId")
+                                    
+                                }
+                                
+                                do {
+                                    placeIDSaved += 1
+                                    try self.managedObjectContext.save()
+                                } catch {
+                                    print("We could not save correctly the PLACE ID into context")
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("No results")
+            }
+        } catch {
+            print("We couldn't save correctly the data into context")
+        }
+        
+        let when = DispatchTime.now() + 2
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            
+            print("Nº Items Place_ID Saved: \(placeIDSaved)")
+            
+        }
+        
+    }
+    
+    
     func getPlaceDetails(_ placeID: String?, _ completionHanlderForPlaceDetails: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
         let parameters = ["placeid": "\(placeID!)"]
@@ -404,8 +457,9 @@ class Model: NSObject {
     }
     
     
+    //MARK: Helper methods for saving data into Model
     
-    //MARK: Add manually
+    // Add entry manually
     
     func addEntryManually() {
         
@@ -430,6 +484,8 @@ class Model: NSObject {
 
     }
     
+    // Load data - ERROR: Cannot extract photos as [String]
+    
     func loadDataNew() {
         
         managedObjectContext = dataStack.viewContext
@@ -449,10 +505,9 @@ class Model: NSObject {
                     }
                     if let photos = result.value(forKey: "photos") as? Data {
                         
-                        let unarchiveObject = NSKeyedUnarchiver.unarchiveObject(with: photos)
-                        let arrayPhotos = unarchiveObject as AnyObject! as! [String]
-                        
-                        print(arrayPhotos)
+                        let photos = NSKeyedUnarchiver.unarchiveObject(with: photos) as? [String]
+   
+                        print(photos ?? "No photos")
                     }
                     
                 }
@@ -462,12 +517,9 @@ class Model: NSObject {
         }
     }
     
-    
-    
-    //MARK: Helper Editable methods for Data Base
-    
-    //Edit values of an attribute in core data
-    func addManually() {
+   
+    //Update placeID's for some entries
+    func addPlaceIDManually() {
         
         managedObjectContext = dataStack.viewContext
         
@@ -588,7 +640,6 @@ class Model: NSObject {
                 
                 print("Postal Code: \(result.postalCode)")
                 
-        
                 print("Rating: \(result.rating)")
                 
                 if let databasePlaceID = result.placeId {
@@ -600,13 +651,17 @@ class Model: NSObject {
                 }
                 
                 if let databaseSmokingType = result.smokingType {
-                    print("Checked: \(databaseSmokingType)")
+                    print("SmokingType: \(databaseSmokingType)")
                 }
                 
-                if let databasePhotos = result.photos {
-                    
-                    print("Photos: \(databasePhotos)")
-                }
+                /*ERROR HERE
+                 if let databasePhotos = result.photos {
+                 if let photos = NSKeyedUnarchiver.unarchiveObject(with: databasePhotos as Data) as? [String] {
+                 print("Photos: \(photos)")
+                 } else {
+                 print("No photos")
+                 }
+                 }*/
             }
         } catch {
             print("Could not load data from database: \(error.localizedDescription)")
@@ -683,63 +738,6 @@ class Model: NSObject {
         }
     }
     
-    func savePlaceIDs() {
-        
-        managedObjectContext = dataStack.viewContext
-        
-        request.returnsObjectsAsFaults = false
-        
-        var placeIDSaved = 0
-        
-        do {
-            
-            let results = try managedObjectContext.fetch(request)
-            
-            if results.count > 0 {
-                
-                for result in results as! [NSManagedObject] {
-                    
-                    if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
-                        
-                        self.getPlaceID(barName, barAddress) { (success, placeID, error) in
-                            
-                            if success {
-                                
-                                if let placeID = placeID {
- 
-                                print("Place ID: \(placeID) for bar: \(barName)")
-                                result.setValue(placeID, forKey: "placeId")
-                                    
-                                }
-                                
-                                do {
-                                    placeIDSaved += 1
-                                    try self.managedObjectContext.save()
-                                } catch {
-                                    print("We could not save correctly the PLACE ID into context")
-                                }
-                                
-                            }
-                        }
-                    }
-                }
-            } else {
-                print("No results")
-            }
-        } catch {
-            print("We couldn't save correctly the data into context")
-        }
-        
-        let when = DispatchTime.now() + 2
-        DispatchQueue.main.asyncAfter(deadline: when) {
-           
-            print("Nº Items Place_ID Saved: \(placeIDSaved)")
-
-        }
-
-    }
-    
-
     // MARK: Shared Instance
 
     class func sharedInstance() -> Model {
