@@ -47,6 +47,7 @@ class Model: NSObject {
         
     }
     
+    //MARK: Export JSON from model - ERROR: I cannot get a json object
     func exportToJSON () {
         
         managedObjectContext = dataStack.viewContext
@@ -107,7 +108,7 @@ class Model: NSObject {
     }
     
 
-    //MARK: Update Core Dato Model from GMS Api
+    //MARK: Update Core Data Model from GMS Api
     func updateNonSmokingBarsModelFromGMSApi() {
         
         var itemsPlaceIDSaved = 0
@@ -327,6 +328,81 @@ class Model: NSObject {
         }
     }
 
+    
+    func updateNonSmokingBarsModelFromGMSApiThird() {
+        
+        var itemsPhotosReceived = 0
+        var itemsPlacesTypesReceived = 0
+        
+        
+        //Accesing Model
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for modelResult in results as! [NSManagedObject] {
+                    if let barName = modelResult.value(forKey: "name") as? String, let placeID = modelResult.value(forKey: "placeId") as? String {
+                        
+                        self.getPlaceDetails(placeID) { (results, error) in
+                            
+                            if let error = error {
+                                
+                                print("We could not get place details. \(error.localizedDescription)")
+                                
+                            } else {
+                                
+                                if let result = results?["result"] as? [String:Any] {
+                                    
+                                    //Get photos as [String] and store
+                                    if let photos = result["photos"] as? [[String:Any]] {
+                                        
+                                        let photoURLArray = self.getPhotoURLArray(photos)
+                                        itemsPhotosReceived += 1
+                                        print("Bar: \(barName)")
+                                        print(photoURLArray)
+                                        
+                                    } else {
+                                        
+                                        print("Could not find photos in results: \(barName)")
+                                    }
+                                    
+                                    if let placeTypes = result["types"] as? [String] {
+                                        
+                                        itemsPlacesTypesReceived += 1
+                                        print(placeTypes)
+                                        
+                                    } else {
+                                        print("Could not find places types in results")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("No results in dataStack")
+            }
+        } catch {
+            print("We couldn't save correctly the data into context")
+        }
+        
+        let when = DispatchTime.now() + 2
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            print("Nº Items TOTAL: \(self.nonSmokingBars.count)")
+            print("Nº Items Photos: \(itemsPhotosReceived)")
+            print("Nº Items Places Types: \(itemsPlacesTypesReceived)")
+        }
+    }
+
+    
+    
     
     // Get Array of URL photos
     func getPhotoURLArray(_ photos: [[String:Any]]) -> [String] {
