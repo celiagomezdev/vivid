@@ -43,16 +43,10 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
         
 
-        //MARK: TEMPORARY calls to update model - data base
-        
-//         Model.sharedInstance().exportToJSON()
-//        Model.sharedInstance().loadResults()
-        Model.sharedInstance().updateNonSmokingBarsModelFromGMSApiThird()
-//        Model.sharedInstance().loadPlaceIDResults()
-//        Model.sharedInstance().addManually()
-//        Model.sharedInstance().changeManually()
-//        Model.sharedInstance().saveDatainNewObject()
-        
+        //MARK: TEMPORARY call to print model data - imported from data base
+        //GSDatabaseStoring.sharedInstance().GetAndPrintDataFromGMSApi()
+        Model.sharedInstance().loadResults()
+  
     }
 
     func locationUpdateNotification(notification: NSNotification) {
