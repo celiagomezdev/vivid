@@ -44,8 +44,8 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
 
         //MARK: TEMPORARY call to print model data - imported from data base
-        //GSDatabaseStoring.sharedInstance().GetAndPrintDataFromGMSApi()
-        Model.sharedInstance().loadResults()
+        GMSClient.sharedInstance().GetAndPrintDataFromGMSApi()
+//        Model.sharedInstance().loadResults()
   
     }
 
@@ -81,21 +81,13 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
                 
                 if searchText == "Current location" {
                     if let userLocation = userLocation {
-                        GMSClient.sharedInstance().getPlacesForUserLocation(userLocation)
-                    } else {
-                        print("We couldn't set the user location")
+                        print("User chose 'Current Location': \(userLocation)")
                     }
                 } else {
-                    GMSClient.sharedInstance().getPlacesForSelectedNeighbourhood(searchText) { (places, error) in
-                        if let places = places {
-                            print("Total places: (\(places.count)")
-                        } else {
-                            print("We don't have yet any places for the selected neighbourhood")
-                        }
-                    }
+                    print("User chose neighbourhood: \(searchText)")
                 }
             } else {
-                
+
                 //Display an alert when text is not recognized
                 let alertController = UIAlertController(title: "Oops!", message:
                     "Unrecognized location. Please try again", preferredStyle: UIAlertControllerStyle.alert)

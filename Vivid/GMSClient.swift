@@ -12,11 +12,20 @@ import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
 import MapKit
+import CoreData
+import Sync
 
 class GMSClient: NSObject {
     
     //MARK: Properties
     var session = URLSession.shared
+    
+    // Core Data
+    let dataStack = DataStack(modelName: "NonSmokingBarModel")
+    var nonSmokingBars = [NonSmokingBar]()
+    var managedObjectContext: NSManagedObjectContext!
+    let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
+    var newManagedObjectContext: NSManagedObjectContext!
     
     // MARK: Initializers
     

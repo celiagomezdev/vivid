@@ -27,7 +27,7 @@ class Model: NSObject {
     
    //Load results in an array
     
-    func loadResults() {
+    func loadData() {
         
         managedObjectContext = dataStack.viewContext
         
@@ -75,7 +75,7 @@ class Model: NSObject {
                     }
                  }
                 
-                if let placeTypes = result.place_types {
+                if let placeTypes = result.placeTypes {
                     if let placeTypesStArray = NSKeyedUnarchiver.unarchiveObject(with: placeTypes as Data) as? [String] {
                         print("Photos: \(placeTypesStArray)")
                     } else {
@@ -87,8 +87,66 @@ class Model: NSObject {
             print("Could not load data from database: \(error.localizedDescription)")
         }
     }
+    
+    func addData() {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            print("nº in Database: \(results.count)")
+            
+            if results.count > 0 {
+                
+                for result in results as! [NSManagedObject] {
+                    
+                    if let barName = result.value(forKey: "name") as? String {
+                        
+                        switch barName {
+                            
+                        case "K-Fetisch":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("ChIJwbcY56VPqEcRWeH0D3fTHf0", forKey: "placeId")
+                        case "Café Pförtner":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("ChIJI-j0Uy9SqEcRPfHhhUyfajo", forKey: "placeId")
+                        case "Mano":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("ChIJQwk7-kpOqEcRZwckKwSnWq0", forKey: "placeId")
+                        case "Ungeheuer":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("ChIJfT45VplPqEcRjouZhssZ7M8", forKey: "placeId")
+                        case "Wolf Kino":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("ChIJFyPA2KVPqEcRTNkgWcCNCHg", forKey: "placeId")
+                        case "Hops & Barley":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("ChIJbQ8FyVhOqEcRWwWTSlK_3W4", forKey: "placeId")
+                        case "Laika":
+                            print("SAVED place id for bar: \(barName)")
+                            result.setValue("ChIJl86BkJ5PqEcRwLxtNiNWZMo", forKey: "placeId")
+                        default:
+                            print("We couldn't set the place id for bar: \(barName)")
+                        }
+                        
+                        do {
+                            try managedObjectContext.save()
+                            print("PLACE ID UPDATED")
+                        } catch {
+                            print("We could not save correctly the PLACE ID into context")
+                        }
+                    }
+                }
+            }
+        }  catch {
+            print("We couldn't save correctly the data into context")
+        }
+    }
 
-    func changeManually() {
+    func updateData() {
         
         managedObjectContext = dataStack.viewContext
         
@@ -124,7 +182,7 @@ class Model: NSObject {
     }
 
     // Delete entry
-    func deleteManually() {
+    func deleteData() {
         
         managedObjectContext = dataStack.viewContext
         
@@ -158,6 +216,33 @@ class Model: NSObject {
         }
     }
     
+    
+    //MARK: Export JSON from model - ERROR: I cannot get a json object
+    func exportDataAsJSON () {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            
+            if results.count > 0 {
+                
+                for entry in results as! [NSManagedObject] {
+                    
+                    let entriesValues = entry.export()
+                    print(entriesValues)
+                    
+                }
+            }
+        } catch {
+            print("We could not fetch the data")
+        }
+    }
+    
+
     // MARK: Shared Instance
 
     class func sharedInstance() -> Model {

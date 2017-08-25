@@ -42,6 +42,7 @@
 		7E498C791F0CDBFF00DC443B /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		7E4A4D801F4DB69D00F38D82 /* GSDatabaseStoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GSDatabaseStoring.swift; sourceTree = "<group>"; };
 		7E88A2B41F35EBA9008C999F /* NonSmokingBarModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NonSmokingBarModel.xcdatamodel; sourceTree = "<group>"; };
+		7ECC86291F5027040034514D /* NonSmokingBarModel v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "NonSmokingBarModel v2.xcdatamodel"; sourceTree = "<group>"; };
 		7EE9062C1EFD9C1200E6EAD9 /* Vivid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vivid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -498,9 +499,10 @@
 		7E88A2B31F35EBA9008C999F /* NonSmokingBarModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7ECC86291F5027040034514D /* NonSmokingBarModel v2.xcdatamodel */,
 				7E88A2B41F35EBA9008C999F /* NonSmokingBarModel.xcdatamodel */,
 			);
-			currentVersion = 7E88A2B41F35EBA9008C999F /* NonSmokingBarModel.xcdatamodel */;
+			currentVersion = 7ECC86291F5027040034514D /* NonSmokingBarModel v2.xcdatamodel */;
 			path = NonSmokingBarModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
