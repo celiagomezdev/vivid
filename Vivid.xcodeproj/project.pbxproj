@@ -24,6 +24,7 @@
 		7E8C725D1F505CA1001E41D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C725C1F505CA1001E41D5 /* LaunchScreen.storyboard */; };
 		7E8C72611F505CDD001E41D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C72601F505CDD001E41D5 /* Assets.xcassets */; };
 		7EB2922C1F505DC400BDF1D7 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7EB2922B1F505DC400BDF1D7 /* Info.plist */; };
+		7EB292301F51D4D700BDF1D7 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB2922F1F51D4D700BDF1D7 /* TableViewController.swift */; };
 		7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */; };
 		7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */; };
 		7EE906421EFD9CC600E6EAD9 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 7EE906411EFD9CC600E6EAD9 /* Podfile */; };
@@ -47,6 +48,7 @@
 		7E8C725C1F505CA1001E41D5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7E8C72601F505CDD001E41D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7EB2922B1F505DC400BDF1D7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EB2922F1F51D4D700BDF1D7 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		7ECC86291F5027040034514D /* NonSmokingBarModel v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "NonSmokingBarModel v2.xcdatamodel"; sourceTree = "<group>"; };
 		7EE9062C1EFD9C1200E6EAD9 /* Vivid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vivid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				7E498C751F0CDBC500DC443B /* TopMenuViewController.swift */,
 				7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */,
 				7E498C791F0CDBFF00DC443B /* PlaceDetailViewController.swift */,
+				7EB2922F1F51D4D700BDF1D7 /* TableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E498C7A1F0CDBFF00DC443B /* PlaceDetailViewController.swift in Sources */,
+				7EB292301F51D4D700BDF1D7 /* TableViewController.swift in Sources */,
 				7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */,
 				7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */,
 				7E44170C1F0A8DD100072545 /* NeighbourhoodPickerViewController.swift in Sources */,

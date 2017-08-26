@@ -13,15 +13,18 @@ class MainViewController: UIViewController {
     var data = [NonSmokingBar]()
     
     //MARK: Outlets
-    
+    @IBOutlet weak var containerViewMap: UIView!
+    @IBOutlet weak var containerViewTable: UIView!
     @IBOutlet weak var searchView: UIView!
     @IBOutlet weak var searchButton: UIBarButtonItem!
+    
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
  
     override func viewDidLoad() {
         super.viewDidLoad()
         searchView.isHidden = true
-        
+        containerViewTable.isHidden = true
 
         // Do any additional setup after loading the view.
     }
@@ -35,4 +38,18 @@ class MainViewController: UIViewController {
         }
     }
     
-  }
+    @IBAction func indexChanged(_ sender: UISegmentedControl) {
+        
+        if sender.selectedSegmentIndex == 0 {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.containerViewMap.alpha = 1
+                self.containerViewTable.alpha = 0
+            })
+        } else {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.containerViewMap.alpha = 0
+                self.containerViewTable.alpha = 1
+            })
+        }
+    }
+}
