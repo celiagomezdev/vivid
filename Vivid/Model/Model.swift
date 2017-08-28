@@ -27,7 +27,9 @@ class Model: NSObject {
     
    //Load results in an array
     
-    func loadData() {
+    func loadDataInArray() -> [NonSmokingBar] {
+        
+        var nonSmokingBars = [NonSmokingBar]()
         
         managedObjectContext = dataStack.viewContext
         
@@ -36,56 +38,12 @@ class Model: NSObject {
         do {
             nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
             print("Nº in Array: \(nonSmokingBars.count)")
-            
-            for result in nonSmokingBars {
-                if let name = result.name {
-                    print("Name: \(name)")
-                }
-                if let address = result.address {
-                    print("Address: \(address)")
-                }
-                if let location = result.location {
-                    print("Location: \(location)")
-                }
-                if let neighbourhood = result.neighbourhood {
-                    print("Neighbourhood: \(neighbourhood)")
-                }
-                
-                print("Postal Code: \(result.postalCode)")
-                
-                print("Rating: \(result.rating)")
-                
-                if let placeID = result.placeId {
-                    print("Place ID: \(placeID)")
-                }
-    
-                if let checked = result.checked {
-                    print("Checked: \(checked)")
-                }
-                
-                if let smokingType = result.smokingType {
-                    print("SmokingType: \(smokingType)")
-                }
-                
-                if let photos = result.photos {
-                    if let photosStArray = NSKeyedUnarchiver.unarchiveObject(with: photos as Data) as? [String] {
-                        print("Photos: \(photosStArray)")
-                    } else {
-                        print("Could not extract Photos from Model")
-                    }
-                 }
-                
-                if let placeTypes = result.placeTypes {
-                    if let placeTypesStArray = NSKeyedUnarchiver.unarchiveObject(with: placeTypes as Data) as? [String] {
-                        print("Photos: \(placeTypesStArray)")
-                    } else {
-                        print("Could not extract Place Types from Model")
-                    }
-                }
-            }
+     
         } catch {
             print("Could not load data from database: \(error.localizedDescription)")
         }
+        
+        return nonSmokingBars
     }
     
     func addData() {

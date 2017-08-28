@@ -149,7 +149,6 @@
         <!--Neighbourhood Picker View Controller-->
         <scene sceneID="2hn-4h-Rbk">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0Bz-5V-7dT" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="NeighbourhoodPickerViewController" id="EBh-Gs-Btj" customClass="NeighbourhoodPickerViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0Dr-QN-cdY"/>
@@ -177,6 +176,7 @@
                         <outlet property="mySearchTextField" destination="jgf-Rj-Mgi" id="N6M-cl-b84"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Bz-5V-7dT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1286" y="-2295"/>
         </scene>
@@ -198,7 +198,7 @@
             </objects>
             <point key="canvasLocation" x="-594" y="-1899"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Data Source-->
         <scene sceneID="NOk-2a-twr">
             <objects>
                 <viewController id="bAr-Ne-bzP" customClass="TableViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
@@ -232,11 +232,59 @@
                             <constraint firstItem="3qK-2c-X3v" firstAttribute="leading" secondItem="ySH-hU-ZNA" secondAttribute="leadingMargin" constant="-16" id="g2n-0k-KNc"/>
                             <constraint firstItem="3qK-2c-X3v" firstAttribute="top" secondItem="I62-SE-kIu" secondAttribute="bottom" id="pX1-hX-ElK"/>
                         </constraints>
+                        <connections>
+                            <outlet property="dataSource" destination="bAr-Ne-bzP" id="SK6-ij-lOL"/>
+                        </connections>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gWd-za-vmI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="626" y="-892"/>
+        </scene>
+        <!--Place Detail View Controller-->
+        <scene sceneID="kKi-bX-Iv4">
+            <objects>
+                <viewController storyboardIdentifier="PlaceDetailViewController" id="lr5-oo-9Sy" customClass="PlaceDetailViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8sf-SD-ZZ8"/>
+                        <viewControllerLayoutGuide type="bottom" id="9Rz-KK-VYK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="x3K-lJ-9Jz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZX-Pw-Nto">
+                                <rect key="frame" x="144" y="312" width="87" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7HV-eq-UcP">
+                                <rect key="frame" x="96" y="118" width="183" height="161"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="161" id="9PE-7c-tS6"/>
+                                    <constraint firstAttribute="width" constant="183" id="xYU-Dy-0Rq"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="dZX-Pw-Nto" firstAttribute="centerX" secondItem="x3K-lJ-9Jz" secondAttribute="centerX" id="BvQ-Ft-8hX"/>
+                            <constraint firstItem="7HV-eq-UcP" firstAttribute="leading" secondItem="x3K-lJ-9Jz" secondAttribute="leadingMargin" constant="80" id="CSa-vc-HR4"/>
+                            <constraint firstItem="7HV-eq-UcP" firstAttribute="top" secondItem="8sf-SD-ZZ8" secondAttribute="bottom" constant="98" id="dcT-B6-iL1"/>
+                            <constraint firstItem="dZX-Pw-Nto" firstAttribute="leading" secondItem="x3K-lJ-9Jz" secondAttribute="leadingMargin" constant="128" id="o8g-38-Bfh"/>
+                            <constraint firstItem="dZX-Pw-Nto" firstAttribute="top" secondItem="7HV-eq-UcP" secondAttribute="bottom" constant="33" id="uia-eB-Yht"/>
+                            <constraint firstItem="7HV-eq-UcP" firstAttribute="centerX" secondItem="x3K-lJ-9Jz" secondAttribute="centerX" id="xRQ-fJ-3St"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="barImage" destination="7HV-eq-UcP" id="wHc-OY-xj8"/>
+                        <outlet property="barName" destination="dZX-Pw-Nto" id="Yhe-YJ-6KQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iVs-vR-KUT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1429.5999999999999" y="-859.52023988005999"/>
         </scene>
     </scenes>
 </document>

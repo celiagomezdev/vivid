@@ -9,6 +9,12 @@
 import UIKit
 
 class PlaceDetailViewController: UIViewController {
+    
+    var bar: NonSmokingBar!
+    
+    @IBOutlet weak var barImage: UIImageView!
+    
+    @IBOutlet weak var barName: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()

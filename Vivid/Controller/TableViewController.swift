@@ -7,11 +7,23 @@
 //
 
 import UIKit
+import Sync
+import Foundation
 
 class TableViewController: UITableViewController {
+    
+    var dataStack = Model.sharedInstance().dataStack
+    var nonSmokingBars = [NonSmokingBar]()
+    var managedObjectContext: NSManagedObjectContext!
+    let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        nonSmokingBars = Model.sharedInstance().loadDataInArray()
+        print("Non smoking bars: \(nonSmokingBars.count)")
+        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -20,32 +32,22 @@ class TableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        
+        return self.nonSmokingBars.count
+        
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
 
-        // Configure the cell...
 
         return cell
     }
-    */
+  
 
     /*
     // Override to support conditional editing of the table view.
