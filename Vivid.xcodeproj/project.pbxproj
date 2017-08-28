@@ -23,7 +23,6 @@
 		7E8C725B1F505C94001E41D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C725A1F505C94001E41D5 /* Main.storyboard */; };
 		7E8C725D1F505CA1001E41D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C725C1F505CA1001E41D5 /* LaunchScreen.storyboard */; };
 		7E8C72611F505CDD001E41D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C72601F505CDD001E41D5 /* Assets.xcassets */; };
-		7EB2922C1F505DC400BDF1D7 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7EB2922B1F505DC400BDF1D7 /* Info.plist */; };
 		7EB292301F51D4D700BDF1D7 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB2922F1F51D4D700BDF1D7 /* TableViewController.swift */; };
 		7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */; };
 		7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */; };
@@ -256,7 +255,6 @@
 			files = (
 				7E8C72591F505C55001E41D5 /* Keys.plist in Resources */,
 				7E8C725D1F505CA1001E41D5 /* LaunchScreen.storyboard in Resources */,
-				7EB2922C1F505DC400BDF1D7 /* Info.plist in Resources */,
 				7E8C725B1F505C94001E41D5 /* Main.storyboard in Resources */,
 				7E8C72611F505CDD001E41D5 /* Assets.xcassets in Resources */,
 				7EE906421EFD9CC600E6EAD9 /* Podfile in Resources */,
