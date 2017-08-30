@@ -24,7 +24,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchView.isHidden = true
-        containerViewTable.isHidden = true
 
         // Do any additional setup after loading the view.
     }

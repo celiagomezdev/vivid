@@ -12,6 +12,7 @@
 		7E0DC0111F505BBD00A4ACA6 /* GMSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0DC00E1F505BBD00A4ACA6 /* GMSConstants.swift */; };
 		7E0DC0121F505BBD00A4ACA6 /* GMSConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0DC00F1F505BBD00A4ACA6 /* GMSConvenience.swift */; };
 		7E0DC0141F505BEB00A4ACA6 /* GSDatabaseStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0DC0131F505BEB00A4ACA6 /* GSDatabaseStoring.swift */; };
+		7E3F0A4F1F56B67D005B918C /* ResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3F0A4E1F56B67D005B918C /* ResultsTableViewCell.swift */; };
 		7E4417081F0A880100072545 /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4417071F0A880100072545 /* GCDBlackBox.swift */; };
 		7E44170C1F0A8DD100072545 /* NeighbourhoodPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E44170B1F0A8DD100072545 /* NeighbourhoodPickerViewController.swift */; };
 		7E498C741F0CDB8700DC443B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E498C731F0CDB8700DC443B /* MainViewController.swift */; };
@@ -23,7 +24,7 @@
 		7E8C725B1F505C94001E41D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C725A1F505C94001E41D5 /* Main.storyboard */; };
 		7E8C725D1F505CA1001E41D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C725C1F505CA1001E41D5 /* LaunchScreen.storyboard */; };
 		7E8C72611F505CDD001E41D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C72601F505CDD001E41D5 /* Assets.xcassets */; };
-		7EB292301F51D4D700BDF1D7 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB2922F1F51D4D700BDF1D7 /* TableViewController.swift */; };
+		7EB292301F51D4D700BDF1D7 /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB2922F1F51D4D700BDF1D7 /* ResultsTableViewController.swift */; };
 		7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */; };
 		7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */; };
 		7EE906421EFD9CC600E6EAD9 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 7EE906411EFD9CC600E6EAD9 /* Podfile */; };
@@ -35,6 +36,7 @@
 		7E0DC00E1F505BBD00A4ACA6 /* GMSConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GMSConstants.swift; path = Clients/GMS/GMSConstants.swift; sourceTree = "<group>"; };
 		7E0DC00F1F505BBD00A4ACA6 /* GMSConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GMSConvenience.swift; path = Clients/GMS/GMSConvenience.swift; sourceTree = "<group>"; };
 		7E0DC0131F505BEB00A4ACA6 /* GSDatabaseStoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GSDatabaseStoring.swift; sourceTree = "<group>"; };
+		7E3F0A4E1F56B67D005B918C /* ResultsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultsTableViewCell.swift; path = View/ResultsTableViewCell.swift; sourceTree = "<group>"; };
 		7E4417071F0A880100072545 /* GCDBlackBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
 		7E44170B1F0A8DD100072545 /* NeighbourhoodPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NeighbourhoodPickerViewController.swift; sourceTree = "<group>"; };
 		7E498C731F0CDB8700DC443B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -47,7 +49,7 @@
 		7E8C725C1F505CA1001E41D5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7E8C72601F505CDD001E41D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7EB2922B1F505DC400BDF1D7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7EB2922F1F51D4D700BDF1D7 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		7EB2922F1F51D4D700BDF1D7 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
 		7ECC86291F5027040034514D /* NonSmokingBarModel v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "NonSmokingBarModel v2.xcdatamodel"; sourceTree = "<group>"; };
 		7EE9062C1EFD9C1200E6EAD9 /* Vivid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vivid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE9062F1EFD9C1200E6EAD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		7E4416F91F0A85C600072545 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7E3F0A4E1F56B67D005B918C /* ResultsTableViewCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -122,7 +125,7 @@
 				7E498C751F0CDBC500DC443B /* TopMenuViewController.swift */,
 				7EE906311EFD9C1200E6EAD9 /* MapViewController.swift */,
 				7E498C791F0CDBFF00DC443B /* PlaceDetailViewController.swift */,
-				7EB2922F1F51D4D700BDF1D7 /* TableViewController.swift */,
+				7EB2922F1F51D4D700BDF1D7 /* ResultsTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -317,7 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E498C7A1F0CDBFF00DC443B /* PlaceDetailViewController.swift in Sources */,
-				7EB292301F51D4D700BDF1D7 /* TableViewController.swift in Sources */,
+				7EB292301F51D4D700BDF1D7 /* ResultsTableViewController.swift in Sources */,
 				7EE906321EFD9C1200E6EAD9 /* MapViewController.swift in Sources */,
 				7EE906301EFD9C1200E6EAD9 /* AppDelegate.swift in Sources */,
 				7E44170C1F0A8DD100072545 /* NeighbourhoodPickerViewController.swift in Sources */,
@@ -330,6 +333,7 @@
 				7E498C761F0CDBC500DC443B /* TopMenuViewController.swift in Sources */,
 				7E0DC0111F505BBD00A4ACA6 /* GMSConstants.swift in Sources */,
 				7E498C741F0CDB8700DC443B /* MainViewController.swift in Sources */,
+				7E3F0A4F1F56B67D005B918C /* ResultsTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

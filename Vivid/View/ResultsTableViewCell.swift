@@ -1,0 +1,30 @@
+//
+//  ResultsTableViewCell.swift
+//  Vivid
+//
+//  Created by Celia Gómez de Villavedón on 30/08/2017.
+//  Copyright © 2017 Celia Gómez de Villavedón Pedrosa. All rights reserved.
+//
+
+import UIKit
+
+class ResultsTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var barImage: UIImageView!
+    
+    @IBOutlet weak var barNameLabel: UILabel!
+    
+    @IBOutlet weak var barAddressLabel: UILabel!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
+}

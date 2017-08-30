@@ -1,5 +1,5 @@
 //
-//  TableViewController.swift
+//  ResultsTableViewController.swift
 //  Vivid
 //
 //  Created by Celia Gómez de Villavedón on 26/08/2017.
@@ -10,7 +10,8 @@ import UIKit
 import Sync
 import Foundation
 
-class TableViewController: UITableViewController {
+
+class ResultsTableViewController: UITableViewController {
     
     var dataStack = Model.sharedInstance().dataStack
     var nonSmokingBars = [NonSmokingBar]()
@@ -23,6 +24,8 @@ class TableViewController: UITableViewController {
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
         print("Non smoking bars: \(nonSmokingBars.count)")
+        
+        self.tableView.register(ResultsTableViewCell.self, forCellReuseIdentifier: "barCell")
         
 
         // Uncomment the following line to preserve selection between presentations
@@ -42,9 +45,14 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "barCell", for: indexPath) as! ResultsTableViewCell
+        
+        let bar = self.nonSmokingBars[(indexPath as NSIndexPath).row]
+        
+        cell.barNameLabel?.text = bar.name
+        cell.barAddressLabel?.text = bar.address
+        
         return cell
     }
   
