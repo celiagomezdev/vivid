@@ -8,10 +8,9 @@
 
 import UIKit
 import Sync
-import Foundation
 
 
-class ResultsTableViewController: UITableViewController {
+class ResultsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var dataStack = Model.sharedInstance().dataStack
     var nonSmokingBars = [NonSmokingBar]()
@@ -23,9 +22,6 @@ class ResultsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
-        print("Non smoking bars: \(nonSmokingBars.count)")
-        
-        self.tableView.register(ResultsTableViewCell.self, forCellReuseIdentifier: "barCell")
         
 
         // Uncomment the following line to preserve selection between presentations
@@ -38,20 +34,26 @@ class ResultsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+ 
         return self.nonSmokingBars.count
         
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "barCell", for: indexPath) as! ResultsTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "barCell", for: indexPath) as? ResultsTableViewCell else {
+            fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        }
         
-        let bar = self.nonSmokingBars[(indexPath as NSIndexPath).row]
+        let bar = nonSmokingBars[indexPath.row]
         
-        cell.barNameLabel?.text = bar.name
-        cell.barAddressLabel?.text = bar.address
+        guard let barName = bar.name, let barAddress = bar.address else {
+            fatalError("Could not unwrapp barName or barAddresss")
+        }
+        
+        cell.barNameLabel?.text = barName
+        cell.barAddressLabel?.text = barAddress
         
         return cell
     }

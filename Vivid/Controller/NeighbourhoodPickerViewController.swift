@@ -6,7 +6,6 @@
 //  Copyright © 2017 Celia Gómez de Villavedón Pedrosa. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import SearchTextField
 import MapKit

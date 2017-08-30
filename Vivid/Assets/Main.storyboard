@@ -199,27 +199,42 @@
         <!--Results Table View Controller-->
         <scene sceneID="NOk-2a-twr">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gWd-za-vmI" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="bAr-Ne-bzP" customClass="ResultsTableViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" sectionHeaderHeight="28" sectionFooterHeight="28" id="U5A-AI-wHF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="barCell" rowHeight="90" id="wcY-VP-oGi" customClass="ResultsTableViewCell" customModule="Vivid" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="barCell" textLabel="V7N-xd-yWe" style="IBUITableViewCellStyleDefault" id="hi5-jc-tPN" customClass="ResultsTableViewCell" customModule="Vivid" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wcY-VP-oGi" id="QdO-Lx-97w">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi5-jc-tPN" id="9ic-nS-NcB">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <color key="backgroundColor" red="0.75298660470000001" green="1" blue="0.99141464739999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="V7N-xd-yWe">
+                                            <rect key="frame" x="15" y="0.0" width="345" height="89.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="barNameLabel" destination="V7N-xd-yWe" id="sem-az-Xh2"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="bAr-Ne-bzP" id="nBb-Dh-ooO"/>
+                            <outlet property="delegate" destination="bAr-Ne-bzP" id="Lt6-vg-z5j"/>
+                        </connections>
                     </tableView>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gWd-za-vmI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="624.79999999999995" y="-892.80359820089961"/>
+            <point key="canvasLocation" x="169" y="-1155"/>
         </scene>
         <!--Place Detail View Controller-->
         <scene sceneID="kKi-bX-Iv4">
