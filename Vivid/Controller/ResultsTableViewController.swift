@@ -16,12 +16,16 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
     var nonSmokingBars = [NonSmokingBar]()
     var managedObjectContext: NSManagedObjectContext!
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
+    var photosDictionary: [String:Any] = [:]
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
+        
+        photosDictionary = Model.sharedInstance().getPhotosDictionary(nonSmokingBars)
+        print(photosDictionary)
         
 
         // Uncomment the following line to preserve selection between presentations

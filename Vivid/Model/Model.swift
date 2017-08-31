@@ -18,7 +18,7 @@ class Model: NSObject {
     var nonSmokingBars = [NonSmokingBar]()
     var managedObjectContext: NSManagedObjectContext!
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
-    var newManagedObjectContext: NSManagedObjectContext!
+    
     
     override init() {
         super.init()
@@ -200,6 +200,30 @@ class Model: NSObject {
         }
     }
     
+    func getPhotosDictionary(_ fetchedResults: [NonSmokingBar]) -> [String:Any] {
+        
+        var photosDictionary = [String:Any]()
+        
+        for object in fetchedResults {
+            
+            if let photosData = object.photos, let barName = object.name {
+                
+                let photosArray = NSKeyedUnarchiver.unarchiveObject(with: photosData as Data) as? [String]
+                
+                if let photosArray = photosArray {
+     
+                    photosDictionary[barName] = photosArray
+                    
+                } else {
+                    print("Could not convert photos as an Array of Strings")
+                }
+            } else {
+                print("Could not find photos or name in fetchedObject")
+            }
+        }
+        print("Empty Dictionary")
+        return photosDictionary
+    }
 
     // MARK: Shared Instance
 
