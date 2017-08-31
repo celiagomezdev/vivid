@@ -16,5 +16,13 @@ class ResultsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var barAddressLabel: UILabel!
 
+    @IBOutlet weak var distanceLabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        barNameLabel.sizeToFit()
+        barAddressLabel.sizeToFit()
+    }
 
 }

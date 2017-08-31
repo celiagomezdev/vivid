@@ -206,24 +206,58 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="barCell" textLabel="V7N-xd-yWe" style="IBUITableViewCellStyleDefault" id="hi5-jc-tPN" customClass="ResultsTableViewCell" customModule="Vivid" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="barCell" id="hi5-jc-tPN" customClass="ResultsTableViewCell" customModule="Vivid" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi5-jc-tPN" id="9ic-nS-NcB">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="V7N-xd-yWe">
-                                            <rect key="frame" x="15" y="0.0" width="345" height="89.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Upa-KT-jsN">
+                                            <rect key="frame" x="8" y="5" width="264" height="21"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKR-lU-Dkg">
+                                            <rect key="frame" x="8" y="31" width="264" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ckv-x3-reQ">
+                                            <rect key="frame" x="8" y="60" width="264" height="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" red="1" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="576-hL-Wgz">
+                                            <rect key="frame" x="280" y="0.0" width="95" height="90"/>
+                                        </imageView>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="576-hL-Wgz" secondAttribute="trailing" id="0gX-9M-cTv"/>
+                                        <constraint firstItem="576-hL-Wgz" firstAttribute="leading" secondItem="Ckv-x3-reQ" secondAttribute="trailing" constant="8" id="1hX-8z-XX5"/>
+                                        <constraint firstItem="Ckv-x3-reQ" firstAttribute="leading" secondItem="9ic-nS-NcB" secondAttribute="leadingMargin" id="2iG-PA-aKX"/>
+                                        <constraint firstItem="cKR-lU-Dkg" firstAttribute="top" secondItem="Upa-KT-jsN" secondAttribute="bottom" constant="5" id="4Ln-sS-anv"/>
+                                        <constraint firstItem="cKR-lU-Dkg" firstAttribute="top" secondItem="Upa-KT-jsN" secondAttribute="bottom" constant="5" id="7ic-ch-Zox"/>
+                                        <constraint firstItem="cKR-lU-Dkg" firstAttribute="leading" secondItem="9ic-nS-NcB" secondAttribute="leadingMargin" id="9Gw-zi-pkX"/>
+                                        <constraint firstItem="576-hL-Wgz" firstAttribute="leading" secondItem="cKR-lU-Dkg" secondAttribute="trailing" constant="8" id="Adb-RU-WwX"/>
+                                        <constraint firstAttribute="bottom" secondItem="576-hL-Wgz" secondAttribute="bottom" id="JMa-vp-hfn"/>
+                                        <constraint firstItem="576-hL-Wgz" firstAttribute="top" secondItem="9ic-nS-NcB" secondAttribute="top" id="OKu-my-7Qv"/>
+                                        <constraint firstItem="Ckv-x3-reQ" firstAttribute="top" secondItem="cKR-lU-Dkg" secondAttribute="bottom" constant="11" id="YSW-rG-owR"/>
+                                        <constraint firstItem="576-hL-Wgz" firstAttribute="leading" secondItem="Upa-KT-jsN" secondAttribute="trailing" constant="8" id="c79-1l-YA9"/>
+                                        <constraint firstItem="Upa-KT-jsN" firstAttribute="leading" secondItem="9ic-nS-NcB" secondAttribute="leading" constant="8" id="pTM-q6-SoS"/>
+                                        <constraint firstItem="Upa-KT-jsN" firstAttribute="top" secondItem="9ic-nS-NcB" secondAttribute="top" constant="5" id="rIL-X3-AtB"/>
+                                        <constraint firstItem="Ckv-x3-reQ" firstAttribute="top" secondItem="cKR-lU-Dkg" secondAttribute="bottom" constant="11" id="ykU-g5-e6b"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Ckv-x3-reQ" secondAttribute="bottom" constant="5.5" id="zX8-pX-7wB"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="barNameLabel" destination="V7N-xd-yWe" id="sem-az-Xh2"/>
+                                    <outlet property="barAddressLabel" destination="cKR-lU-Dkg" id="rZu-Dh-Bjq"/>
+                                    <outlet property="barImage" destination="576-hL-Wgz" id="b9R-Q7-Q8T"/>
+                                    <outlet property="barNameLabel" destination="Upa-KT-jsN" id="VFq-hu-PYZ"/>
+                                    <outlet property="distanceLabel" destination="Ckv-x3-reQ" id="bkY-C7-QLV"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -234,7 +268,7 @@
                     </tableView>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="169" y="-1155"/>
+            <point key="canvasLocation" x="168.80000000000001" y="-1155.472263868066"/>
         </scene>
         <!--Place Detail View Controller-->
         <scene sceneID="kKi-bX-Iv4">
