@@ -26,17 +26,6 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
 
         photosDictionary = Model.sharedInstance().getPhotosDictionary(nonSmokingBars)
         
-        for (key, value) in photosDictionary {
-            print("Key: \(key)")
-            if key == "Laika" {
-                if let valueArray = value as? [String] {
-                    print(valueArray[0])
-                } else {
-                    print("Could not cast Any as [String]")
-                }
-            }
-        }
-        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -62,13 +51,32 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         
         let bar = nonSmokingBars[indexPath.row]
         
-        guard let barName = bar.name, let barAddress = bar.address else {
-            fatalError("Could not unwrapp barName or barAddresss")
+ 
+        guard let barName = bar.name, let barAddress = bar.address, let barImages = bar.photos else {
+            fatalError("Could not unwrapp barName, barAddresss or barImage")
         }
+        
+        var barImagesInArray = Model.sharedInstance().getPhotosArray(photos: barImages)
         
         cell.barNameLabel?.text = barName
         cell.barAddressLabel?.text = barAddress
         
+        //Extract UIImage from URL
+        if barImagesInArray.count >= 1 {
+            
+            let firstImageURL = barImagesInArray[0]
+            let url = URL(string: firstImageURL)
+            let data = try? Data(contentsOf: url!)
+            cell.barImage.image = UIImage(data: data!)
+            
+        } else {
+            print("Used default photo for bar: \(barName)")
+            let url = URL(string: "https://c2.staticflickr.com/4/3766/13275992763_53485b6dc5_b.jpg")
+            let data = try? Data(contentsOf: url!)
+            cell.barImage.image = UIImage(data: data!)
+            
+        }
+
         return cell
     }
   

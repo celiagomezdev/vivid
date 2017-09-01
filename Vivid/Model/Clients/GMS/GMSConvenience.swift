@@ -444,5 +444,4 @@ extension GMSClient {
             }
         }
     }
-   
 }

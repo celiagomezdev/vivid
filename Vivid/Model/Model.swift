@@ -252,8 +252,19 @@ class Model: NSObject {
                 print("Could not find photos or name in fetchedObject")
             }
         }
-        print(photosDictionary)
         return photosDictionary
+    }
+    
+    func getPhotosArray(photos: NSData) -> [String] {
+        
+        let photosArray = NSKeyedUnarchiver.unarchiveObject(with: photos as Data) as? [String]
+        if let photosArray = photosArray {
+            print("Photos: \(photosArray)")
+            return photosArray
+        } else {
+            print("Could not convert photos as Array")
+            return []
+        }  
     }
 
     // MARK: Shared Instance
