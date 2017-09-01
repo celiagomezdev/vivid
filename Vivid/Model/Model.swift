@@ -25,6 +25,42 @@ class Model: NSObject {
     }
     
     
+   //Load data
+    
+    func loadData() {
+        
+        var nonSmokingBars = [NonSmokingBar]()
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            nonSmokingBars = try managedObjectContext.fetch(request) as! [NonSmokingBar]
+           
+            if nonSmokingBars.count > 0 {
+                
+                for result in nonSmokingBars {
+                    
+                    guard let name = result.name, let photos = result.photos, let placeTypes = result.placeTypes else {
+                        print("Could not unwrap properly name, photos or place_types")
+                        return
+                    }
+                    
+                    print("Bar name: \(name)")
+                    print("Photos: \(photos)")
+                    print("Places Types: \(placeTypes)")
+
+                }
+            }
+        } catch {
+            print("Could not load data from database: \(error.localizedDescription)")
+        }
+
+    }
+
+    
+
    //Load results in an array
     
     func loadDataInArray() -> [NonSmokingBar] {
@@ -210,18 +246,13 @@ class Model: NSObject {
                 
                 let photosArray = NSKeyedUnarchiver.unarchiveObject(with: photosData as Data) as? [String]
                 
-                if let photosArray = photosArray {
-     
-                    photosDictionary[barName] = photosArray
-                    
-                } else {
-                    print("Could not convert photos as an Array of Strings")
-                }
+                photosDictionary[barName] = photosArray
+      
             } else {
                 print("Could not find photos or name in fetchedObject")
             }
         }
-        print("Empty Dictionary")
+        print(photosDictionary)
         return photosDictionary
     }
 

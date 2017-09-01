@@ -23,9 +23,19 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
-        
+
         photosDictionary = Model.sharedInstance().getPhotosDictionary(nonSmokingBars)
-        print(photosDictionary)
+        
+        for (key, value) in photosDictionary {
+            print("Key: \(key)")
+            if key == "Laika" {
+                if let valueArray = value as? [String] {
+                    print(valueArray[0])
+                } else {
+                    print("Could not cast Any as [String]")
+                }
+            }
+        }
         
 
         // Uncomment the following line to preserve selection between presentations

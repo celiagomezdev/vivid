@@ -41,10 +41,6 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
         
-
-        //MARK: TEMPORARY call to print model data
-//        GMSClient.sharedInstance().GetAndPrintDataFromGMSApi()
-        GSDatabaseStoring.sharedInstance().importFromJSON()
   
     }
 

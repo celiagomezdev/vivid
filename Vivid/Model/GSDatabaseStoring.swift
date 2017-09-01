@@ -71,7 +71,7 @@ class GSDatabaseStoring: NSObject {
                 parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
                 
                 DispatchQueue.main.async {
-                    print("JSON data sent to completion handler)")
+                    print("JSON data sent to completion handler")
                     completion(parsedResult, nil)
                 }
             } catch {
