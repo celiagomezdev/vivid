@@ -16,30 +16,8 @@ import Sync
 
 extension GMSClient {
     
-
-    //Define parameters for every neighbourhood.
-    func getLocationForNeighbourhood(_ searchText: String) -> String {
-        
-        var location = ""
-        
-        if searchText == "Neukölln" {
-            location = Neighbourhoods.Neukölln
-            print("Selected Neighbourhood: \(searchText)")
-        }
-        
-        if searchText == "Kreuzberg" {
-            location = Neighbourhoods.Kreuzberg
-            print("Selected Neighbourhood: \(searchText)")
-        }
-        
-        if searchText == "Mitte" {
-            location = Neighbourhoods.Mitte
-            print("Selected Neighbourhood: \(searchText)")
-        }
-        
-        return location
-    }
     
+    //Define location parameters for every neighbourhood.
     struct Neighbourhoods {
         
         static let Neukölln = "52.479209,13.437409"
@@ -48,164 +26,197 @@ extension GMSClient {
         
     }
     
-    //MARK: Update Core Data Model from GMS Api
-    func updateNonSmokingBarsModelFromGMSApi() {
+    
+    func getAndPrintDataFromGMSApi() {
         
-        var itemsPlaceIDSaved = 0
-        var itemsRatingSaved = 0
-        var itemsLocationSaved = 0
-        var itemsPhotosSaved = 0
-        var itemsPlaceTypesSaved = 0
+        let results = fetchManagedObject()
         
-        //Accesing Model
-        
-        managedObjectContext = dataStack.viewContext
-        
-        request.returnsObjectsAsFaults = false
-        
-        do {
+        if results.count > 0 {
             
-            let results = try managedObjectContext.fetch(request)
-            
-            if results.count > 0 {
+            for modelResult in results as! [NSManagedObject] {
                 
-                for modelResult in results as! [NSManagedObject] {
-                    if let name = modelResult.value(forKey: "name") as? String, let placeID = modelResult.value(forKey: "placeId") as? String {
+                if let placeID = modelResult.value(forKey: "placeId") as? String, let barName = modelResult.value(forKey: "name") as? String {
+                    
+                    self.getPlaceDetails(placeID) { (results, error) in
                         
-                        self.getPlaceDetails(placeID) { (results, error) in
-                            
-                            if let error = error {
-                                
-                                print("We could not get place details. \(error.localizedDescription)")
-                                
-                            } else {
-                                
-                                
-                                if let result = results?["result"] as? [String:Any] {
-                                    
-                                    itemsPlaceIDSaved += 1
-                                    
-                                    //Get location as String and store
-                                    if let geometry = result["geometry"] as? [String:Any] {
-                                        
-                                        if let location = geometry["location"] as? [String:Any] {
-                                            
-                                            if let latitude = location["lat"] as? Double, let longitude = location["lng"] as? Double {
-                                                
-                                                let location = "\(latitude), \(longitude)"
-                                                
-                                                itemsLocationSaved += 1
-                                                modelResult.setValue(location, forKey: "location")
-                                                
-                                                do {
-                                                    try self.managedObjectContext.save()
-                                                    
-                                                } catch {
-                                                    
-                                                    print("We couldn't save correctly the data into context")
-                                                }
-                                                
-                                            } else {
-                                                print("Could not find latitude, or longitud in results")
-                                            }
-                                        } else {
-                                            print("Could not find location in results")
-                                        }
-                                    } else {
-                                        print("Could not find geometry in results")
-                                    }
-                                    
-                                    //Get rating as String and store
-                                    if let rating = result["rating"] as? Int {
-                                        print("Rating Saved")
-                                        
-                                        itemsRatingSaved += 1
-                                        
-                                        modelResult.setValue(rating, forKey: "rating")
-                                        
-                                    } else {
-                                        print("Could not find rating in results")
-                                    }
-                                    
-                                    do {
-                                        try self.managedObjectContext.save()
-                                        
-                                    } catch {
-                                        
-                                        print("We couldn't save correctly the data into context")
-                                    }
-                                    
-                                    if let placeTypes = result["types"] as? [String] {
-                                        
-                                        let data = NSKeyedArchiver.archivedData(withRootObject: placeTypes)
-                                        
-                                        itemsPlaceTypesSaved += 1
-                                        
-                                        modelResult.setValue(data, forKey: "placeTypes")
-                                        
-                                        
-                                    } else {
-                                        print("Could not find places types in results")
-                                    }
-                                    
-                                    
-                                    //Get photos as [String] and store
-                                    if let photos = result["photos"] as? [[String:Any]] {
-                                        
-                                        let photoURLArray = self.getPhotoURLArray(photos)
-                                        
-                                        let data = NSKeyedArchiver.archivedData(withRootObject: photoURLArray)
-                                        
-                                        itemsPhotosSaved += 1
-                                        
-                                        modelResult.setValue(data, forKey: "photos")
-                                        
-                                        do {
-                                            try self.managedObjectContext.save()
-                                            
-                                        } catch {
-                                            
-                                            print("We couldn't save correctly the data into context")
-                                        }
-                                    }
-                                    
-                                } else {
-                                    
-                                    if let status = results?["status"] as? String {
-                                        print("Had error for place: \(name), with place id: \(placeID). \(status)")
-                                    }
-                                }
-                            }
+                        guard (error == nil) else {
+                            print("Could not get place details")
+                            return
                         }
+                        
+                        guard let result = results?["result"] as? [String:Any] else {
+                            print("Could not get result from results")
+                            return
+                        }
+                        
+                        //Get place details
+                        let location = self.getLocation(result)
+                        let rating = self.getRating(result)
+                        let placeTypes = self.getPlaceTypes(result)
+                        let photos = self.getPhotos(result)
+                        
+                        //Print in console:
+                        print("Bar name: \(barName)")
+                        print("Location: \(location)")
+                        print("rating: \(rating)")
+                        print("placeTypes: \(placeTypes)")
+                        print("Photos: \(photos)")
                     }
                 }
-            } else {
-                print("No results in dataStack")
             }
-        } catch {
-            print("We couldn't save correctly the data into context")
-        }
-        
-        let when = DispatchTime.now() + 2
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            print("Nº Items TOTAL: \(self.nonSmokingBars.count)")
-            print("Nº Items saved with Place_ID: \(itemsPlaceIDSaved)")
-            print("Nº Items saved with Location: \(itemsLocationSaved)")
-            print("Nº Items saved with Rating: \(itemsRatingSaved)")
-            print("Nº Items saved with Photos: \(itemsPhotosSaved)")
-            print("Nº Items saved with Places Types: \(itemsPhotosSaved)")
         }
     }
     
-    func GetAndPrintDataFromGMSApi() {
+    
+    //MARK: Update Core Data Model from GMS Api
+    func updateNonSmokingBarsModelFromGMSApi() {
         
-        var itemsPlaceIDReceived = 0
-        var itemsRatingReceived = 0
-        var itemsLocationReceived = 0
-        var itemsPhotosReceived = 0
-        var itemsPlaceTypesReceived = 0
+        let results = fetchManagedObject()
         
-        //Accesing Model
+        if results.count > 0 {
+            
+            for modelResult in results as! [NSManagedObject] {
+                
+                if let placeID = modelResult.value(forKey: "placeId") as? String {
+                    
+                    self.getPlaceDetails(placeID) { (results, error) in
+                        
+                        guard (error == nil) else {
+                            print("Could not get place details")
+                            return
+                        }
+                        
+                        guard let result = results?["result"] as? [String:Any] else {
+                            print("Could not get result from results")
+                            return
+                        }
+                        
+                        //Get place details
+                        let location = self.getLocation(result)
+                        let rating = self.getRating(result)
+                        let placeTypes = self.getPlaceTypes(result)
+                        let photos = self.getPhotos(result)
+                        
+                        //Store into context
+                        self.storeLocation(modelResult, location)
+                        self.storeRating(modelResult, rating)
+                        self.storePlaceTypes(modelResult, placeTypes)
+                        self.storePhotos(modelResult, photos)
+                    }
+                }
+            }
+        }
+    }
+    
+    func getLocation(_ result: [String:Any]) -> String {
+        
+        guard let geometry = result["geometry"] as? [String:Any] else {
+            print("Could not find geometry in results")
+            return ""
+        }
+        
+        guard let location = geometry["location"] as? [String:Any] else {
+            print("Could not find location in geometry results")
+            return ""
+        }
+        
+        guard let latitude = location["lat"] as? Double, let longitude = location["lng"] as? Double else {
+            print("Could not find latitude or longitude in location results")
+            return ""
+        }
+        
+        let locationString = "\(latitude), \(longitude)"
+        
+        return locationString
+    }
+    
+    //Method to store Location in Model
+    func storeLocation(_ modelResult: NSManagedObject,_ location: String) {
+        
+        //Store location in Model
+        modelResult.setValue(location, forKey: "location")
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print("Could not save correctly location into context")
+        }
+    }
+    
+    //Method to store Rating in Model
+    func getRating(_ result: [String:Any]) -> Int {
+        
+        guard let rating = result["rating"] as? Int else {
+            print("Could not find rating in results")
+            return 0
+        }
+        return rating
+    }
+    
+    func storeRating(_ modelResult: NSManagedObject,_ rating: Int) {
+        
+        //Set value and save in Model
+        modelResult.setValue(rating, forKey: "rating")
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print("Could not save correctly rating into context")
+        }
+    }
+    
+    //Method to store Place Types in Model
+    func getPlaceTypes(_ result: [String:Any]) -> [String] {
+        
+        guard let placeTypes = result["place_types"] as? [String] else {
+            print("Could not find place types in results")
+            return []
+        }
+        
+        return placeTypes
+    }
+    
+    func storePlaceTypes(_ modelResult: NSManagedObject,_ placeTypes: [String]) {
+        //Set value and save in Model
+        let data = NSKeyedArchiver.archivedData(withRootObject: placeTypes)
+        
+        modelResult.setValue(data, forKey: "placeTypes")
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print("Could not save correctly place types into context")
+        }
+    }
+    
+    //Method to store Photos in Model
+    func getPhotos(_ result: [String:Any]) -> [String] {
+        
+        guard let photos = result["photos"] as? [[String:Any]] else {
+            print("Could not find place types in results")
+            return []
+        }
+        
+        let photoURLArray = self.getPhotoURLArray(photos)
+        
+        return photoURLArray
+    }
+    
+    func storePhotos(_ modelResult: NSManagedObject,_ photos: [String]) {
+        
+        //Set value and save in Model
+        let data = NSKeyedArchiver.archivedData(withRootObject: photos)
+        
+        modelResult.setValue(data, forKey: "photos")
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print("Could not save correctly place types into context")
+        }
+    }
+    
+    func fetchManagedObject() -> [Any] {
         
         managedObjectContext = dataStack.viewContext
         
@@ -214,105 +225,11 @@ extension GMSClient {
         do {
             
             let results = try managedObjectContext.fetch(request)
+            return results
             
-            if results.count > 0 {
-                
-                for modelResult in results as! [NSManagedObject] {
-                    if let name = modelResult.value(forKey: "name") as? String, let placeID = modelResult.value(forKey: "placeId") as? String {
-                        
-                        self.getPlaceDetails(placeID) { (results, error) in
-                            
-                            if let error = error {
-                                
-                                print("We could not get place details. \(error.localizedDescription)")
-                                
-                            } else {
-                                
-                                
-                                if let result = results?["result"] as? [String:Any] {
-                                    
-                                    itemsPlaceIDReceived += 1
-                                    
-                                    //Get location as String and store
-                                    if let geometry = result["geometry"] as? [String:Any] {
-                                        
-                                        if let location = geometry["location"] as? [String:Any] {
-                                            
-                                            if let latitude = location["lat"] as? Double, let longitude = location["lng"] as? Double {
-                                                
-                                                let location = "\(latitude), \(longitude)"
-                                                
-                                                itemsLocationReceived += 1
-                                                print(name)
-                                                print(placeID)
-                                                print(location)
-                                                
-                                            } else {
-                                                print("Could not find latitude, or longitud in results")
-                                            }
-                                        } else {
-                                            print("Could not find location in results")
-                                        }
-                                    } else {
-                                        print("Could not find geometry in results")
-                                    }
-                                    
-                                    //Get rating as String and store
-                                    if let rating = result["rating"] as? Int {
-                                        
-                                        itemsRatingReceived += 1
-                                        print(rating)
-                                        
-                                    } else {
-                                        print("Could not find rating in results")
-                                    }
-                                    
-                                    if let placeTypes = result["types"] as? [String] {
-                                        
-                                        itemsPlaceTypesReceived += 1
-                                        
-                                        print(placeTypes)
-                                        
-                                    } else {
-                                        print("Could not find places types in results")
-                                    }
-                                    
-                                    //Get photos as [String] and store
-                                    if let photos = result["photos"] as? [[String:Any]] {
-                                        
-                                        let photoURLArray = self.getPhotoURLArray(photos)
-                                        
-                                        itemsPhotosReceived += 1
-                                        
-                                        print(photoURLArray)
-                                        
-                                    }
-                                    
-                                } else {
-                                    
-                                    if let status = results?["status"] as? String {
-                                        print("Had error for place: \(name), with place id: \(placeID). \(status)")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                print("No results in dataStack")
-            }
         } catch {
-            print("We couldn't save correctly the data into context")
-        }
-        
-        let when = DispatchTime.now() + 4
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            print("Nº Items TOTAL: \(self.nonSmokingBars.count)")
-            print("Nº Items saved with Place_ID: \(itemsPlaceIDReceived)")
-            print("Nº Items saved with Location: \(itemsLocationReceived)")
-            print("Nº Items saved with Rating: \(itemsRatingReceived)")
-            print("Nº Items saved with Photos: \(itemsPhotosReceived)")
-            print("Nº Items saved with Places Types: \(itemsPhotosReceived)")
+            print("Could not fetch the data")
+            return []
         }
     }
     
@@ -334,6 +251,7 @@ extension GMSClient {
         return photoURLArray
     }
     
+    //Get and store place ID from GMS methods
     
     func getPlaceID (_ barName: String?,_ barAddress: String?, _ completionHanlderForPlaceID: @escaping (_ success: Bool, _ placeID: String?, _ errorString: String?) -> Void) {
         
@@ -341,33 +259,31 @@ extension GMSClient {
         
         let _ = GMSClient.sharedInstance().taskForGetMethod(GMSClient.Methods.SearchPlace, parameters: parameters as [String:Any]) { (results, error) in
             
-            if let error = error {
+            guard (error == nil) else {
+                print("There was an error with your request: \(error!.localizedDescription)")
+                completionHanlderForPlaceID(false, nil, "Get Request Failed")
+                return
+            }
+            
+            if let parsedResults = results?["results"] as? [[String:Any]] {
                 
-                print("ERROR: \(error.localizedDescription)")
-                completionHanlderForPlaceID(false, nil, error.localizedDescription)
-                
-            } else {
-                
-                if let parsedResults = results?["results"] as? [[String:Any]] {
+                for item in parsedResults {
                     
-                    for item in parsedResults {
+                    guard let itemName = item["name"] as? String, let itemAddress = item["vicinity"] as? String else {
+                        completionHanlderForPlaceID(false, nil, "Could not find name or address in results")
+                        return
+                    }
+                    
+                    if (itemName == barName) || (itemAddress == barAddress) {
                         
-                        if let itemName = item["name"] as? String, let itemAddress = item["vicinity"] as? String {
+                        if let placeID = item["place_id"] as? String {
+                            completionHanlderForPlaceID(true, placeID, nil)
                             
-                            if (itemName == barName) || (itemAddress == barAddress) {
-                                
-                                if let placeID = item["place_id"] as? String {
-                                    completionHanlderForPlaceID(true, placeID, nil)
-                                    
-                                } else {
-                                    completionHanlderForPlaceID(false, nil, "Could not store Place ID in CompletionHandler for barName: \(barName!) \(String(describing: error?.localizedDescription))")
-                                }
-                            } else {
-                                completionHanlderForPlaceID(false, nil, "NOT SAVED. GMSName: \(itemName), GMSAddress: \(itemAddress) // databaseName: \(barName!), databaseAddress: \(barAddress!) ")
-                            }
                         } else {
-                            completionHanlderForPlaceID(false, nil, "Could not find itemName or itemAddress in parsed results : \(String(describing: error?.localizedDescription))")
+                            completionHanlderForPlaceID(false, nil, "Could not store Place ID in CompletionHandler for barName: \(barName!) \(String(describing: error?.localizedDescription))")
                         }
+                    } else {
+                        completionHanlderForPlaceID(false, nil, "NOT SAVED. GMSName: \(itemName), GMSAddress: \(itemAddress) // databaseName: \(barName!), databaseAddress: \(barAddress!) ")
                     }
                 }
             }
@@ -376,60 +292,45 @@ extension GMSClient {
     
     func savePlaceIDs() {
         
-        managedObjectContext = dataStack.viewContext
-        
-        request.returnsObjectsAsFaults = false
-        
         var placeIDSaved = 0
         
-        do {
+        let results = fetchManagedObject()
+        
+        guard results.count > 0 else {
+            print("Results is empty")
+            return
+        }
+        
+        for result in results as! [NSManagedObject] {
             
-            let results = try managedObjectContext.fetch(request)
-            
-            if results.count > 0 {
+            if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
                 
-                for result in results as! [NSManagedObject] {
+                self.getPlaceID(barName, barAddress) { (success, placeID, error) in
                     
-                    if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
-                        
-                        self.getPlaceID(barName, barAddress) { (success, placeID, error) in
-                            
-                            if success {
-                                
-                                if let placeID = placeID {
-                                    
-                                    print("Place ID: \(placeID) for bar: \(barName)")
-                                    result.setValue(placeID, forKey: "placeId")
-                                    
-                                }
-                                
-                                do {
-                                    placeIDSaved += 1
-                                    try self.managedObjectContext.save()
-                                } catch {
-                                    print("We could not save correctly the PLACE ID into context")
-                                }
-                                
-                            }
-                        }
+                    guard success, let placeID = placeID else {
+                        print("Getting place ID was not succesful")
+                        return
+                    }
+                    
+                    result.setValue(placeID, forKey: "placeId")
+                    
+                    
+                    //Store place ID and handle error
+                    do {
+                        try self.managedObjectContext.save()
+                        placeIDSaved += 1
+                    } catch {
+                        print("Could not save place id into context")
                     }
                 }
-            } else {
-                print("No results")
             }
-        } catch {
-            print("We couldn't save correctly the data into context")
         }
         
         let when = DispatchTime.now() + 2
         DispatchQueue.main.asyncAfter(deadline: when) {
-            
-            print("Nº Items Place_ID Saved: \(placeIDSaved)")
-            
+            print("PlaceIDs saved count: \(placeIDSaved)")
         }
-        
     }
-    
     
     func getPlaceDetails(_ placeID: String?, _ completionHanlderForPlaceDetails: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
