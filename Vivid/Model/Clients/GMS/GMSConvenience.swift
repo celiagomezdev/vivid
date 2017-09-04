@@ -27,13 +27,15 @@ extension GMSClient {
     }
     
     
-    func getAndPrintDataFromGMSApi() {
+    func getDataFromGMSApi(_ completionHanlderForGMSData: @escaping (_ modelResults: [Any]?,_ GMSApiResult: [String:Any]?,_ errorString: String?) -> Void) {
         
-        let results = fetchManagedObject()
+        var resultsArray = [String:Any]()
         
-        if results.count > 0 {
+        let modelResults = fetchManagedObject()
+        
+        if modelResults.count > 0 {
             
-            for modelResult in results as! [NSManagedObject] {
+            for modelResult in modelResults as! [NSManagedObject] {
                 
                 if let placeID = modelResult.value(forKey: "placeId") as? String, let barName = modelResult.value(forKey: "name") as? String {
                     
@@ -41,19 +43,25 @@ extension GMSClient {
                         
                         guard (error == nil) else {
                             print("Could not get place details")
+                            completionHanlderForGMSData(nil, nil, error?.localizedDescription)
                             return
                         }
                         
                         guard let result = results?["result"] as? [String:Any] else {
                             print("Could not get result from results")
+                            completionHanlderForGMSData(nil, nil, error?.localizedDescription)
                             return
                         }
                         
                         //Get place details
                         let location = self.getLocation(result)
+                        resultsArray["location"] = location
                         let rating = self.getRating(result)
+                        resultsArray["rating"] = rating
                         let placeTypes = self.getPlaceTypes(result)
+                        resultsArray["placeTypes"] = placeTypes
                         let photos = self.getPhotos(result)
+                        resultsArray["photos"] = photos
                         
                         //Print in console:
                         print("Bar name: \(barName)")
@@ -61,6 +69,8 @@ extension GMSClient {
                         print("rating: \(rating)")
                         print("placeTypes: \(placeTypes)")
                         print("Photos: \(photos)")
+                        
+                        completionHanlderForGMSData(modelResults, resultsArray, nil)
                     }
                 }
             }
@@ -69,41 +79,37 @@ extension GMSClient {
     
     
     //MARK: Update Core Data Model from GMS Api
-    func updateNonSmokingBarsModelFromGMSApi() {
+    func storeDatainModelFromGMSApi() {
         
-        let results = fetchManagedObject()
-        
-        if results.count > 0 {
+        getDataFromGMSApi { (modelResults, results, error) in
             
-            for modelResult in results as! [NSManagedObject] {
+            guard error == nil else {
+                print(error!)
+                return
+            }
+            
+            guard let results = results, let modelResults = modelResults else {
+                print("Could not receive modelResults or results")
+                return
+            }
+            
+            guard let location = results["location"] as? String, let rating = results["rating"] as? Int, let placeTypes = results["placeTypes"] as? [String], let photos = results["photos"] as? [String] else {
+                print("Could not find location, rating, placeTypes or photos in results")
+                return
+            }
+            
+            guard modelResults.count > 0 else {
+                print("modelResult was empty")
+                return
                 
-                if let placeID = modelResult.value(forKey: "placeId") as? String {
-                    
-                    self.getPlaceDetails(placeID) { (results, error) in
-                        
-                        guard (error == nil) else {
-                            print("Could not get place details")
-                            return
-                        }
-                        
-                        guard let result = results?["result"] as? [String:Any] else {
-                            print("Could not get result from results")
-                            return
-                        }
-                        
-                        //Get place details
-                        let location = self.getLocation(result)
-                        let rating = self.getRating(result)
-                        let placeTypes = self.getPlaceTypes(result)
-                        let photos = self.getPhotos(result)
-                        
-                        //Store into context
-                        self.storeLocation(modelResult, location)
-                        self.storeRating(modelResult, rating)
-                        self.storePlaceTypes(modelResult, placeTypes)
-                        self.storePhotos(modelResult, photos)
-                    }
-                }
+            }
+            
+            for modelResult in modelResults as! [NSManagedObject] {
+                //Store into context
+                self.storeLocation(modelResult, location)
+                self.storeRating(modelResult, rating)
+                self.storePlaceTypes(modelResult, placeTypes)
+                self.storePhotos(modelResult, photos)
             }
         }
     }
@@ -274,17 +280,17 @@ extension GMSClient {
                         return
                     }
                     
-                    if (itemName == barName) || (itemAddress == barAddress) {
-                        
-                        if let placeID = item["place_id"] as? String {
-                            completionHanlderForPlaceID(true, placeID, nil)
-                            
-                        } else {
-                            completionHanlderForPlaceID(false, nil, "Could not store Place ID in CompletionHandler for barName: \(barName!) \(String(describing: error?.localizedDescription))")
-                        }
-                    } else {
+                    guard (itemName == barName) || (itemAddress == barAddress) else {
                         completionHanlderForPlaceID(false, nil, "NOT SAVED. GMSName: \(itemName), GMSAddress: \(itemAddress) // databaseName: \(barName!), databaseAddress: \(barAddress!) ")
+                        return
                     }
+                    
+                    guard let placeID = item["place_id"] as? String else {
+                        completionHanlderForPlaceID(false, nil, "Could not store Place ID in CompletionHandler for barName: \(barName!) \(String(describing: error?.localizedDescription))")
+                        return
+                    }
+                    
+                    completionHanlderForPlaceID(true, placeID, nil)
                 }
             }
         }
@@ -313,8 +319,7 @@ extension GMSClient {
                     }
                     
                     result.setValue(placeID, forKey: "placeId")
-                    
-                    
+                
                     //Store place ID and handle error
                     do {
                         try self.managedObjectContext.save()
