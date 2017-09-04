@@ -23,7 +23,7 @@ extension GMSClient {
         static let Neukölln = "52.479209,13.437409"
         static let Kreuzberg = "52.499248,13.403765"
         static let Mitte = "52.521785,13.401039"
-        
+       
     }
     
     
