@@ -19,12 +19,28 @@ class Model: NSObject {
     var managedObjectContext: NSManagedObjectContext!
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
     
-    
     override init() {
         super.init()
     }
     
+    //MARK: Fetch data from Managed Object
+    func fetchManagedObject() -> [Any] {
+        
+        managedObjectContext = dataStack.viewContext
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+            let results = try managedObjectContext.fetch(request)
+            return results
+        } catch {
+            print("Could not fetch the data")
+            return []
+        }
+    }
     
+
    //Load data
     
     func loadData() {
@@ -82,6 +98,36 @@ class Model: NSObject {
         return nonSmokingBars
     }
     
+    func addPlaceIdInd(placeId: String) {
+        
+        let modelResults = fetchManagedObject()
+        
+        guard !modelResults.isEmpty else {
+            print("modelResults in empty")
+            return
+        }
+        
+        for result in modelResults as! [NSManagedObject] {
+            
+            guard let name = result.value(forKey: "name") as? String else {
+                print("Could not find name as String in Model")
+                return
+            }
+            
+            if name == "OFFSIDE Pub & Whisky Bar" {
+                result.setValue(placeId, forKey: "placeId")
+                print("Place Id: \(placeId) saved for bar: \(name)")
+                
+                do {
+                    try managedObjectContext.save()
+                    print("PLACE ID UPDATED")
+                } catch {
+                    print("We could not save correctly the PLACE ID into context")
+                }
+            }
+        }
+    }
+
     func addData() {
         
         managedObjectContext = dataStack.viewContext
@@ -137,6 +183,48 @@ class Model: NSObject {
             }
         }  catch {
             print("We couldn't save correctly the data into context")
+        }
+    }
+    
+    
+    func savePlaceIDs() {
+        
+        var placeIDSaved = 0
+        
+        let results = fetchManagedObject()
+        
+        guard results.count > 0 else {
+            print("Results is empty")
+            return
+        }
+        
+        for result in results as! [NSManagedObject] {
+            
+            if let barName = result.value(forKey: "name") as? String, let barAddress = result.value(forKey: "address") as? String {
+                
+                GMSClient.sharedInstance().getPlaceID(barName, barAddress) { (success, placeID, error) in
+                    
+                    guard success, let placeID = placeID else {
+                        print("Getting place ID was not succesful")
+                        return
+                    }
+                    
+                    result.setValue(placeID, forKey: "placeId")
+                    
+                    //Store place ID and handle error
+                    do {
+                        try self.managedObjectContext.save()
+                        placeIDSaved += 1
+                    } catch {
+                        print("Could not save place id into context")
+                    }
+                }
+            }
+        }
+        
+        let when = DispatchTime.now() + 2
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            print("PlaceIDs saved count: \(placeIDSaved)")
         }
     }
 
@@ -259,12 +347,144 @@ class Model: NSObject {
         
         let photosArray = NSKeyedUnarchiver.unarchiveObject(with: photos as Data) as? [String]
         if let photosArray = photosArray {
-            print("Photos: \(photosArray)")
             return photosArray
         } else {
-            print("Could not convert photos as Array")
+            print("Could not convert photos as array of Strings")
             return []
         }  
+    }
+    
+    func getPlaceIDDictionary() -> [String:String] {
+        
+        var placeIDDictionary: [String:String] = [:]
+        
+        let modelResults = fetchManagedObject()
+        
+        guard !modelResults.isEmpty else {
+            print("modelResultIsEmpty")
+            return [:]
+        }
+        
+        for result in modelResults as! [NonSmokingBar] {
+            
+            if let name = result.value(forKey: "name") as? String, let placeID = result.value(forKey: "placeId") as? String{
+                placeIDDictionary[name] = placeID
+            } else {
+                print(result.name ?? "No name")
+                print(result.placeId ?? "No placeID")
+                print("Could not find name or placeID in results")
+            }
+            
+        }
+        print("GET PLACE DICTIONARY CALLED")
+        return placeIDDictionary
+    }
+    
+    func storeLocation(_ modelResult: NSManagedObject,_ location: String) {
+        
+        modelResult.setValue(location, forKey: "location")
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print("Could not save correctly location into context")
+        }
+    }
+    
+    func storeRating(_ modelResult: NSManagedObject,_ rating: Int) {
+        
+        modelResult.setValue(rating, forKey: "rating")
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print("Could not save correctly rating into context")
+        }
+    }
+    
+    func storePlaceTypes(_ modelResult: NSManagedObject,_ placeTypes: [String]) {
+        //Set value and save in Model
+        let data = NSKeyedArchiver.archivedData(withRootObject: placeTypes)
+        
+        modelResult.setValue(data, forKey: "placeTypes")
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print("Could not save correctly place types into context")
+        }
+    }
+    
+    func storePhotos(_ modelResult: NSManagedObject,_ photos: [String]) {
+        
+        //Set value and save in Model
+        let data = NSKeyedArchiver.archivedData(withRootObject: photos)
+        
+        modelResult.setValue(data, forKey: "photos")
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print("Could not save correctly place types into context")
+        }
+    }
+    
+    //MARK: Update Core Data Model from GMS Api
+    func storeDatainModelFromGMSApi() {
+        
+        print("Store data method called")
+        var matchedBars = 0
+        
+        GMSClient.sharedInstance().getDataFromGMSApi { (modelResults, results, error) in
+            
+            guard error == nil else {
+                print(error!)
+                return
+            }
+            
+            guard let results = results, let modelResults = modelResults else {
+                print("Could not receive modelResults or results")
+                return
+            }
+            
+            guard let name = results["name"] as? String, let location = results["location"] as? String, let rating = results["rating"] as? Int, let placeTypes = results["placeTypes"] as? [String], let photos = results["photos"] as? [String] else {
+                print("Could not find name, location, rating, placeTypes or photos in results")
+                return
+            }
+            
+            guard !modelResults.isEmpty else {
+                print("modelResults is empty")
+                return
+            }
+            
+            for modelResult in modelResults as! [NSManagedObject] {
+                //Store into context
+                //                self.storeLocation(modelResult, location)
+                //                self.storeRating(modelResult, rating)
+                //                self.storePlaceTypes(modelResult, placeTypes)
+                //                self.storePhotos(modelResult, photos)
+                
+                guard let modelName = modelResult.value(forKey: "name") as? String else {
+                    print("Could not find modelName as String")
+                    return
+                }
+                
+                if modelName == name {
+                    matchedBars += 1
+                    print("Model Name: \(modelName)")
+                    print("GMS Name: \(name)")
+                    print("Location: \(location)")
+                    print("Rating: \(rating)")
+                    print("PlaceTypes: \(placeTypes.count)")
+                    print("Photos: \(photos.count)")
+                }
+            }
+            
+            let when = DispatchTime.now() + 3
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                print("Matched Bars: \(matchedBars)")
+            }
+        }
     }
 
     // MARK: Shared Instance

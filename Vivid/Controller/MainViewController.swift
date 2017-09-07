@@ -43,11 +43,13 @@ class MainViewController: UIViewController {
             UIView.animate(withDuration: 0.5, animations: {
                 self.containerViewMap.alpha = 1
                 self.containerViewTable.alpha = 0
+                self.searchButton.isEnabled = true
             })
         } else {
             UIView.animate(withDuration: 0.5, animations: {
                 self.containerViewMap.alpha = 0
                 self.containerViewTable.alpha = 1
+                self.searchButton.isEnabled = false
             })
         }
     }

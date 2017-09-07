@@ -25,14 +25,12 @@ class GMSClient: NSObject {
     var nonSmokingBars = [NonSmokingBar]()
     var managedObjectContext: NSManagedObjectContext!
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
-    var newManagedObjectContext: NSManagedObjectContext!
-    
+
     // MARK: Initializers
     
     override init() {
         super.init()
     }
-    
     
     //MARK: GET
     
@@ -99,7 +97,6 @@ class GMSClient: NSObject {
         
         completionHandlerForConvertData(parsedResult, nil)
     }
-    
     
     //Create a url from parameters
     

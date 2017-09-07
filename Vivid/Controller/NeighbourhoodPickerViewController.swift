@@ -40,8 +40,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
         
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
-        
-  
+
     }
 
     func locationUpdateNotification(notification: NSNotification) {

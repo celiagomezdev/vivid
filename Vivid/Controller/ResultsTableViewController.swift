@@ -24,7 +24,8 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
 
-        photosDictionary = Model.sharedInstance().getPhotosDictionary(nonSmokingBars)
+//        photosDictionary = Model.sharedInstance().getPhotosDictionary(nonSmokingBars)
+//        GMSClient.sharedInstance().getPhotoURLArrayOfDictionaries()
         
 
         // Uncomment the following line to preserve selection between presentations
@@ -46,7 +47,7 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "barCell", for: indexPath) as? ResultsTableViewCell else {
-            fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+            fatalError("The dequeued cell is not an instance of ResultsTableViewCell.")
         }
         
         let bar = nonSmokingBars[indexPath.row]
@@ -57,7 +58,7 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         }
         
         var barImagesInArray = Model.sharedInstance().getPhotosArray(photos: barImages)
-        
+     
         cell.barNameLabel?.text = barName
         cell.barAddressLabel?.text = barAddress
         
@@ -80,7 +81,6 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
   
-
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
