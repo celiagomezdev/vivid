@@ -48,6 +48,7 @@
 		7E8C725A1F505C94001E41D5 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		7E8C725C1F505CA1001E41D5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7E8C72601F505CDD001E41D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7E9D0C541F619C80002E1F56 /* NonSmokingBarModel v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "NonSmokingBarModel v3.xcdatamodel"; sourceTree = "<group>"; };
 		7EB2922B1F505DC400BDF1D7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EB2922F1F51D4D700BDF1D7 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
 		7ECC86291F5027040034514D /* NonSmokingBarModel v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "NonSmokingBarModel v2.xcdatamodel"; sourceTree = "<group>"; };
@@ -488,10 +489,11 @@
 		7E88A2B31F35EBA9008C999F /* NonSmokingBarModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7E9D0C541F619C80002E1F56 /* NonSmokingBarModel v3.xcdatamodel */,
 				7ECC86291F5027040034514D /* NonSmokingBarModel v2.xcdatamodel */,
 				7E88A2B41F35EBA9008C999F /* NonSmokingBarModel.xcdatamodel */,
 			);
-			currentVersion = 7ECC86291F5027040034514D /* NonSmokingBarModel v2.xcdatamodel */;
+			currentVersion = 7E9D0C541F619C80002E1F56 /* NonSmokingBarModel v3.xcdatamodel */;
 			path = NonSmokingBarModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

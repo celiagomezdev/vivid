@@ -23,74 +23,53 @@ extension GMSClient {
         static let Mitte = "52.521785,13.401039"
     }
     
-    func getDataFromGMSApi(_ completionHanlderForGMSData: @escaping (_ modelResults: [Any]?, _ results: [String:Any]?,_ errorString: String?) -> Void) {
+    func getDataFromGMSApi(_ completionHanlderForGMSData: @escaping (_ results: [String:Any]?,_ errorString: String?) -> Void) {
         
         var resultsArray = [String:Any]()
-        var modelResultsArray = [Any]()
         
-        managedObjectContext = dataStack.viewContext
-        
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            
-            let modelResults = try managedObjectContext.fetch(request)
-            
-            guard !modelResults.isEmpty else {
-                print("modelResults is empty")
-                return
-            }
-            
-            modelResultsArray.append(modelResults)
-            
-            for modelResult in modelResults as! [NSManagedObject] {
+        let IDdictionary = Model.sharedInstance().getPlaceIDDictionary()
+
+        for (name, placeId) in IDdictionary {
+
+            self.getPlaceDetails(placeId) { (results, error) in
                 
-                guard let placeID = modelResult.value(forKey: "placeId") as? String, let _ = modelResult.value(forKey: "name") as? String else {
-                    print("Could not find ")
+                guard (error == nil) else {
+                    print("Could not get place details")
+                    completionHanlderForGMSData(nil, error?.localizedDescription)
                     return
                 }
                 
-                self.getPlaceDetails(placeID) { (results, error) in
-                    
-                    guard (error == nil) else {
-                        print("Could not get place details")
-                        completionHanlderForGMSData(nil, nil, error?.localizedDescription)
-                        return
-                    }
-                    
-                    guard let result = results?["result"] as? [String:Any] else {
-                        print("Could not get result from results")
-                        completionHanlderForGMSData(nil, nil, error?.localizedDescription)
-                        return
-                    }
-                    
-                    //Get place details and print in console
-                    let name = self.getName(result)
-                    resultsArray["name"] = name
-                    
-                    let location = self.getLocation(result)
-                    resultsArray["location"] = location
-                    //                    print("Bar name: \(barName)")
-                    //                    print("Location: \(location)")
-                    
-                    let rating = self.getRating(result)
-                    resultsArray["rating"] = rating
-                    //                    print("Rating: \(rating)")
-                    
-                    let placeTypes = self.getPlaceTypes(result)
-                    resultsArray["placeTypes"] = placeTypes
-                    //                    print("placeTypes: \(placeTypes)")
-                    
-                    let photos = self.getPhotos(result)
-//                    resultsArray["photos"] = photos
-                    //                    print("Photos: \(photos)")
+                guard let result = results?["result"] as? [String:Any] else {
+                    print("Could not get result from results")
+                    completionHanlderForGMSData(nil, error?.localizedDescription)
+                    return
                 }
+                
+                //Get place details and print in console
+                resultsArray["name"] = name
+//
+//                let location = self.getLocation(result)
+//                resultsArray["location"] = location
+//                //                    print("Bar name: \(barName)")
+//                //                    print("Location: \(location)")
+//                
+//                let rating = self.getRating(result)
+//                resultsArray["rating"] = rating
+//                //                    print("Rating: \(rating)")
+//                
+//                let placeTypes = self.getPlaceTypes(result)
+//                resultsArray["placeTypes"] = placeTypes
+//                //                    print("placeTypes: \(placeTypes)")
+                
+                let largePhotos = self.getLargePhotos(result)
+                resultsArray["largePhotos"] = largePhotos
+                
+                let thumbPhotos = self.getLargePhotos(result)
+                resultsArray["thumbPhotos"] = thumbPhotos
             }
-        } catch {
-            print("Could not fetch the data")
         }
-        
-        completionHanlderForGMSData(modelResultsArray, resultsArray, nil)
+  
+        completionHanlderForGMSData(resultsArray, nil)
         print("GMS Results count: \(resultsArray.count)")
         print("Sent data to completion handler for GMSData")
     }
@@ -157,57 +136,46 @@ extension GMSClient {
         return placeTypes
     }
     
-    //Photos:
-    func getPhotos(_ result: [String:Any]) -> [Int:Any]? {
+    //Get Thumb Photos:
+    func getThumbPhotos(_ result: [String:Any]) -> [String] {
         
         guard let photos = result["photos"] as? [[String:Any]] else {
             
             print("Could not find photos in results")
-            return [:]
+            return []
         }
         
-        let photoURLArray = self.getPhotoURLArrayOfDictionaries(photos)
+        let photoURLArray = self.getPhotoUrlArray("300", photos)
+        
+        return photoURLArray
+    }
+    
+    //Get Large Photos:
+    func getLargePhotos(_ result: [String:Any]) -> [String] {
+        
+        guard let photos = result["photos"] as? [[String:Any]] else {
+            
+            print("Could not find photos in results")
+            return []
+        }
+        
+        let photoURLArray = self.getPhotoUrlArray("1500", photos)
         
         return photoURLArray
     }
 
-    //TEMP: Get Array of URL photos
-    func getPhotoURLArrayOfDictionaries(_ photos: [[String:Any]]) -> [Int:Any] {
-        
-        var photoURLDictionary = [Int:Any]()
-        
-        var fotoURLSizes = [String:Int]()
-        
-        fotoURLSizes = ["thumb": 100, "small" : 300]
-        
-        for photo in photos {
-            
-            if let photoReference = photo["photo_reference"] as? String {
-                
-                for (name, size) in fotoURLSizes {
-                    
-                    let photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=\(size)&photoreference=\(photoReference)&key=\(GMSClient.Constants.ApiKey)"
-                    
-                    photoURLDictionary[+1] = [name: photoURL]
-                }
-            }
-        }
-        print(photoURLDictionary)
-        return photoURLDictionary
-    }
-    
-    //Old method
-    func getPhotoUrlArray(_ photos: [[String:Any]]) -> [String] {
+    func getPhotoUrlArray(_ size: String, _ photos: [[String:Any]]) -> [String] {
         
         var photoUrlArray = [String]()
         
         for photo in photos {
             
             if let photoReference = photo["photo_reference"] as? String {
-                let photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photoreference=\(photoReference)&key=\(GMSClient.Constants.ApiKey)"
+                let photoURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=\(size)&photoreference=\(photoReference)&key=\(GMSClient.Constants.ApiKey)"
                 photoUrlArray.append(photoURL)
             }
         }
+        
         return photoUrlArray
     }
     

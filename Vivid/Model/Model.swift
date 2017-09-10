@@ -58,7 +58,7 @@ class Model: NSObject {
                 
                 for result in nonSmokingBars {
                     
-                    guard let name = result.name, let photos = result.photos, let placeTypes = result.placeTypes else {
+                    guard let name = result.name, let photos = result.thumbPhotos, let placeTypes = result.placeTypes else {
                         print("Could not unwrap properly name, photos or place_types")
                         return
                     }
@@ -330,7 +330,7 @@ class Model: NSObject {
         
         for object in fetchedResults {
             
-            if let photosData = object.photos, let barName = object.name {
+            if let photosData = object.thumbPhotos, let barName = object.name {
                 
                 let photosArray = NSKeyedUnarchiver.unarchiveObject(with: photosData as Data) as? [String]
                 
@@ -415,17 +415,33 @@ class Model: NSObject {
         }
     }
     
-    func storePhotos(_ modelResult: NSManagedObject,_ photos: [String]) {
+    func storeThumbPhotos(_ modelResult: NSManagedObject,_ photos: [String]) {
         
         //Set value and save in Model
         let data = NSKeyedArchiver.archivedData(withRootObject: photos)
         
-        modelResult.setValue(data, forKey: "photos")
+        modelResult.setValue(data, forKey: "thumbPhotos")
         
         do {
             try self.managedObjectContext.save()
+            print("Thumb photos saved")
         } catch {
-            print("Could not save correctly place types into context")
+            print("Could not save correctly thumb photos into context")
+        }
+    }
+    
+    func storeLargePhotos(_ modelResult: NSManagedObject,_ photos: [String]) {
+        
+        //Set value and save in Model
+        let data = NSKeyedArchiver.archivedData(withRootObject: photos)
+        
+        modelResult.setValue(data, forKey: "largePhotos")
+        
+        do {
+            try self.managedObjectContext.save()
+            print("Large photos saved")
+        } catch {
+            print("Could not save correctly large photos into context")
         }
     }
     
@@ -435,15 +451,17 @@ class Model: NSObject {
         print("Store data method called")
         var matchedBars = 0
         
-        GMSClient.sharedInstance().getDataFromGMSApi { (modelResults, results, error) in
+        let modelResults = fetchManagedObject()
+        
+        GMSClient.sharedInstance().getDataFromGMSApi { (results, error) in
             
             guard error == nil else {
                 print(error!)
                 return
             }
             
-            guard let results = results, let modelResults = modelResults else {
-                print("Could not receive modelResults or results")
+            guard let results = results else {
+                print("No results")
                 return
             }
             
@@ -452,23 +470,20 @@ class Model: NSObject {
                 return
             }
             
-            guard !modelResults.isEmpty else {
-                print("modelResults is empty")
-                return
-            }
-            
+    
             for modelResult in modelResults as! [NSManagedObject] {
-                //Store into context
-                //                self.storeLocation(modelResult, location)
-                //                self.storeRating(modelResult, rating)
-                //                self.storePlaceTypes(modelResult, placeTypes)
-                //                self.storePhotos(modelResult, photos)
+                // Store into context
+                self.storeLocation(modelResult, location)
+                self.storeRating(modelResult, rating)
+                self.storePlaceTypes(modelResult, placeTypes)
+                self.storeLargePhotos(modelResult, photos)
+                self.storeThumbPhotos(modelResult, photos)
                 
                 guard let modelName = modelResult.value(forKey: "name") as? String else {
                     print("Could not find modelName as String")
                     return
                 }
-                
+            
                 if modelName == name {
                     matchedBars += 1
                     print("Model Name: \(modelName)")

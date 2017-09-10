@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="NonSmokingBar" representedClassName="NonSmokingBar" syncable="YES" codeGenerationType="class">
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="checked" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="largePhotos" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES">
+            <userInfo>
+                <entry key="sync.isPrimaryKey" value="true"/>
+            </userInfo>
+        </attribute>
+        <attribute name="neighbourhood" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="placeId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="placeTypes" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="postalCode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="rating" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="smokingType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="thumbPhotos" optional="YES" attributeType="Binary" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="NonSmokingBar" positionX="-63" positionY="-18" width="128" height="225"/>
+    </elements>
+</model>
