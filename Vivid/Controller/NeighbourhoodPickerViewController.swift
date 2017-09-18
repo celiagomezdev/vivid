@@ -40,46 +40,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
         
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
-        
-        GMSClient.sharedInstance().getDataFromGMSApi { (results, error) in
-            
-            guard error == nil else {
-                print(error ?? "error getting data from gms api")
-                return
-            }
-            
-            guard let results = results else {
-                print("No results")
-                return
-            }
-            
-            guard let thumbPhotos = results["thumbPhotos"] as? [String], let largePhotos = results["largePhotos"] as? [String], let name = results["name"] as? String else {
-                print("Could not find thumbPhotos o largePhotos in results")
-                return
-            }
-            
-            let modelResults = Model.sharedInstance().fetchManagedObject()
-            
-            guard !modelResults.isEmpty else {
-                print("Model results is empty")
-                return
-            }
-            
-            for modelResult in modelResults as! [NSManagedObject] {
-                
-                guard let modelName = modelResult.value(forKey: "name") as? String else {
-                    print("Could not find modelName as String")
-                    return
-                }
-                
-                if modelName == name {
-                    Model.sharedInstance().storeLargePhotos(modelResult, largePhotos)
-                    Model.sharedInstance().storeThumbPhotos(modelResult, thumbPhotos)
-                } else {
-                    print("modelName and resultsName didn't match")
-                }
-            }
-        }
+
     }
 
     func locationUpdateNotification(notification: NSNotification) {

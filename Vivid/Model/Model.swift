@@ -31,7 +31,6 @@ class Model: NSObject {
         request.returnsObjectsAsFaults = false
         
         do {
-            
             let results = try managedObjectContext.fetch(request)
             return results
         } catch {
@@ -74,8 +73,6 @@ class Model: NSObject {
         }
 
     }
-
-    
 
    //Load results in an array
     
@@ -376,7 +373,6 @@ class Model: NSObject {
             }
             
         }
-        print("GET PLACE DICTIONARY CALLED")
         return placeIDDictionary
     }
     
@@ -446,14 +442,46 @@ class Model: NSObject {
     }
     
     //MARK: Update Core Data Model from GMS Api
-    func storeDatainModelFromGMSApi() {
+    func storeDatainModelFromGMSApi(_ results: [[String:Any]]) {
         
         print("Store data method called")
         var matchedBars = 0
         
         let modelResults = fetchManagedObject()
         
-        GMSClient.sharedInstance().getDataFromGMSApi { (results, error) in
+        for result in results {
+            
+            guard let name = result["name"] as? String, let _ = result["location"] as? String, let _ = result["rating"] as? Int, let _ = result["placeTypes"] as? [String], let largePhotos = result["largePhotos"] as? [String], let thumbPhotos = result["thumbPhotos"] as? [String] else {
+                print("Could not find name, location, rating, placeTypes, thumbPhotos or largePhotos in results")
+                return
+            }
+        
+            for modelResult in modelResults as! [NSManagedObject] {
+                
+                guard let modelName = modelResult.value(forKey: "name") as? String else {
+                    print("Could not find modelName as String")
+                    return
+                }
+                
+                //In this case we are only storing the photo arrays
+                if modelName == name {
+                    matchedBars += 1
+                    storeThumbPhotos(modelResult, thumbPhotos)
+                    storeLargePhotos(modelResult, largePhotos)
+                }
+            }
+        }
+        
+        let when = DispatchTime.now() + 3
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            print("Matched Bars: \(matchedBars)")
+        }
+    }
+    
+    // MARK: Store Data General call
+    func storeDataGeneralCall() {
+    
+            GMSClient.sharedInstance().getDataFromGMSApi() { (results, error) in
             
             guard error == nil else {
                 print(error!)
@@ -461,44 +489,11 @@ class Model: NSObject {
             }
             
             guard let results = results else {
-                print("No results")
+                print("Could not unwrap results from completion handler")
                 return
             }
             
-            guard let name = results["name"] as? String, let location = results["location"] as? String, let rating = results["rating"] as? Int, let placeTypes = results["placeTypes"] as? [String], let photos = results["photos"] as? [String] else {
-                print("Could not find name, location, rating, placeTypes or photos in results")
-                return
-            }
-            
-    
-            for modelResult in modelResults as! [NSManagedObject] {
-                // Store into context
-                self.storeLocation(modelResult, location)
-                self.storeRating(modelResult, rating)
-                self.storePlaceTypes(modelResult, placeTypes)
-                self.storeLargePhotos(modelResult, photos)
-                self.storeThumbPhotos(modelResult, photos)
-                
-                guard let modelName = modelResult.value(forKey: "name") as? String else {
-                    print("Could not find modelName as String")
-                    return
-                }
-            
-                if modelName == name {
-                    matchedBars += 1
-                    print("Model Name: \(modelName)")
-                    print("GMS Name: \(name)")
-                    print("Location: \(location)")
-                    print("Rating: \(rating)")
-                    print("PlaceTypes: \(placeTypes.count)")
-                    print("Photos: \(photos.count)")
-                }
-            }
-            
-            let when = DispatchTime.now() + 3
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                print("Matched Bars: \(matchedBars)")
-            }
+            self.storeDatainModelFromGMSApi(results)
         }
     }
 

@@ -23,55 +23,49 @@ extension GMSClient {
         static let Mitte = "52.521785,13.401039"
     }
     
-    func getDataFromGMSApi(_ completionHanlderForGMSData: @escaping (_ results: [String:Any]?,_ errorString: String?) -> Void) {
+    func getDataFromGMSApi(completion: @escaping (_ results: [[String:Any]]?, _ errorString: String?) -> Void) {
         
-        var resultsArray = [String:Any]()
-        
+        var resultsArray = [[String:Any]]()
+        var resultData = [String:Any]()
+ 
         let IDdictionary = Model.sharedInstance().getPlaceIDDictionary()
 
         for (name, placeId) in IDdictionary {
 
             self.getPlaceDetails(placeId) { (results, error) in
-                
+  
                 guard (error == nil) else {
-                    print("Could not get place details")
-                    completionHanlderForGMSData(nil, error?.localizedDescription)
+                    completion(nil, "getPlaceDetails Error: \(error!.localizedDescription)")
                     return
                 }
                 
                 guard let result = results?["result"] as? [String:Any] else {
-                    print("Could not get result from results")
-                    completionHanlderForGMSData(nil, error?.localizedDescription)
+                    completion(nil, "Could not find result in results")
                     return
                 }
                 
                 //Get place details and print in console
-                resultsArray["name"] = name
-//
-//                let location = self.getLocation(result)
-//                resultsArray["location"] = location
-//                //                    print("Bar name: \(barName)")
-//                //                    print("Location: \(location)")
-//                
-//                let rating = self.getRating(result)
-//                resultsArray["rating"] = rating
-//                //                    print("Rating: \(rating)")
-//                
-//                let placeTypes = self.getPlaceTypes(result)
-//                resultsArray["placeTypes"] = placeTypes
-//                //                    print("placeTypes: \(placeTypes)")
+                resultData["name"] = name
+                
+                let location = self.getLocation(result)
+                resultData["location"] = location
+                
+                let rating = self.getRating(result)
+                resultData["rating"] = rating
+                
+                let placeTypes = self.getPlaceTypes(result)
+                resultData["placeTypes"] = placeTypes
                 
                 let largePhotos = self.getLargePhotos(result)
-                resultsArray["largePhotos"] = largePhotos
+                resultData["largePhotos"] = largePhotos
                 
-                let thumbPhotos = self.getLargePhotos(result)
-                resultsArray["thumbPhotos"] = thumbPhotos
+                let thumbPhotos = self.getThumbPhotos(result)
+                resultData["thumbPhotos"] = thumbPhotos
+                
+                resultsArray.append(resultData)
+                completion(resultsArray, nil)
             }
         }
-  
-        completionHanlderForGMSData(resultsArray, nil)
-        print("GMS Results count: \(resultsArray.count)")
-        print("Sent data to completion handler for GMSData")
     }
     
 

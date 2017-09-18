@@ -49,31 +49,28 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         let bar = nonSmokingBars[indexPath.row]
         
  
-        guard let barName = bar.name, let barAddress = bar.address else {
+        guard let barName = bar.name, let barAddress = bar.address, let barThumbPhotos = bar.thumbPhotos else {
             fatalError("Could not unwrapp barName, barAddresss or barImage")
         }
         
-//        var barImagesInArray = Model.sharedInstance().getPhotosArray(photos: barImages)
+        var barThumbPhotosInArray = Model.sharedInstance().getPhotosArray(photos: barThumbPhotos)
      
         cell.barNameLabel?.text = barName
         cell.barAddressLabel?.text = barAddress
         
-        //Extract UIImage from URL
-//        if barImagesInArray.count >= 1 {
-//            
-//            let firstImageURL = barImagesInArray[0]
-//            let url = URL(string: firstImageURL)
-//            let data = try? Data(contentsOf: url!)
-//            cell.barImage.image = UIImage(data: data!)
-//            
-//        } else {
-//            print("Used default photo for bar: \(barName)")
-//            let url = URL(string: "https://c2.staticflickr.com/4/3766/13275992763_53485b6dc5_b.jpg")
-//            let data = try? Data(contentsOf: url!)
-//            cell.barImage.image = UIImage(data: data!)
-//            
-//        }
-
+        //Extract UIImage from URL async
+        
+        if !barThumbPhotosInArray.isEmpty {
+            let firstImageURL = barThumbPhotosInArray[0]
+            let url = URL(string: firstImageURL)
+            let data = try? Data(contentsOf: url!)
+            cell.barImage.image = UIImage(data: data!)
+        } else {
+            print("Used default photo for bar: \(barName)")
+            let url = URL(string: "https://c2.staticflickr.com/4/3766/13275992763_53485b6dc5_b.jpg")
+            let data = try? Data(contentsOf: url!)
+            cell.barImage.image = UIImage(data: data!)
+        }
         return cell
     }
   
