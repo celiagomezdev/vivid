@@ -66,12 +66,12 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
             
             let firstImageURL = barThumbPhotosInArray[0]
             
-            //Download image in the background
+            //Download image in the background - GCD
             downloadQueue.async {
                 
                 if let url = URL(string: firstImageURL), let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
                     
-                    //Display it in the main thread
+                    //Display the image in the main thread - GCD
                     DispatchQueue.main.async(execute: { () -> Void in
                         cell.barImage.image = image
                     })
