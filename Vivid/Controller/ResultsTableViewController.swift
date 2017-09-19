@@ -61,10 +61,22 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         //Extract UIImage from URL async
         
         if !barThumbPhotosInArray.isEmpty {
+            
+            let downloadQueue = DispatchQueue(label: "download", attributes: [])
+            
             let firstImageURL = barThumbPhotosInArray[0]
-            let url = URL(string: firstImageURL)
-            let data = try? Data(contentsOf: url!)
-            cell.barImage.image = UIImage(data: data!)
+            
+            //Download image in the background
+            downloadQueue.async {
+                
+                if let url = URL(string: firstImageURL), let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                    
+                    //Display it in the main thread
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        cell.barImage.image = image
+                    })
+                }
+            }
         } else {
             print("Used default photo for bar: \(barName)")
             let url = URL(string: "https://c2.staticflickr.com/4/3766/13275992763_53485b6dc5_b.jpg")
