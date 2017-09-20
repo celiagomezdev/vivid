@@ -26,7 +26,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="div-J5-Grf" userLabel="Map Container View">
                                 <rect key="frame" x="0.0" y="63" width="375" height="555"/>
                                 <connections>
-                                    <segue destination="g1x-9Q-HCP" kind="embed" id="5yg-ci-k5O"/>
+                                    <segue destination="g1x-9Q-HCP" kind="embed" identifier="" id="5yg-ci-k5O"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LK3-OY-fhb" userLabel="Table Container View">
@@ -36,7 +36,7 @@
                                     <constraint firstAttribute="width" constant="375" id="exr-8Y-72A"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="bAr-Ne-bzP" kind="embed" id="r26-SA-3CB"/>
+                                    <segue destination="bAr-Ne-bzP" kind="embed" identifier="" id="r26-SA-3CB"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T7e-uv-WyC" userLabel="Search Container View">
@@ -121,11 +121,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Jce-0a-a4h"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="fSq-FM-QsJ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3d7-ik-Vk7" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -143,7 +143,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aU9-SR-rla" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1380" y="-1522"/>
+            <point key="canvasLocation" x="1286" y="-1504"/>
         </scene>
         <!--Neighbourhood Picker View Controller-->
         <scene sceneID="2hn-4h-Rbk">
@@ -173,18 +173,20 @@
                     </view>
                     <connections>
                         <outlet property="mySearchTextField" destination="jgf-Rj-Mgi" id="N6M-cl-b84"/>
+                        <segue destination="bAr-Ne-bzP" kind="presentation" identifier="collectionSegue" id="rNZ-8G-uat"/>
+                        <segue destination="g1x-9Q-HCP" kind="presentation" identifier="mapSegue" id="mQk-sG-aM3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Bz-5V-7dT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1286" y="-2295"/>
+            <point key="canvasLocation" x="1286" y="-2390"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="FYc-Gz-V5I">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rtb-4y-6sn" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2ns-6N-eet">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="2ns-6N-eet">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -202,7 +204,7 @@
             <objects>
                 <viewController id="bAr-Ne-bzP" customClass="ResultsTableViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" sectionHeaderHeight="28" sectionFooterHeight="28" id="U5A-AI-wHF">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -268,7 +270,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gWd-za-vmI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="168.80000000000001" y="-1155.472263868066"/>
+            <point key="canvasLocation" x="2170" y="-1899"/>
         </scene>
         <!--Place Detail View Controller-->
         <scene sceneID="kKi-bX-Iv4">
@@ -322,4 +324,8 @@
             <point key="canvasLocation" x="1429.5999999999999" y="-859.52023988005999"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="rNZ-8G-uat"/>
+        <segue reference="mQk-sG-aM3"/>
+    </inferredMetricsTieBreakers>
 </document>

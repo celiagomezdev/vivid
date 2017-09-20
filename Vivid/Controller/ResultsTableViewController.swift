@@ -17,12 +17,15 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
     var managedObjectContext: NSManagedObjectContext!
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
     var photosDictionary: [String:Any] = [:]
+    var filteredSmokingBars = [NonSmokingBar]()
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
+        
+        print("Filtered smoking bars: \(filteredSmokingBars.count)")
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -36,7 +39,7 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
  
-        return self.nonSmokingBars.count
+        return self.filteredSmokingBars.count
         
     }
 
@@ -46,7 +49,7 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
             fatalError("The dequeued cell is not an instance of ResultsTableViewCell.")
         }
         
-        let bar = nonSmokingBars[indexPath.row]
+        let bar = filteredSmokingBars[indexPath.row]
         
  
         guard let barName = bar.name, let barAddress = bar.address, let barThumbPhotos = bar.thumbPhotos else {

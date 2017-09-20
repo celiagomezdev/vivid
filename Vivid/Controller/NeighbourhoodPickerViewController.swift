@@ -22,6 +22,8 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     var neighbourhoods: [String]!
     var userLocation: String?
     var searchTask: URLSessionDataTask?
+    var nonSmokingBars = [NonSmokingBar]()
+    var filteredSmokingBars = [NonSmokingBar]()
     
     
     //MARK: Neighbourhood enumeration
@@ -40,6 +42,9 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         neighbourhoods = [Neighbourhood.currentLocation.rawValue, Neighbourhood.kreuzberg.rawValue, Neighbourhood.neukölln.rawValue, Neighbourhood.mitte.rawValue]
         
         neighbourhoodPickerConfig(neighbourhoods: neighbourhoods)
+        
+        //Call method to populate array with all the bars from Model
+        nonSmokingBars = Model.sharedInstance().loadDataInArray()
 
     }
 
@@ -69,6 +74,8 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         
+        mySearchTextField.isHidden = true
+        
         if let searchText = textField.text {
             
             if neighbourhoods.contains(searchText) {
@@ -79,6 +86,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
                     }
                 } else {
                     print("User chose the neighbourhood: \(searchText)")
+                    self.filteredSmokingBars = self.saveResultsBySearch(searchText: searchText)
                 }
             } else {
 
@@ -92,7 +100,35 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
                 print("The user typed the location incorrectly")
             }
         }
-    }    
+    }
+    
+    func saveResultsBySearch(searchText: String) -> [NonSmokingBar] {
+        
+        var filteredSmokingBars = [NonSmokingBar]()
+        
+        for item in nonSmokingBars {
+            if item.neighbourhood == searchText {
+                filteredSmokingBars.append(item)
+            }
+        }
+        return filteredSmokingBars
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "collectionSegue" {
+            print("collection segue called")
+            let collectionController = segue.destination as! ResultsTableViewController
+            collectionController.filteredSmokingBars = filteredSmokingBars
+        }
+        
+        if segue.identifier == "mapSegue" {
+            print("collection segue called")
+            let mapController = segue.destination as! MapViewController
+            mapController.filteredSmokingBars = filteredSmokingBars
+        }
+    }
+    
 }
 
 

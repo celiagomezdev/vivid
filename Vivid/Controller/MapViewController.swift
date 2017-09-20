@@ -23,6 +23,7 @@ class MapViewController: UIViewController {
     // MARK: Properties
     
     let locationManager = CLLocationManager()
+    var filteredSmokingBars = [NonSmokingBar]()
     
 
     // MARK: Life Cycle
