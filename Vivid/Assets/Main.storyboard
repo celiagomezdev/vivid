@@ -115,17 +115,17 @@
         <!--Map View Controller-->
         <scene sceneID="PEq-ea-cko">
             <objects>
-                <viewController id="g1x-9Q-HCP" customClass="MapViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MapViewController" id="g1x-9Q-HCP" customClass="MapViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7SY-X2-1jl"/>
                         <viewControllerLayoutGuide type="bottom" id="Jce-0a-a4h"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="fSq-FM-QsJ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3d7-ik-Vk7" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -173,8 +173,7 @@
                     </view>
                     <connections>
                         <outlet property="mySearchTextField" destination="jgf-Rj-Mgi" id="N6M-cl-b84"/>
-                        <segue destination="bAr-Ne-bzP" kind="presentation" identifier="collectionSegue" id="rNZ-8G-uat"/>
-                        <segue destination="g1x-9Q-HCP" kind="presentation" identifier="mapSegue" id="mQk-sG-aM3"/>
+                        <segue destination="bAr-Ne-bzP" kind="presentation" identifier="collectionSegue" id="qLP-kf-FhZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Bz-5V-7dT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -199,10 +198,10 @@
             </objects>
             <point key="canvasLocation" x="-594" y="-1899"/>
         </scene>
-        <!--Results Table View Controller-->
+        <!--collectionSegue-->
         <scene sceneID="NOk-2a-twr">
             <objects>
-                <viewController id="bAr-Ne-bzP" customClass="ResultsTableViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ResultsTableViewController" title="collectionSegue" id="bAr-Ne-bzP" customClass="ResultsTableViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" sectionHeaderHeight="28" sectionFooterHeight="28" id="U5A-AI-wHF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -267,6 +266,9 @@
                             <outlet property="delegate" destination="bAr-Ne-bzP" id="Lt6-vg-z5j"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="resultsTableView" destination="U5A-AI-wHF" id="nA2-02-wQF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gWd-za-vmI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -325,7 +327,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="rNZ-8G-uat"/>
-        <segue reference="mQk-sG-aM3"/>
+        <segue reference="qLP-kf-FhZ"/>
     </inferredMetricsTieBreakers>
 </document>

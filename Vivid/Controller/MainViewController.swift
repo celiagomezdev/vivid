@@ -50,6 +50,7 @@ class MainViewController: UIViewController {
                 self.containerViewMap.alpha = 0
                 self.containerViewTable.alpha = 1
                 self.searchButton.isEnabled = false
+                self.searchView.isHidden = true
             })
         }
     }

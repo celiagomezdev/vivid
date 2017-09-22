@@ -14,10 +14,17 @@ import Sync
 
 //MARK: NeighbourhoodPickerViewController: UIViewController
 
+
+protocol NeighbourhoodPickerDelegate {
+    func userDidMadeSearchQuery(results: [NonSmokingBar]?)
+}
+
 class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
 
     //MARK: Outlets
     @IBOutlet weak var mySearchTextField: SearchTextField!
+    
+    var delegate: NeighbourhoodPickerDelegate? = nil
     
     var neighbourhoods: [String]!
     var userLocation: String?
@@ -74,19 +81,23 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         
-        mySearchTextField.isHidden = true
-        
-        if let searchText = textField.text {
+        if let searchString = textField.text {
             
-            if neighbourhoods.contains(searchText) {
+            if neighbourhoods.contains(searchString) {
                 
-                if searchText == "Current location" {
+                if searchString == "Current location" {
                     if let userLocation = userLocation {
                         print("User chose 'Current Location': \(userLocation)")
                     }
                 } else {
-                    print("User chose the neighbourhood: \(searchText)")
-                    self.filteredSmokingBars = self.saveResultsBySearch(searchText: searchText)
+                    print("User chose the neighbourhood: \(searchString)")
+                    if (delegate != nil) {
+                        self.getBarsForSearchString(searchString, completion: { (bars, error) in
+                            if let bars = bars {
+                                self.delegate!.userDidMadeSearchQuery(results: bars)
+                            }
+                        })
+                    }
                 }
             } else {
 
@@ -102,33 +113,29 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func saveResultsBySearch(searchText: String) -> [NonSmokingBar] {
+    func getBarsForSearchString(_ searchString: String, completion: @escaping (_ result: [NonSmokingBar]?,_ error: NSError?) -> Void) {
         
         var filteredSmokingBars = [NonSmokingBar]()
         
         for item in nonSmokingBars {
-            if item.neighbourhood == searchText {
+            if item.neighbourhood == searchString {
                 filteredSmokingBars.append(item)
+                completion(filteredSmokingBars, nil)
+            } else {
+                completion(nil, NSError(domain: "getBarsForStringSearch filtering", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not get bars for the user searchString"]))
             }
         }
-        return filteredSmokingBars
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "collectionSegue" {
-            print("collection segue called")
-            let collectionController = segue.destination as! ResultsTableViewController
-            collectionController.filteredSmokingBars = filteredSmokingBars
-        }
-        
-        if segue.identifier == "mapSegue" {
-            print("collection segue called")
-            let mapController = segue.destination as! MapViewController
-            mapController.filteredSmokingBars = filteredSmokingBars
-        }
-    }
+    // MARK: Shared Instance
     
+    class func sharedInstance() -> NeighbourhoodPickerViewController {
+        struct Singleton {
+            static var sharedInstance = NeighbourhoodPickerViewController()
+        }
+        return Singleton.sharedInstance
+    }
+
 }
 
 
