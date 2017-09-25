@@ -18,6 +18,7 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
     var photosDictionary: [String:Any] = [:]
     var filteredSmokingBars = [NonSmokingBar]()
+    var receivedText = String()
     
     @IBOutlet var resultsTableView: UITableView!
 
@@ -25,7 +26,7 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -40,11 +41,10 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         resultsTableView.reloadData()
     }
     
-    func userDidMadeSearchQuery(results: [NonSmokingBar]?) {
+    func userDidMadeSearchQuery(data: String?) {
         print("userDidMadeSearchQuery called")
-        if let results = results {
-            self.nonSmokingBars = results
-            print("Filtered smoking bars: \(filteredSmokingBars.count)")
+        if let data = data {
+            print("Received text: \(data)")
         } else {
             print("No results")
         }
@@ -104,12 +104,5 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         }
         return cell
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "collectionSegue" {
-            let neighbourPickerController: NeighbourhoodPickerViewController = segue.destination as! NeighbourhoodPickerViewController
-            neighbourPickerController.delegate = self
-        }
-    }
-    
+
 }

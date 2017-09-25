@@ -16,22 +16,22 @@ import Sync
 
 
 protocol NeighbourhoodPickerDelegate {
-    func userDidMadeSearchQuery(results: [NonSmokingBar]?)
+    func userDidMadeSearchQuery(data: String?)
 }
 
 class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
-
+    
     //MARK: Outlets
     @IBOutlet weak var mySearchTextField: SearchTextField!
     
-    var delegate: NeighbourhoodPickerDelegate? = nil
+    var delegate: NeighbourhoodPickerDelegate?
     
     var neighbourhoods: [String]!
     var userLocation: String?
     var searchTask: URLSessionDataTask?
     var nonSmokingBars = [NonSmokingBar]()
     var filteredSmokingBars = [NonSmokingBar]()
-    
+    var queryText = String()
     
     //MARK: Neighbourhood enumeration
     
@@ -52,11 +52,11 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         //Call method to populate array with all the bars from Model
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
-
+        
     }
-
+    
     func locationUpdateNotification(notification: NSNotification) {
-
+        
         if let userInfo = notification.userInfo?["location"] as? CLLocation {
             self.userLocation = "\(userInfo.coordinate.latitude),\(userInfo.coordinate.longitude)"
         }
@@ -67,9 +67,9 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     func neighbourhoodPickerConfig(neighbourhoods: [String]) {
         
         mySearchTextField.filterStrings(neighbourhoods)
-            mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
-            mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
-            mySearchTextField.autocorrectionType = .no
+        mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
+        mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
+        mySearchTextField.autocorrectionType = .no
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -79,38 +79,49 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: getPlaces methods depending what user chooses
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    //    func textFieldDidEndEditing(_ textField: UITextField) {
+    //
+    //        if let searchString = textField.text {
+    //
+    //            if neighbourhoods.contains(searchString) {
+    //
+    //                if searchString == "Current location" {
+    //                    if let userLocation = userLocation {
+    //                        print("User chose 'Current Location': \(userLocation)")
+    //                    }
+    //                } else {
+    //                    print("User chose the neighbourhood: \(searchString)")
+    //                    if (delegate != nil) {
+    //                        self.getBarsForSearchString(searchString, completion: { (bars, error) in
+    //                            if let bars = bars {
+    //                                self.delegate!.userDidMadeSearchQuery(results: bars)
+    //                            }
+    //                        })
+    //                    }
+    //                }
+    //            } else {
+    //
+    //                //Display an alert when text is not recognized
+    //                let alertController = UIAlertController(title: "Oops!", message:
+    //                    "Unrecognized location. Please try again", preferredStyle: UIAlertControllerStyle.alert)
+    //                alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default,handler: nil))
+    //
+    //                self.present(alertController, animated: true, completion: nil)
+    //
+    //                print("The user typed the location incorrectly")
+    //            }
+    //        }
+    //    }
+    
+    
+    @IBAction func sendText(_ sender: Any) {
         
-        if let searchString = textField.text {
-            
-            if neighbourhoods.contains(searchString) {
-                
-                if searchString == "Current location" {
-                    if let userLocation = userLocation {
-                        print("User chose 'Current Location': \(userLocation)")
-                    }
-                } else {
-                    print("User chose the neighbourhood: \(searchString)")
-                    if (delegate != nil) {
-                        self.getBarsForSearchString(searchString, completion: { (bars, error) in
-                            if let bars = bars {
-                                self.delegate!.userDidMadeSearchQuery(results: bars)
-                            }
-                        })
-                    }
-                }
-            } else {
-
-                //Display an alert when text is not recognized
-                let alertController = UIAlertController(title: "Oops!", message:
-                    "Unrecognized location. Please try again", preferredStyle: UIAlertControllerStyle.alert)
-                alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default,handler: nil))
-                
-                self.present(alertController, animated: true, completion: nil)
-                
-                print("The user typed the location incorrectly")
-            }
+        guard let data = mySearchTextField.text else {
+            print("We couldn't receive the data")
+            return
         }
+        
+        self.queryText = data
     }
     
     func getBarsForSearchString(_ searchString: String, completion: @escaping (_ result: [NonSmokingBar]?,_ error: NSError?) -> Void) {
@@ -126,16 +137,5 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
-    
-    // MARK: Shared Instance
-    
-    class func sharedInstance() -> NeighbourhoodPickerViewController {
-        struct Singleton {
-            static var sharedInstance = NeighbourhoodPickerViewController()
-        }
-        return Singleton.sharedInstance
-    }
-
 }
-
 

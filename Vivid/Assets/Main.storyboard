@@ -36,7 +36,7 @@
                                     <constraint firstAttribute="width" constant="375" id="exr-8Y-72A"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="bAr-Ne-bzP" kind="embed" identifier="" id="r26-SA-3CB"/>
+                                    <segue destination="bAr-Ne-bzP" kind="embed" identifier="resultsTableSegue" id="r26-SA-3CB"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T7e-uv-WyC" userLabel="Search Container View">
@@ -143,7 +143,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aU9-SR-rla" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1286" y="-1504"/>
+            <point key="canvasLocation" x="1529" y="-1576"/>
         </scene>
         <!--Neighbourhood Picker View Controller-->
         <scene sceneID="2hn-4h-Rbk">
@@ -157,35 +157,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jgf-Rj-Mgi" customClass="SearchTextField" customModule="SearchTextField">
-                                <rect key="frame" x="16" y="9" width="343" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jgf-Rj-Mgi" customClass="SearchTextField" customModule="SearchTextField">
+                                <rect key="frame" x="16" y="9" width="277" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R2H-Li-ItI">
+                                <rect key="frame" x="318" y="9" width="30" height="30"/>
+                                <state key="normal" title="Ok"/>
+                                <connections>
+                                    <action selector="sendText:" destination="EBh-Gs-Btj" eventType="touchUpInside" id="ePA-1F-ho9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="jgf-Rj-Mgi" firstAttribute="top" secondItem="mY7-j9-f85" secondAttribute="topMargin" constant="9" id="08f-gx-kbi"/>
+                            <constraint firstItem="R2H-Li-ItI" firstAttribute="top" secondItem="0Dr-QN-cdY" secondAttribute="bottom" constant="9" id="2WY-yg-Dl7"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="R2H-Li-ItI" secondAttribute="trailing" constant="11" id="33J-IA-1XA"/>
                             <constraint firstItem="jgf-Rj-Mgi" firstAttribute="leading" secondItem="mY7-j9-f85" secondAttribute="leadingMargin" id="8RD-V0-Bun"/>
+                            <constraint firstItem="CY6-Ap-Pqg" firstAttribute="top" secondItem="R2H-Li-ItI" secondAttribute="bottom" constant="10" id="BRB-h8-xCj"/>
+                            <constraint firstItem="R2H-Li-ItI" firstAttribute="leading" secondItem="jgf-Rj-Mgi" secondAttribute="trailing" constant="25" id="FEt-il-ysU"/>
                             <constraint firstAttribute="bottomMargin" secondItem="jgf-Rj-Mgi" secondAttribute="bottom" constant="10" id="Ne2-Lw-Kh3"/>
-                            <constraint firstItem="jgf-Rj-Mgi" firstAttribute="trailing" secondItem="mY7-j9-f85" secondAttribute="trailingMargin" id="o9n-UG-e8Y"/>
+                            <constraint firstItem="CY6-Ap-Pqg" firstAttribute="top" secondItem="R2H-Li-ItI" secondAttribute="bottom" constant="10" id="iy3-56-eFY"/>
+                            <constraint firstItem="R2H-Li-ItI" firstAttribute="top" secondItem="0Dr-QN-cdY" secondAttribute="bottom" constant="9" id="pHd-5M-29i"/>
+                            <constraint firstItem="R2H-Li-ItI" firstAttribute="leading" secondItem="jgf-Rj-Mgi" secondAttribute="trailing" constant="25" id="vRJ-EP-b5w"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="mySearchTextField" destination="jgf-Rj-Mgi" id="N6M-cl-b84"/>
-                        <segue destination="bAr-Ne-bzP" kind="presentation" identifier="collectionSegue" id="qLP-kf-FhZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Bz-5V-7dT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1286" y="-2390"/>
+            <point key="canvasLocation" x="1430" y="-2783"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="FYc-Gz-V5I">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rtb-4y-6sn" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="2ns-6N-eet">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2ns-6N-eet">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -198,12 +210,12 @@
             </objects>
             <point key="canvasLocation" x="-594" y="-1899"/>
         </scene>
-        <!--collectionSegue-->
+        <!--Results Table View Controller-->
         <scene sceneID="NOk-2a-twr">
             <objects>
-                <viewController storyboardIdentifier="ResultsTableViewController" title="collectionSegue" id="bAr-Ne-bzP" customClass="ResultsTableViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ResultsTableViewController" title="Results Table View Controller" id="bAr-Ne-bzP" customClass="ResultsTableViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" sectionHeaderHeight="28" sectionFooterHeight="28" id="U5A-AI-wHF">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -272,7 +284,34 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gWd-za-vmI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2170" y="-1899"/>
+            <point key="canvasLocation" x="1911" y="-2272"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="GVf-fq-VlQ">
+            <objects>
+                <viewController id="etd-uG-eHh" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4Qj-E3-mLE"/>
+                        <viewControllerLayoutGuide type="bottom" id="Lc5-zH-9Sb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4kx-ZZ-LLr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="osZ-ei-o0u">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <connections>
+                                    <segue destination="V3A-4d-tIc" kind="embed" id="eAq-mZ-piR"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6eQ-Fm-zZX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-844" y="-785.75712143928047"/>
         </scene>
         <!--Place Detail View Controller-->
         <scene sceneID="kKi-bX-Iv4">
@@ -325,8 +364,18 @@
             </objects>
             <point key="canvasLocation" x="1429.5999999999999" y="-859.52023988005999"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="DNZ-aV-3z0">
+            <objects>
+                <viewController id="V3A-4d-tIc" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="SJe-8S-Tsb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UQn-xe-w0M" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="qLP-kf-FhZ"/>
-    </inferredMetricsTieBreakers>
 </document>

@@ -20,7 +20,16 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
- 
+    
+    func userDidMadeSearchQuery(data: String?) {
+        print("userDidMadeSearchQuery called")
+        if let data = data {
+            print("Received text: \(data)")
+        } else {
+            print("No results")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchView.isHidden = true
