@@ -55,7 +55,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    func locationUpdateNotification(notification: NSNotification) {
+    @objc func locationUpdateNotification(notification: NSNotification) {
         
         if let userInfo = notification.userInfo?["location"] as? CLLocation {
             self.userLocation = "\(userInfo.coordinate.latitude),\(userInfo.coordinate.longitude)"
@@ -68,7 +68,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         mySearchTextField.filterStrings(neighbourhoods)
         mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
-        mySearchTextField.highlightAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize:14)]
+        mySearchTextField.highlightAttributes = [NSAttributedStringKey.font.rawValue:UIFont.boldSystemFont(ofSize:14)]
         mySearchTextField.autocorrectionType = .no
     }
     

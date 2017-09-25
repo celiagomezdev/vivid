@@ -20,6 +20,73 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
+    private lazy var mapViewController: MapViewController = {
+        
+        // Load storyboard
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        
+        // Instantiate View Controller
+        var viewController = storyboard.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
+        
+        self.add(asChildViewController: viewController)
+        
+        return viewController
+        
+    }()
+    
+    private lazy var resultsTableViewController: ResultsTableViewController = {
+        
+        // Load storyboard
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        
+        // Instantiate View Controller
+        var viewController = storyboard.instantiateViewController(withIdentifier: "ResultsTableViewController") as! ResultsTableViewController
+        
+        self.add(asChildViewController: viewController)
+        
+        return viewController
+        
+    }()
+    
+    private lazy var neighbourhoodPickerViewController: NeighbourhoodPickerViewController = {
+        
+        // Load storyboard
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        
+        // Instantiate View Controller
+        var viewController = storyboard.instantiateViewController(withIdentifier: "NeighbourhoodPickerViewController") as! NeighbourhoodPickerViewController
+        
+        self.add(asChildViewController: viewController)
+        
+        return viewController
+        
+    }()
+    
+    private func add(asChildViewController viewController: UIViewController) {
+        //Add Child View Controller
+        addChildViewController(viewController)
+        
+        //Add Child View as Subview
+        view.addSubview(viewController.view)
+        
+        //Configure Child View
+        viewController.view.frame = view.bounds
+        viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        //Notify Child View Controller
+        viewController.didMove(toParentViewController: self)
+    }
+    
+    private func remove(asChildViewController viewController: UIViewController) {
+        //Notify Child View Controller
+        viewController.willMove(toParentViewController: nil)
+        
+        //Remove Child View From Superview
+        viewController.view.removeFromSuperview()
+        
+        //Notify Child View Controller
+        viewController.removeFromParentViewController()
+    }
     
     func userDidMadeSearchQuery(data: String?) {
         print("userDidMadeSearchQuery called")
@@ -33,7 +100,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchView.isHidden = true
-
+        
         // Do any additional setup after loading the view.
     }
     
@@ -53,6 +120,8 @@ class MainViewController: UIViewController {
                 self.containerViewMap.alpha = 1
                 self.containerViewTable.alpha = 0
                 self.searchButton.isEnabled = true
+                self.remove(asChildViewController: self.resultsTableViewController)
+                self.add(asChildViewController: self.mapViewController)
             })
         } else {
             UIView.animate(withDuration: 0.5, animations: {
@@ -60,6 +129,8 @@ class MainViewController: UIViewController {
                 self.containerViewTable.alpha = 1
                 self.searchButton.isEnabled = false
                 self.searchView.isHidden = true
+                self.remove(asChildViewController: self.mapViewController)
+                self.add(asChildViewController: self.resultsTableViewController)
             })
         }
     }
