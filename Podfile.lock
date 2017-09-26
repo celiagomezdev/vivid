@@ -10,7 +10,7 @@ PODS:
   - GooglePlaces (2.4.0):
     - GoogleMaps/Base (= 2.4.0)
   - SearchTextField (1.1.8)
-  - Sync (3.3.0)
+  - Sync (3.3.1)
 
 DEPENDENCIES:
   - GoogleMaps
@@ -24,7 +24,7 @@ SPEC CHECKSUMS:
   GooglePlacePicker: 755f10343d71280c7b016823e73fbae9625dfa8a
   GooglePlaces: aafe5990fa7951e98e078761bbdaaf236d7e0c65
   SearchTextField: 1d43b423c2acd3a9e2b37a74180e0cb137fcf1e7
-  Sync: 7bf0699de46e470d68dc5f1f8408e4c19536c71f
+  Sync: 235890fe49277107d266b9524e7346da7a665305
 
 PODFILE CHECKSUM: ab684a3c7341e1d84266b2da92c5f51418fc4703
 

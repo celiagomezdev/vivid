@@ -68,7 +68,7 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         mySearchTextField.filterStrings(neighbourhoods)
         mySearchTextField.theme.font = UIFont.systemFont(ofSize:14)
-        mySearchTextField.highlightAttributes = [NSAttributedStringKey.font.rawValue:UIFont.boldSystemFont(ofSize:14)]
+        mySearchTextField.highlightAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue):UIFont.boldSystemFont(ofSize:14)]
         mySearchTextField.autocorrectionType = .no
     }
     

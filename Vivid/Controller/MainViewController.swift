@@ -28,7 +28,7 @@ class MainViewController: UIViewController {
         // Instantiate View Controller
         var viewController = storyboard.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
         
-        self.add(asChildViewController: viewController)
+        self.add(asChildViewController: viewController, containerView: containerViewMap)
         
         return viewController
         
@@ -42,7 +42,7 @@ class MainViewController: UIViewController {
         // Instantiate View Controller
         var viewController = storyboard.instantiateViewController(withIdentifier: "ResultsTableViewController") as! ResultsTableViewController
         
-        self.add(asChildViewController: viewController)
+        self.add(asChildViewController: viewController, containerView: containerViewTable)
         
         return viewController
         
@@ -56,13 +56,13 @@ class MainViewController: UIViewController {
         // Instantiate View Controller
         var viewController = storyboard.instantiateViewController(withIdentifier: "NeighbourhoodPickerViewController") as! NeighbourhoodPickerViewController
         
-        self.add(asChildViewController: viewController)
+        self.add(asChildViewController: viewController, containerView: searchView)
         
         return viewController
         
     }()
     
-    private func add(asChildViewController viewController: UIViewController) {
+    private func add(asChildViewController viewController: UIViewController, containerView: UIView) {
         //Add Child View Controller
         addChildViewController(viewController)
         
@@ -70,7 +70,7 @@ class MainViewController: UIViewController {
         view.addSubview(viewController.view)
         
         //Configure Child View
-        viewController.view.frame = view.bounds
+        viewController.view.frame = containerView.bounds
         viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         //Notify Child View Controller
@@ -120,8 +120,9 @@ class MainViewController: UIViewController {
                 self.containerViewMap.alpha = 1
                 self.containerViewTable.alpha = 0
                 self.searchButton.isEnabled = true
+                self.searchView.isHidden = false
                 self.remove(asChildViewController: self.resultsTableViewController)
-                self.add(asChildViewController: self.mapViewController)
+                self.add(asChildViewController: self.mapViewController,containerView: self.containerViewMap)
             })
         } else {
             UIView.animate(withDuration: 0.5, animations: {
@@ -130,7 +131,7 @@ class MainViewController: UIViewController {
                 self.searchButton.isEnabled = false
                 self.searchView.isHidden = true
                 self.remove(asChildViewController: self.mapViewController)
-                self.add(asChildViewController: self.resultsTableViewController)
+                self.add(asChildViewController: self.resultsTableViewController, containerView: self.containerViewTable)
             })
         }
     }
