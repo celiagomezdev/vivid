@@ -23,21 +23,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="div-J5-Grf" userLabel="Map Container View">
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KaC-Pn-UiQ">
                                 <rect key="frame" x="0.0" y="63" width="375" height="555"/>
-                                <connections>
-                                    <segue destination="g1x-9Q-HCP" kind="embed" identifier="" id="5yg-ci-k5O"/>
-                                </connections>
-                            </containerView>
-                            <containerView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LK3-OY-fhb" userLabel="Table Container View">
-                                <rect key="frame" x="0.0" y="63" width="375" height="555"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="555" id="Nyz-by-Aeb"/>
-                                    <constraint firstAttribute="width" constant="375" id="exr-8Y-72A"/>
-                                </constraints>
-                                <connections>
-                                    <segue destination="bAr-Ne-bzP" kind="embed" identifier="resultsTableSegue" id="r26-SA-3CB"/>
-                                </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T7e-uv-WyC" userLabel="Search Container View">
                                 <rect key="frame" x="0.0" y="63" width="375" height="49"/>
@@ -66,31 +53,23 @@
                                     <segment title="Map"/>
                                     <segment title="List"/>
                                 </segments>
-                                <connections>
-                                    <action selector="indexChanged:" destination="luq-mx-GPd" eventType="valueChanged" id="gWu-9b-YPp"/>
-                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="LK3-OY-fhb" firstAttribute="centerY" secondItem="div-J5-Grf" secondAttribute="centerY" id="07y-nA-rWh"/>
                             <constraint firstItem="T7e-uv-WyC" firstAttribute="leading" secondItem="TeP-BL-YrV" secondAttribute="leading" id="0hH-5q-yUG"/>
-                            <constraint firstItem="div-J5-Grf" firstAttribute="top" secondItem="TeP-BL-YrV" secondAttribute="top" constant="63" id="7ld-Id-Hjm"/>
-                            <constraint firstItem="LK3-OY-fhb" firstAttribute="top" secondItem="TeP-BL-YrV" secondAttribute="top" constant="63" id="CDp-Kd-QDy"/>
-                            <constraint firstItem="Uj1-ky-hwW" firstAttribute="leading" secondItem="TeP-BL-YrV" secondAttribute="leadingMargin" constant="-16" id="EJd-7C-SyF"/>
-                            <constraint firstAttribute="trailing" secondItem="LK3-OY-fhb" secondAttribute="trailing" id="JRK-BW-ERj"/>
-                            <constraint firstItem="Uj1-ky-hwW" firstAttribute="top" secondItem="div-J5-Grf" secondAttribute="bottom" id="JpP-24-ogU"/>
-                            <constraint firstItem="div-J5-Grf" firstAttribute="leading" secondItem="TeP-BL-YrV" secondAttribute="leading" id="Lo2-PS-3uX"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Uj1-ky-hwW" secondAttribute="trailing" constant="-16" id="SO4-J9-gEi"/>
+                            <constraint firstItem="Uj1-ky-hwW" firstAttribute="leading" secondItem="TeP-BL-YrV" secondAttribute="leading" id="DBT-Gz-x22"/>
+                            <constraint firstItem="Uj1-ky-hwW" firstAttribute="top" secondItem="KaC-Pn-UiQ" secondAttribute="bottom" id="FcH-Q5-GjO"/>
+                            <constraint firstAttribute="trailing" secondItem="Uj1-ky-hwW" secondAttribute="trailing" id="Of9-7L-nzn"/>
+                            <constraint firstAttribute="trailing" secondItem="KaC-Pn-UiQ" secondAttribute="trailing" id="VCz-fn-fOX"/>
+                            <constraint firstItem="KaC-Pn-UiQ" firstAttribute="top" secondItem="T7e-uv-WyC" secondAttribute="top" id="YV8-wI-20S"/>
+                            <constraint firstItem="KaC-Pn-UiQ" firstAttribute="leading" secondItem="TeP-BL-YrV" secondAttribute="leading" id="bOr-hN-gQM"/>
                             <constraint firstItem="T7e-uv-WyC" firstAttribute="top" secondItem="TeP-BL-YrV" secondAttribute="top" constant="63" id="bqn-mZ-j6I"/>
-                            <constraint firstItem="LK3-OY-fhb" firstAttribute="centerX" secondItem="div-J5-Grf" secondAttribute="centerX" id="hbh-AQ-FOf"/>
-                            <constraint firstItem="LK3-OY-fhb" firstAttribute="leading" secondItem="TeP-BL-YrV" secondAttribute="leading" id="jKe-0w-kqS"/>
-                            <constraint firstItem="Uj1-ky-hwW" firstAttribute="top" secondItem="LK3-OY-fhb" secondAttribute="bottom" id="l6R-Xf-Rty"/>
-                            <constraint firstItem="HV3-9W-3KN" firstAttribute="top" secondItem="Uj1-ky-hwW" secondAttribute="bottom" id="qhT-gI-cZH"/>
+                            <constraint firstItem="HV3-9W-3KN" firstAttribute="top" secondItem="Uj1-ky-hwW" secondAttribute="bottom" id="l3E-2U-IJW"/>
                             <constraint firstItem="0hB-1Q-IKa" firstAttribute="centerY" secondItem="Uj1-ky-hwW" secondAttribute="centerY" id="sYd-Y5-2h3"/>
                             <constraint firstAttribute="trailing" secondItem="T7e-uv-WyC" secondAttribute="trailing" id="u2X-2v-wlh"/>
+                            <constraint firstItem="KaC-Pn-UiQ" firstAttribute="bottom" secondItem="Uj1-ky-hwW" secondAttribute="top" id="vTD-HZ-ZaC"/>
                             <constraint firstItem="0hB-1Q-IKa" firstAttribute="centerX" secondItem="Uj1-ky-hwW" secondAttribute="centerX" id="wLs-Hd-yT8"/>
-                            <constraint firstAttribute="trailing" secondItem="div-J5-Grf" secondAttribute="trailing" id="xTT-7t-Siw"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="iTh-bN-2Vw">
@@ -101,16 +80,16 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="containerViewMap" destination="div-J5-Grf" id="LvZ-jp-iRC"/>
-                        <outlet property="containerViewTable" destination="LK3-OY-fhb" id="6Os-Aw-TgX"/>
+                        <outlet property="containerSwitchView" destination="KaC-Pn-UiQ" id="uAj-Pz-v54"/>
                         <outlet property="searchButton" destination="DEg-J5-Ltd" id="QQw-Yb-d3B"/>
                         <outlet property="searchView" destination="T7e-uv-WyC" id="w0f-XR-oIP"/>
                         <outlet property="segmentedControl" destination="0hB-1Q-IKa" id="KQO-so-fXO"/>
+                        <outlet property="tabBar" destination="Uj1-ky-hwW" id="C5F-K9-gTY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dJ8-Gl-SrS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="408.80000000000001" y="-1898.5007496251876"/>
+            <point key="canvasLocation" x="461.60000000000002" y="-1899.400299850075"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="PEq-ea-cko">
@@ -121,11 +100,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Jce-0a-a4h"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="fSq-FM-QsJ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3d7-ik-Vk7" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="20" width="375" height="535"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -198,24 +177,27 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rtb-4y-6sn" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="2ns-6N-eet">
-                        <rect key="frame" x="0.0" y="20" width="375" height="48"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="x4c-YF-cKH">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="luq-mx-GPd" kind="relationship" relationship="rootViewController" id="14H-ZE-DP5"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOw-j6-cNk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-886" y="-1899"/>
+            <point key="canvasLocation" x="-583" y="-1899"/>
         </scene>
         <!--Results Table View Controller-->
         <scene sceneID="NOk-2a-twr">
             <objects>
                 <viewController storyboardIdentifier="ResultsTableViewController" title="Results Table View Controller" id="bAr-Ne-bzP" customClass="ResultsTableViewController" customModule="Vivid" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" sectionHeaderHeight="28" sectionFooterHeight="28" id="U5A-AI-wHF">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="555"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -284,7 +266,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gWd-za-vmI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1911" y="-2272"/>
+            <point key="canvasLocation" x="1529" y="-2274"/>
         </scene>
         <!--Place Detail View Controller-->
         <scene sceneID="kKi-bX-Iv4">
@@ -335,7 +317,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iVs-vR-KUT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1429.5999999999999" y="-859.52023988005999"/>
+            <point key="canvasLocation" x="1529" y="-855"/>
         </scene>
     </scenes>
 </document>
