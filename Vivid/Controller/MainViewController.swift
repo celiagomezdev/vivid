@@ -28,7 +28,7 @@ class MainViewController: UIViewController {
         // Instantiate View Controller
         var viewController = storyboard.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
         
-        self.add(asChildViewController: viewController)
+        self.add(asChildViewController: viewController, containerView: containerSwitchView)
         
         return viewController
         
@@ -42,10 +42,23 @@ class MainViewController: UIViewController {
         // Instantiate View Controller
         var viewController = storyboard.instantiateViewController(withIdentifier: "ResultsTableViewController") as! ResultsTableViewController
         
-        self.add(asChildViewController: viewController)
+        self.add(asChildViewController: viewController, containerView: containerSwitchView)
         
         return viewController
         
+    }()
+    
+    private lazy var neighbourhoodPickerViewController: NeighbourhoodPickerViewController = {
+        
+        // Load storyboard
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        
+        // Instantiate View Controller
+        var viewController = storyboard.instantiateViewController(withIdentifier: "NeighbourhoodPickerViewController") as! NeighbourhoodPickerViewController
+        
+        self.add(asChildViewController: viewController, containerView: searchView)
+        
+        return viewController
     }()
     
     override func viewDidLoad() {
@@ -76,16 +89,16 @@ class MainViewController: UIViewController {
         updateView()
     }
     
-    private func add(asChildViewController viewController: UIViewController) {
+    private func add(asChildViewController viewController: UIViewController, containerView: UIView) {
         
         //Add Child View Controller
         addChildViewController(viewController)
         
         //Add Child View as Subview
-        self.containerSwitchView.addSubview(viewController.view)
+        containerView.addSubview(viewController.view)
         
         //Configure Child View
-        viewController.view.frame = self.containerSwitchView.bounds
+        viewController.view.frame = containerView.bounds
         viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         //Notify Child View Controller
@@ -102,23 +115,16 @@ class MainViewController: UIViewController {
         //Notify Child View Controller
         viewController.removeFromParentViewController()
     }
-    
-    func userDidMadeSearchQuery(data: String?) {
-        print("userDidMadeSearchQuery called")
-        if let data = data {
-            print("Received text: \(data)")
-        } else {
-            print("No results")
-        }
-    }
-    
+
     private func updateView() {
         if segmentedControl.selectedSegmentIndex == 0 {
             remove(asChildViewController: resultsTableViewController)
-            add(asChildViewController: mapViewController)
+            add(asChildViewController: mapViewController, containerView: containerSwitchView)
         } else {
+            searchButton.isEnabled = false
+            searchView.isHidden = true
             remove(asChildViewController: mapViewController)
-            add(asChildViewController: resultsTableViewController)
+            add(asChildViewController: resultsTableViewController, containerView: containerSwitchView)
         }
     }
 
@@ -126,8 +132,10 @@ class MainViewController: UIViewController {
         
         if searchView.isHidden {
             searchView.isHidden = false
+            add(asChildViewController: neighbourhoodPickerViewController, containerView: searchView)
         } else {
             searchView.isHidden = true
+            remove(asChildViewController: neighbourhoodPickerViewController)
         }
     }
 }

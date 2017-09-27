@@ -42,6 +42,18 @@ class MapViewController: UIViewController {
         super.viewDidAppear(animated)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("MapViewController Will Appear")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        print("MapViewController Will Disappear")
+    }
+    
     
     func initialLocation() {
         let camera = GMSCameraPosition.camera(withLatitude: 52.520736, longitude: 13.409423, zoom: 8)

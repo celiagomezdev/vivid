@@ -14,17 +14,10 @@ import Sync
 
 //MARK: NeighbourhoodPickerViewController: UIViewController
 
-
-protocol NeighbourhoodPickerDelegate {
-    func userDidMadeSearchQuery(data: String?)
-}
-
 class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: Outlets
     @IBOutlet weak var mySearchTextField: SearchTextField!
-    
-    var delegate: NeighbourhoodPickerDelegate?
     
     var neighbourhoods: [String]!
     var userLocation: String?
@@ -52,7 +45,18 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         //Call method to populate array with all the bars from Model
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
+        print("Neighbourhood View Controller Will Appear")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        print("Neighbourhood View Controller Will Disappear")
     }
     
     @objc func locationUpdateNotification(notification: NSNotification) {
@@ -77,42 +81,35 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    //MARK: getPlaces methods depending what user chooses
+//    MARK: getPlaces methods depending what user chooses
     
-    //    func textFieldDidEndEditing(_ textField: UITextField) {
-    //
-    //        if let searchString = textField.text {
-    //
-    //            if neighbourhoods.contains(searchString) {
-    //
-    //                if searchString == "Current location" {
-    //                    if let userLocation = userLocation {
-    //                        print("User chose 'Current Location': \(userLocation)")
-    //                    }
-    //                } else {
-    //                    print("User chose the neighbourhood: \(searchString)")
-    //                    if (delegate != nil) {
-    //                        self.getBarsForSearchString(searchString, completion: { (bars, error) in
-    //                            if let bars = bars {
-    //                                self.delegate!.userDidMadeSearchQuery(results: bars)
-    //                            }
-    //                        })
-    //                    }
-    //                }
-    //            } else {
-    //
-    //                //Display an alert when text is not recognized
-    //                let alertController = UIAlertController(title: "Oops!", message:
-    //                    "Unrecognized location. Please try again", preferredStyle: UIAlertControllerStyle.alert)
-    //                alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default,handler: nil))
-    //
-    //                self.present(alertController, animated: true, completion: nil)
-    //
-    //                print("The user typed the location incorrectly")
-    //            }
-    //        }
-    //    }
-    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        if let searchString = textField.text {
+            
+            if neighbourhoods.contains(searchString) {
+                
+                if searchString == "Current location" {
+                    if let userLocation = userLocation {
+                        print("User chose 'Current Location': \(userLocation)")
+                    }
+                } else {
+                    print("User chose the neighbourhood: \(searchString)")
+                }
+            }
+        } else {
+            
+            //Display an alert when text is not recognized
+            let alertController = UIAlertController(title: "Oops!", message:
+                "Unrecognized location. Please try again", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default,handler: nil))
+            
+            self.present(alertController, animated: true, completion: nil)
+            
+            print("The user typed the location incorrectly")
+        }
+    }
+
     
     @IBAction func sendText(_ sender: Any) {
         

@@ -10,7 +10,7 @@ import UIKit
 import Sync
 
 
-class ResultsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NeighbourhoodPickerDelegate {
+class ResultsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var dataStack = Model.sharedInstance().dataStack
     var nonSmokingBars = [NonSmokingBar]()
@@ -18,7 +18,6 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
     var photosDictionary: [String:Any] = [:]
     var filteredSmokingBars = [NonSmokingBar]()
-    var receivedText = String()
     
     @IBOutlet var resultsTableView: UITableView!
 
@@ -26,32 +25,23 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        resultsTableView.reloadData()
+        super.viewWillAppear(animated)
+        
+        print("ResultsViewController Will Appear")
     }
     
-    func userDidMadeSearchQuery(data: String?) {
-        print("userDidMadeSearchQuery called")
-        if let data = data {
-            print("Received text: \(data)")
-        } else {
-            print("No results")
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        print("ResultsViewController Will Disappear")
     }
+    
 
     // MARK: - Table view data source
-
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
  
