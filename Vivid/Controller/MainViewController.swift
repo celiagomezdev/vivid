@@ -20,6 +20,8 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
+    var sentText = "Hola Caracola"
+    
     private lazy var mapViewController: MapViewController = {
         
         // Load storyboard

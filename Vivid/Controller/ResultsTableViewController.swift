@@ -18,6 +18,7 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: "NonSmokingBar")
     var photosDictionary: [String:Any] = [:]
     var filteredSmokingBars = [NonSmokingBar]()
+    var receivedText = String()
     
     @IBOutlet var resultsTableView: UITableView!
 
@@ -25,6 +26,7 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
+        print(receivedText)
 
     }
     
