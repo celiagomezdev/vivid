@@ -53,6 +53,9 @@ extension GMSClient {
                 let rating = self.getRating(result)
                 resultData["rating"] = rating
                 
+                let website = self.getWebsite(result)
+                resultData["website"] = website
+                
                 let placeTypes = self.getPlaceTypes(result)
                 resultData["placeTypes"] = placeTypes
                 
@@ -61,6 +64,9 @@ extension GMSClient {
                 
                 let thumbPhotos = self.getThumbPhotos(result)
                 resultData["thumbPhotos"] = thumbPhotos
+                
+                let openingHours = self.getOpeningHours(result)
+                resultData["openingHours"] = openingHours
                 
                 resultsArray.append(resultData)
                 completion(resultsArray, nil)
@@ -78,6 +84,7 @@ extension GMSClient {
             print("Could not find name in results")
             return ""
         }
+        
         return name
     }
     
@@ -117,6 +124,16 @@ extension GMSClient {
         return rating
     }
     
+    func getWebsite(_ result: [String:Any]) -> String {
+        
+        guard let website = result["website"] as? String else {
+            print("Could not find website in results")
+            return ""
+        }
+        
+        return website
+    }
+    
 
     //Place Types:
     
@@ -128,6 +145,15 @@ extension GMSClient {
         }
         
         return placeTypes
+    }
+    
+    func getOpeningHours(_ result: [String:Any]) -> [String:Any] {
+        guard let openingHours = result["opening_hours"] as? [String:Any] else {
+            print("Could not find opening hourse in results")
+            return [:]
+        }
+        
+        return openingHours
     }
     
     //Get Thumb Photos:

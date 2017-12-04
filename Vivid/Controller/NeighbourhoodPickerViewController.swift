@@ -45,6 +45,20 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
         
         //Call method to populate array with all the bars from Model
         nonSmokingBars = Model.sharedInstance().loadDataInArray()
+        
+        //Get data from GMS Api
+        var results = GMSClient.sharedInstance().getDataFromGMSApi { (results, error) in
+            guard error != nil else {
+                print("We encountered an error fetching the data from GMSApi: \(String(describing: error))")
+                return
+            }
+            guard let results = results else {
+                print("We could not find results from GMS api call")
+                return
+                
+            }
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,6 +109,12 @@ class NeighbourhoodPickerViewController: UIViewController, UITextFieldDelegate {
                     }
                 } else {
                     print("User chose the neighbourhood: \(searchString)")
+                    getBarsForSearchString(searchString, completion: { (results, error) in
+                        guard error != nil else {
+                            print("we could not fetch the data for this searchString: \(searchString)")
+                            return
+                        }
+                    })
                 }
             }
         } else {

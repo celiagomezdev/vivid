@@ -64,7 +64,8 @@ class ResultsTableViewController: UIViewController, UITableViewDataSource, UITab
             fatalError("Could not unwrapp barName, barAddresss or barImage")
         }
         
-        var barThumbPhotosInArray = Model.sharedInstance().getPhotosArray(photos: barThumbPhotos)
+
+        var barThumbPhotosInArray = Model.sharedInstance().getPhotosArray(photos: barThumbPhotos as NSData)
      
         cell.barNameLabel?.text = barName
         cell.barAddressLabel?.text = barAddress

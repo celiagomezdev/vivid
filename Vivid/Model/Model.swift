@@ -364,7 +364,7 @@ class Model: NSObject {
         
         for result in modelResults as! [NonSmokingBar] {
             
-            if let name = result.value(forKey: "name") as? String, let placeID = result.value(forKey: "placeId") as? String{
+            if let name = result.value(forKey: "name") as? String, let placeID = result.value(forKey: "placeId") as? String {
                 placeIDDictionary[name] = placeID
             } else {
                 print(result.name ?? "No name")
