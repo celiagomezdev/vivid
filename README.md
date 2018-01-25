@@ -1,3 +1,3 @@
 # Vivid
-A very much-needed iOS App for searching non smoking bars in Berlin. 
+Vivid is an iOS App to search for non-smoking bars in Berlin. 
 Under construction 🚧
